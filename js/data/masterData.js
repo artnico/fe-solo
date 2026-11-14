@@ -1101,9 +1101,9 @@ export const MONSTERS = {
   },
   wolf: {
     id: 'wolf', name: '人狼の斥候', element: 'wind',
-    level: 4, exp: 28, gold: 32,
-    stats: { hp: 20, mp: 3, str: 14, mag: 2, skl: 11, spd: 13, lck: 6, def: 7, res: 5, cha: 2 },
-    weaponType: 'dagger', atk: 10, mag: 0,
+    level: 8, exp: 42, gold: 45,
+    stats: { hp: 36, mp: 4, str: 22, mag: 4, skl: 16, spd: 19, lck: 8, def: 13, res: 10, cha: 3 },
+    weaponType: 'dagger', atk: 16, mag: 0,
     drops: [
       { kind: 'weapon', id: 'silver_dagger', rate: 0.08 },
       { kind: 'weapon', id: 'thunder_katana', rate: 0.04 },
@@ -1113,9 +1113,9 @@ export const MONSTERS = {
   },
   dark_mage: {
     id: 'dark_mage', name: '闇の術師', element: 'fire',
-    level: 5, exp: 35, gold: 45,
-    stats: { hp: 16, mp: 12, str: 4, mag: 15, skl: 10, spd: 9, lck: 5, def: 5, res: 10, cha: 3 },
-    weaponType: 'tome', atk: 0, mag: 11,
+    level: 10, exp: 55, gold: 60,
+    stats: { hp: 32, mp: 18, str: 8, mag: 25, skl: 15, spd: 14, lck: 7, def: 11, res: 18, cha: 4 },
+    weaponType: 'tome', atk: 0, mag: 18,
     drops: [
       { kind: 'weapon', id: 'arcane_tome', rate: 0.09 },
       { kind: 'weapon', id: 'saint_staff', rate: 0.05 },
@@ -1126,9 +1126,9 @@ export const MONSTERS = {
   },
   orc_warrior: {
     id: 'orc_warrior', name: 'オーク戦士', element: 'earth',
-    level: 7, exp: 50, gold: 65,
-    stats: { hp: 28, mp: 4, str: 19, mag: 2, skl: 9, spd: 6, lck: 4, def: 13, res: 6, cha: 2 },
-    weaponType: 'axe', atk: 14, mag: 0,
+    level: 15, exp: 95, gold: 100,
+    stats: { hp: 68, mp: 6, str: 36, mag: 4, skl: 16, spd: 12, lck: 6, def: 26, res: 14, cha: 4 },
+    weaponType: 'axe', atk: 25, mag: 0,
     drops: [
       { kind: 'weapon', id: 'battle_axe', rate: 0.09 },
       { kind: 'weapon', id: 'knight_lance', rate: 0.07 },
@@ -1138,10 +1138,10 @@ export const MONSTERS = {
     ]
   },
   ruin_guardian: {
-    id: 'ruin_guardian', name: '遺跡の守護者', element: 'earth', statusResist: 15,
-    level: 10, exp: 80, gold: 110,
-    stats: { hp: 38, mp: 6, str: 23, mag: 8, skl: 13, spd: 9, lck: 6, def: 17, res: 12, cha: 3 },
-    weaponType: 'lance', atk: 17, mag: 0,
+    id: 'ruin_guardian', name: '遺跡の守護者', element: 'earth', statusResist: 25,
+    level: 20, exp: 145, gold: 160,
+    stats: { hp: 96, mp: 10, str: 44, mag: 14, skl: 22, spd: 16, lck: 10, def: 34, res: 24, cha: 5 },
+    weaponType: 'lance', atk: 30, mag: 0,
     drops: [
       { kind: 'weapon', id: 'knight_lance', rate: 0.14 },
       { kind: 'weapon', id: 'thunder_katana', rate: 0.10 },
@@ -1150,10 +1150,10 @@ export const MONSTERS = {
     ]
   },
   goblin_king: {
-    id: 'goblin_king', name: 'ゴブリンキング', element: 'fire', statusResist: 25, isBoss: true,
-    level: 6, exp: 75, gold: 150,
-    stats: { hp: 36, mp: 4, str: 18, mag: 3, skl: 11, spd: 8, lck: 6, def: 12, res: 7, cha: 4 },
-    weaponType: 'axe', atk: 15, mag: 0,
+    id: 'goblin_king', name: 'ゴブリンキング', element: 'fire', statusResist: 30, isBoss: true,
+    level: 12, exp: 130, gold: 240,
+    stats: { hp: 90, mp: 8, str: 30, mag: 6, skl: 17, spd: 14, lck: 8, def: 21, res: 15, cha: 6 },
+    weaponType: 'axe', atk: 22, mag: 0,
     drops: [
       { kind: 'weapon', id: 'goblin_slayer_blade', rate: 0.35 },
       { kind: 'item', id: 'class_crest', rate: 0.25 }
@@ -1161,19 +1161,19 @@ export const MONSTERS = {
   },
   skeleton_knight: {
     id: 'skeleton_knight', name: '骸骨騎士', element: 'none',
-    level: 9, exp: 65, gold: 80,
-    stats: { hp: 30, mp: 3, str: 20, mag: 2, skl: 12, spd: 10, lck: 4, def: 16, res: 8, cha: 2 },
-    weaponType: 'sword', atk: 15, mag: 0,
+    level: 17, exp: 115, gold: 125,
+    stats: { hp: 72, mp: 6, str: 38, mag: 4, skl: 20, spd: 17, lck: 7, def: 30, res: 18, cha: 4 },
+    weaponType: 'sword', atk: 27, mag: 0,
     drops: [
       { kind: 'weapon', id: 'steel_sword', rate: 0.15 },
       { kind: 'item', id: 'class_crest', rate: 0.10 }
     ]
   },
   lich_lord: {
-    id: 'lich_lord', name: 'リッチロード', element: 'ice', statusResist: 35, isBoss: true,
-    level: 13, exp: 150, gold: 300,
-    stats: { hp: 46, mp: 24, str: 8, mag: 26, skl: 15, spd: 12, lck: 8, def: 14, res: 20, cha: 6 },
-    weaponType: 'tome', atk: 0, mag: 20,
+    id: 'lich_lord', name: 'リッチロード', element: 'ice', statusResist: 45, isBoss: true,
+    level: 24, exp: 300, gold: 520,
+    stats: { hp: 180, mp: 40, str: 16, mag: 54, skl: 26, spd: 21, lck: 14, def: 32, res: 42, cha: 10 },
+    weaponType: 'tome', atk: 0, mag: 38,
     drops: [
       { kind: 'weapon', id: 'abyssal_grimoire', rate: 0.35 },
       { kind: 'weapon', id: 'soul_reaper_scythe', rate: 0.30 },
@@ -1182,9 +1182,9 @@ export const MONSTERS = {
   },
   wyvern: {
     id: 'wyvern', name: 'ワイバーン', element: 'wind',
-    level: 15, exp: 130, gold: 160,
-    stats: { hp: 48, mp: 6, str: 28, mag: 6, skl: 16, spd: 18, lck: 8, def: 18, res: 14, cha: 4 },
-    weaponType: 'lance', atk: 20, mag: 0,
+    level: 26, exp: 230, gold: 260,
+    stats: { hp: 125, mp: 10, str: 55, mag: 12, skl: 28, spd: 30, lck: 14, def: 36, res: 28, cha: 8 },
+    weaponType: 'lance', atk: 38, mag: 0,
     drops: [
       { kind: 'armor', id: 'astral_coat', rate: 0.12 },
       { kind: 'weapon', id: 'thunder_katana', rate: 0.10 },
@@ -1192,10 +1192,10 @@ export const MONSTERS = {
     ]
   },
   dragon_knight: {
-    id: 'dragon_knight', name: '竜騎士', element: 'fire',
-    level: 18, exp: 175, gold: 220,
-    stats: { hp: 58, mp: 10, str: 34, mag: 8, skl: 18, spd: 14, lck: 9, def: 24, res: 16, cha: 6 },
-    weaponType: 'lance', atk: 24, mag: 0,
+    id: 'dragon_knight', name: '竜騎士', element: 'fire', statusResist: 20,
+    level: 30, exp: 310, gold: 340,
+    stats: { hp: 160, mp: 16, str: 66, mag: 18, skl: 32, spd: 26, lck: 16, def: 46, res: 34, cha: 10 },
+    weaponType: 'lance', atk: 44, mag: 0,
     drops: [
       { kind: 'armor', id: 'dragon_mail', rate: 0.12 },
       { kind: 'weapon', id: 'dragon_slayer', rate: 0.08 },
@@ -1204,10 +1204,10 @@ export const MONSTERS = {
     ]
   },
   celestial_warden: {
-    id: 'celestial_warden', name: '星界の番人', element: 'thunder', statusResist: 20,
-    level: 24, exp: 260, gold: 340,
-    stats: { hp: 72, mp: 20, str: 38, mag: 30, skl: 22, spd: 20, lck: 12, def: 26, res: 26, cha: 10 },
-    weaponType: 'bow', atk: 28, mag: 0,
+    id: 'celestial_warden', name: '星界の番人', element: 'thunder', statusResist: 35,
+    level: 38, exp: 480, gold: 560,
+    stats: { hp: 230, mp: 30, str: 82, mag: 72, skl: 40, spd: 36, lck: 20, def: 56, res: 54, cha: 15 },
+    weaponType: 'bow', atk: 56, mag: 0,
     drops: [
       { kind: 'weapon', id: 'celestial_bow', rate: 0.12 },
       { kind: 'weapon', id: 'genesis_staff', rate: 0.10 },
@@ -1216,10 +1216,10 @@ export const MONSTERS = {
     ]
   },
   abyss_dragon: {
-    id: 'abyss_dragon', name: '深淵竜バハムート', element: 'heatwave', statusResist: 50, isBoss: true,
-    level: 30, exp: 500, gold: 800,
-    stats: { hp: 110, mp: 35, str: 46, mag: 42, skl: 25, spd: 22, lck: 14, def: 32, res: 30, cha: 15 },
-    weaponType: 'sword', atk: 34, mag: 0,
+    id: 'abyss_dragon', name: '深淵竜バハムート', element: 'heatwave', statusResist: 65, isBoss: true,
+    level: 48, exp: 1200, gold: 1800,
+    stats: { hp: 420, mp: 60, str: 102, mag: 90, skl: 48, spd: 40, lck: 24, def: 68, res: 64, cha: 22 },
+    weaponType: 'sword', atk: 68, mag: 0,
     drops: [
       { kind: 'weapon', id: 'dragon_slayer', rate: 0.45 },
       { kind: 'weapon', id: 'genesis_staff', rate: 0.35 },
@@ -1313,9 +1313,32 @@ export const THIEF_LINE_CLASSES = [
 // インスタンスダンジョン定義（Phase 3〜4）
 export const DUNGEONS = [
   {
+    id: 'slime_cave',
+    sourceAreaId: 'meadow',
+    name: 'スライムの巣穴',
+    recommendedLv: 4,
+    totalFloors: 2,
+    stepsPerFloor: 4,
+    rarityBonus: 0.1,
+    trainingChance: 0.01,
+    description: '静かな草原の地下に広がる湿った洞窟。初心者向けの最初のダンジョン。',
+    normalEncounters: [
+      ['slime', 'slime'],
+      ['slime', 'goblin']
+    ],
+    eliteEncounters: [
+      ['goblin', 'goblin', 'goblin_archer']
+    ],
+    bossEncounter: ['goblin_king', 'slime', 'slime'],
+    exclusiveLootIds: ['steel_sword', 'water_tome', 'heal_staff'],
+    familiarPool: ['gnome', 'sylph'],
+    familiarDropRate: 0.04
+  },
+  {
     id: 'goblin_fort',
+    sourceAreaId: 'meadow',
     name: 'ゴブリンの砦',
-    recommendedLv: 3,
+    recommendedLv: 7,
     totalFloors: 3,
     stepsPerFloor: 5,
     rarityBonus: 0.25,
@@ -1336,9 +1359,34 @@ export const DUNGEONS = [
     familiarDropRate: 0.06
   },
   {
+    id: 'mist_shrine',
+    sourceAreaId: 'forest',
+    name: '霧森の古社',
+    recommendedLv: 12,
+    totalFloors: 3,
+    stepsPerFloor: 5,
+    rarityBonus: 0.35,
+    trainingChance: 0.01,
+    description: '霧の深い森の奥に忘れられた古社。Tier 2 育成中の腕試しに最適。',
+    normalEncounters: [
+      ['wolf', 'wolf'],
+      ['wolf', 'dark_mage'],
+      ['wolf', 'orc_warrior']
+    ],
+    eliteEncounters: [
+      ['orc_warrior', 'dark_mage', 'wolf'],
+      ['ruin_guardian', 'dark_mage']
+    ],
+    bossEncounter: ['goblin_king', 'wolf', 'dark_mage'],
+    exclusiveLootIds: ['arcane_tome', 'saint_staff', 'thunder_katana'],
+    familiarPool: ['sylph', 'undine', 'fortune_cat'],
+    familiarDropRate: 0.07
+  },
+  {
     id: 'abyss_catacomb',
+    sourceAreaId: 'ruins',
     name: '深淵の地下墓地',
-    recommendedLv: 8,
+    recommendedLv: 18,
     totalFloors: 4,
     stepsPerFloor: 6,
     rarityBonus: 0.55,
@@ -1359,9 +1407,33 @@ export const DUNGEONS = [
     familiarDropRate: 0.09
   },
   {
+    id: 'dragon_nest',
+    sourceAreaId: 'dragon_peak',
+    name: '紅蓮の竜巣',
+    recommendedLv: 28,
+    totalFloors: 4,
+    stepsPerFloor: 6,
+    rarityBonus: 0.8,
+    trainingChance: 0.01,
+    description: '竜の峰の頂に隠された竜族の聖域。Tier 4 クラスの強敵が立ち塞がる。',
+    normalEncounters: [
+      ['wyvern', 'wyvern'],
+      ['wyvern', 'dragon_knight']
+    ],
+    eliteEncounters: [
+      ['dragon_knight', 'dragon_knight'],
+      ['wyvern', 'dragon_knight', 'celestial_warden']
+    ],
+    bossEncounter: ['lich_lord', 'dragon_knight', 'wyvern'],
+    exclusiveLootIds: ['dragon_slayer', 'thunder_katana', 'soul_reaper_scythe'],
+    familiarPool: ['salamander', 'valkyrie_drake', 'minerva_owl'],
+    familiarDropRate: 0.1
+  },
+  {
     id: 'eternal_abyss',
+    sourceAreaId: 'celestial_sanctum',
     name: '永劫の竜宮',
-    recommendedLv: 18,
+    recommendedLv: 38,
     totalFloors: 5,
     stepsPerFloor: 7,
     rarityBonus: 1.0,

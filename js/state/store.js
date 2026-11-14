@@ -20,6 +20,7 @@ import {
   RARITIES,
   CLASSES,
   QUESTS,
+  DUNGEONS,
   STAR_BLESSINGS,
   STAR_EXCHANGES,
   getAllowedArmors
@@ -125,7 +126,8 @@ function createInitialState() {
     quests: {
       completed: []
     },
-    unlockedHiddenClasses: []
+    unlockedHiddenClasses: [],
+    discoveredDungeons: []
   };
 }
 
@@ -214,6 +216,14 @@ function migrateState(parsed) {
   }
   if (!Array.isArray(parsed.unlockedHiddenClasses)) {
     parsed.unlockedHiddenClasses = [];
+  }
+  if (!Array.isArray(parsed.discoveredDungeons)) {
+    parsed.discoveredDungeons = [];
+  }
+  for (const [dId, count] of Object.entries(parsed.stats.dungeonClears || {})) {
+    if (count > 0 && !parsed.discoveredDungeons.includes(dId)) {
+      parsed.discoveredDungeons.push(dId);
+    }
   }
   parsed.version = 3;
   return parsed;
@@ -805,6 +815,26 @@ class GameStore {
     if (!amount || amount <= 0) return;
     this.state.starStones = (this.state.starStones || 0) + amount;
     this.save();
+  }
+
+  isDungeonDiscovered(dungeonId) {
+    return Array.isArray(this.state.discoveredDungeons)
+      && this.state.discoveredDungeons.includes(dungeonId);
+  }
+
+  tryDiscoverDungeonForArea(areaId) {
+    if (!Array.isArray(this.state.discoveredDungeons)) {
+      this.state.discoveredDungeons = [];
+    }
+    const candidates = DUNGEONS.filter(
+      d => d.sourceAreaId === areaId && !this.state.discoveredDungeons.includes(d.id)
+    );
+    if (candidates.length === 0) return null;
+    if (Math.random() >= 0.12) return null;
+    const found = candidates[0];
+    this.state.discoveredDungeons.push(found.id);
+    this.save();
+    return found;
   }
 }
 

@@ -164,6 +164,24 @@ function renderDungeonSection() {
           HP/MPを引き継ぎながら分岐マスを進む手動攻略モードです。全滅すると未帰還戦利品の一部を失います。
         </p>
         ${DUNGEONS.map(d => {
+          const isDiscovered = store.isDungeonDiscovered(d.id);
+          const sourceAreaName = AREAS.find(a => a.id === d.sourceAreaId)?.name || '通常エリア';
+          if (!isDiscovered) {
+            return `
+              <div class="cc-option" style="margin-top:8px;opacity:0.7;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <div>
+                    <strong>🔒 ${escapeHtml(d.name)}</strong>
+                    <span style="font-size:11px;color:var(--accent-blue);margin-left:4px;">推奨Lv.${d.recommendedLv}〜 / 全${d.totalFloors}階層</span>
+                  </div>
+                  <span style="font-size:11px;color:var(--text-muted);">未発見</span>
+                </div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">
+                  『${escapeHtml(sourceAreaName)}』を探索すると見つかります
+                </div>
+              </div>
+            `;
+          }
           const lootNames = d.exclusiveLootIds
             .map(id => WEAPONS[id]?.name || id)
             .join('・');

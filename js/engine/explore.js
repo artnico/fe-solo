@@ -153,6 +153,10 @@ export class AutoExploreController {
       for (const msg of messages) {
         this.addExploreLog(msg);
       }
+      const discovered = store.tryDiscoverDungeonForArea(store.state.selectedAreaId);
+      if (discovered) {
+        this.addExploreLog(`🗺️ 新たなインスタンスダンジョン「${discovered.name}」を発見した！`);
+      }
       if (!store.state.settings?.skipLevelUpPopup && levelUps.length > 0) {
         if (this.isRunning) {
           this.isPausedForPopup = true;
