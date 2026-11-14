@@ -46,6 +46,7 @@ let isDropHintOpen = false;
 let isClassTreeOpen = false;
 let lastDungeonSummary = null;
 let levelUpQueue = [];
+let levelUpAutoTimer = null;
 let showSettingsModal = false;
 let selectedCharId = store.state.partyIds[0] || store.state.roster[0]?.id;
 let swapSourceIndex = null;
@@ -1651,8 +1652,16 @@ function renderModal() {
   const root = document.getElementById('modal-root');
   if (!root) return;
 
+  if (levelUpAutoTimer) {
+    clearTimeout(levelUpAutoTimer);
+    levelUpAutoTimer = null;
+  }
+
   if (showSettingsModal) {
     const skipPopup = Boolean(store.state.settings?.skipLevelUpPopup);
+    const debugMode = Boolean(store.state.settings?.debugMode);
+    const battleIntervalMs = Number(store.state.settings?.battleIntervalMs || 1000);
+    const expMultiplier = Number(store.state.settings?.expMultiplier || 1);
     root.innerHTML = `
       <div class="modal-backdrop" id="modal-backdrop">
         <div class="settings-card">
@@ -1669,6 +1678,49 @@ function renderModal() {
               ${skipPopup ? 'OFF (スキップ)' : 'ON (表示)'}
             </button>
           </div>
+          <div class="setting-row">
+            <div>
+              <div style="font-weight:700;font-size:13px;">🛠️ デバッグモード</div>
+              <div style="font-size:11px;color:var(--text-muted);">ONにすると戦闘間隔や経験値倍率を変更できます</div>
+            </div>
+            <button class="btn btn-sm ${debugMode ? 'btn-primary' : ''}" id="btn-toggle-debug-mode">
+              ${debugMode ? 'ON' : 'OFF'}
+            </button>
+          </div>
+          ${
+            debugMode
+              ? `
+            <div class="setting-row">
+              <div>
+                <div style="font-weight:700;font-size:12px;">戦闘間隔</div>
+                <div style="font-size:10px;color:var(--text-muted);">基本は 1000ms (1秒)</div>
+              </div>
+              <select class="select-input" id="select-debug-interval" style="width:auto;padding:4px 8px;font-size:12px;">
+                ${[100, 250, 500, 1000, 1500, 2000]
+                  .map(
+                    ms =>
+                      `<option value="${ms}" ${battleIntervalMs === ms ? 'selected' : ''}>${ms}ms (${ms / 1000}秒)</option>`
+                  )
+                  .join('')}
+              </select>
+            </div>
+            <div class="setting-row">
+              <div>
+                <div style="font-weight:700;font-size:12px;">経験値獲得率</div>
+                <div style="font-size:10px;color:var(--text-muted);">通常探索での獲得EXP倍率</div>
+              </div>
+              <select class="select-input" id="select-debug-exp-mult" style="width:auto;padding:4px 8px;font-size:12px;">
+                ${[1, 2, 5, 10, 25, 50]
+                  .map(
+                    m =>
+                      `<option value="${m}" ${expMultiplier === m ? 'selected' : ''}>${m}倍</option>`
+                  )
+                  .join('')}
+              </select>
+            </div>
+          `
+              : ''
+          }
           <div class="setting-row" style="border-bottom:none;">
             <div>
               <div style="font-weight:700;font-size:13px;">セーブデータ初期化</div>
@@ -1693,6 +1745,16 @@ function renderModal() {
     document.getElementById('btn-toggle-lvup-popup')?.addEventListener('click', () => {
       store.setSetting('skipLevelUpPopup', !skipPopup);
       renderModal();
+    });
+    document.getElementById('btn-toggle-debug-mode')?.addEventListener('click', () => {
+      store.setSetting('debugMode', !debugMode);
+      renderModal();
+    });
+    document.getElementById('select-debug-interval')?.addEventListener('change', e => {
+      store.setSetting('battleIntervalMs', Number(e.target.value));
+    });
+    document.getElementById('select-debug-exp-mult')?.addEventListener('change', e => {
+      store.setSetting('expMultiplier', Number(e.target.value));
     });
     document.getElementById('btn-reset-save')?.addEventListener('click', () => {
       if (confirm('セーブデータを初期状態にリセットしますか？')) {
@@ -1760,11 +1822,18 @@ function renderModal() {
               ${remainCount > 0 ? `次へ（残り${remainCount}件）` : 'OK'}
             </button>
           </div>
+          <div style="text-align:center;font-size:10px;color:var(--text-muted);margin-top:6px;">
+            ※ 演出終了後、そのままにすると自動で閉じます
+          </div>
         </div>
       </div>
     `;
 
     const closeOne = () => {
+      if (levelUpAutoTimer) {
+        clearTimeout(levelUpAutoTimer);
+        levelUpAutoTimer = null;
+      }
       levelUpQueue.shift();
       renderModal();
       if (levelUpQueue.length === 0) {
@@ -1772,11 +1841,18 @@ function renderModal() {
       }
     };
 
+    const autoCloseDelay = Math.max(2800, 250 + gainOrder * 300 + 2000);
+    levelUpAutoTimer = setTimeout(closeOne, autoCloseDelay);
+
     document.getElementById('btn-lvup-next')?.addEventListener('click', closeOne);
     document.getElementById('lvup-backdrop')?.addEventListener('click', e => {
       if (e.target.id === 'lvup-backdrop') closeOne();
     });
     document.getElementById('btn-lvup-skip-all')?.addEventListener('click', () => {
+      if (levelUpAutoTimer) {
+        clearTimeout(levelUpAutoTimer);
+        levelUpAutoTimer = null;
+      }
       levelUpQueue = [];
       renderModal();
       explorer.resumeAfterPopup();

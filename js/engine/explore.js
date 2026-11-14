@@ -91,6 +91,8 @@ export class AutoExploreController {
     if (this.timerId) clearTimeout(this.timerId);
 
     const mode = store.state.exploreMode;
+    const settings = store.state.settings || {};
+    const stepInterval = settings.debugMode ? Number(settings.battleIntervalMs || 1000) : 1000;
 
     if (mode === 'fast') {
       // 高速周回モード
@@ -107,11 +109,13 @@ export class AutoExploreController {
         if (this.isRunning && !this.isPausedForPopup) {
           this.scheduleNextTick();
         }
-      }, 950);
+      }, stepInterval);
     } else {
       // 観戦モード（1手ずつ進行）
       const delay =
-        !this.currentBattle || this.currentBattle.status !== 'ongoing' ? 1400 : 380;
+        !this.currentBattle || this.currentBattle.status !== 'ongoing'
+          ? Math.max(stepInterval, 1200)
+          : stepInterval;
 
       this.timerId = setTimeout(() => {
         if (!this.isRunning || this.isPausedForPopup) return;
@@ -139,8 +143,10 @@ export class AutoExploreController {
         b.rewards,
         store.state.selectedAreaId
       );
+      const expMult = store.state.settings?.debugMode ? Number(store.state.settings.expMultiplier || 1) : 1;
+      const shownExp = Math.round((b.rewards.exp || 0) * expMult);
       this.addExploreLog(
-        `✅ 勝利！ EXP +${b.rewards.exp} / +${b.rewards.gold}G`
+        `✅ 勝利！ EXP +${shownExp}${expMult > 1 ? ` (${expMult}倍)` : ''} / +${b.rewards.gold}G`
       );
       for (const msg of messages) {
         this.addExploreLog(msg);

@@ -1501,24 +1501,24 @@ export const QUESTS = [
   {
     id: 'flora_1', seriesId: 'flora', step: 1, prevQuestId: null,
     title: '草原の花摘み',
-    story: '「冒険者さん！風車の草原に咲く薬草を摘んできてくれませんか？」',
-    condition: { type: 'area_clear', areaId: 'meadow', count: 5, label: '「風車の草原」で5回勝利' },
-    rewards: { gold: 150 }
+    story: '「冒険者さん！風車の草原に咲く薬草をたくさん摘んできてくれませんか？」',
+    condition: { type: 'area_clear', areaId: 'meadow', count: 30, label: '「風車の草原」で30回勝利' },
+    rewards: { gold: 300 }
   },
   {
     id: 'flora_2', seriesId: 'flora', step: 2, prevQuestId: 'flora_1',
     title: '森の秘薬草',
     story: '「もっと珍しい花があれば、病気のみんなを助けられるんです！」',
-    condition: { type: 'area_clear', areaId: 'forest', count: 10, label: '「迷いの森」で10回勝利' },
-    rewards: { gold: 300, items: { class_crest: 1 } }
+    condition: { type: 'area_clear', areaId: 'forest', count: 80, label: '「迷いの森」で80回勝利' },
+    rewards: { gold: 800, items: { class_crest: 1 } }
   },
   {
     id: 'flora_3', seriesId: 'flora', step: 3, prevQuestId: 'flora_2',
     title: '花売りの笑顔',
     story: '「おかげで町のみんなが元気になりました！お礼に大切な花のお守りをどうぞ！」',
-    condition: { type: 'dungeon_clear', dungeonId: 'goblin_fort', count: 1, label: '「ゴブリンの砦」を1回踏破' },
+    condition: { type: 'dungeon_clear', dungeonId: 'goblin_fort', count: 3, label: '「ゴブリンの砦」を3回踏破' },
     rewards: {
-      gold: 500,
+      gold: 1500,
       uniqueEquip: { slot: 'accessory', templateId: 'lucky_amulet', rarity: 'epic', traits: ['blessed', 'greed', 'vital'] }
     }
   },
@@ -1528,21 +1528,21 @@ export const QUESTS = [
     id: 'dragon_1', seriesId: 'dragon', step: 1, prevQuestId: null,
     title: '古竜の気配',
     story: '『……我が眠りを妨げるのは誰だ。まずはその力を示してみよ』',
-    condition: { type: 'area_clear', areaId: 'ruins', count: 10, label: '「古代遺跡」で10回勝利' },
-    rewards: { gold: 500 }
+    condition: { type: 'area_clear', areaId: 'ruins', count: 80, label: '「古代遺跡」で80回勝利' },
+    rewards: { gold: 1000 }
   },
   {
     id: 'dragon_2', seriesId: 'dragon', step: 2, prevQuestId: 'dragon_1',
     title: '封印を解く鍵',
     story: '『ほう、悪くない。ならば深淵の墓地に眠る死者の王を討ち、楔を砕け』',
-    condition: { type: 'dungeon_clear', dungeonId: 'abyss_catacomb', count: 1, label: '「深淵の地下墓地」を1回踏破' },
-    rewards: { gold: 800, items: { hero_crest: 1 } }
+    condition: { type: 'dungeon_clear', dungeonId: 'abyss_catacomb', count: 3, label: '「深淵の地下墓地」を3回踏破' },
+    rewards: { gold: 2000, items: { hero_crest: 1 } }
   },
   {
     id: 'dragon_3', seriesId: 'dragon', step: 3, prevQuestId: 'dragon_2',
     title: '古竜の認めし者',
     story: '『見事だ！汝らに古き竜の騎士の秘伝と、我が眷属を授けよう！』',
-    condition: { type: 'dungeon_clear', dungeonId: 'eternal_abyss', count: 1, label: '「永劫の竜宮」を1回踏破' },
+    condition: { type: 'dungeon_clear', dungeonId: 'eternal_abyss', count: 3, label: '「永劫の竜宮」を3回踏破' },
     rewards: { unlockClassId: 'dragon_knight', familiarId: 'valkyrie_drake' }
   },
 
@@ -1551,21 +1551,21 @@ export const QUESTS = [
     id: 'hero_1', seriesId: 'hero_youth', step: 1, prevQuestId: null,
     title: '最初の一歩',
     story: '「俺もいつか伝説の勇者になるんだ！まずは実戦経験を積まないと！」',
-    condition: { type: 'victories', count: 10, label: '戦闘で合計10回勝利' },
-    rewards: { gold: 120 }
+    condition: { type: 'victories', count: 50, label: '戦闘で合計50回勝利' },
+    rewards: { gold: 400 }
   },
   {
     id: 'hero_2', seriesId: 'hero_youth', step: 2, prevQuestId: 'hero_1',
     title: '迷宮への挑戦',
-    story: '「ゴブリンの砦を突破したのか！？すごいな、俺も負けてられない！」',
-    condition: { type: 'dungeon_clear', dungeonId: 'goblin_fort', count: 1, label: '「ゴブリンの砦」を1回踏破' },
-    rewards: { gold: 350, items: { class_crest: 1 } }
+    story: '「ゴブリンの砦を何度も突破したのか！？すごいな、俺も負けてられない！」',
+    condition: { type: 'dungeon_clear', dungeonId: 'goblin_fort', count: 3, label: '「ゴブリンの砦」を3回踏破' },
+    rewards: { gold: 1000, items: { class_crest: 2 } }
   },
   {
     id: 'hero_3', seriesId: 'hero_youth', step: 3, prevQuestId: 'hero_2',
     title: '英雄の背中',
     story: '「あんたたちの強さは本物だ！家宝の剣、俺なんかよりあんたが持っててくれ！」',
-    condition: { type: 'max_level', level: 15, label: '誰か1人が Lv.15 に到達' },
+    condition: { type: 'max_level', level: 25, label: '誰か1人が Lv.25 に到達' },
     rewards: {
       uniqueEquip: { slot: 'weapon', templateId: 'mithril_sword', rarity: 'epic', traits: ['sharp', 'deadly', 'vampiric'] }
     }
@@ -1576,21 +1576,21 @@ export const QUESTS = [
     id: 'ygg_1', seriesId: 'yggdrasil', step: 1, prevQuestId: null,
     title: '芽吹きの水やり',
     story: '街の片隅でかすかに光る小さな苗木。森の清らかな魔力に反応しているようだ。',
-    condition: { type: 'area_clear', areaId: 'forest', count: 8, label: '「迷いの森」で8回勝利' },
-    rewards: { gold: 200 }
+    condition: { type: 'area_clear', areaId: 'forest', count: 60, label: '「迷いの森」で60回勝利' },
+    rewards: { gold: 500 }
   },
   {
     id: 'ygg_2', seriesId: 'yggdrasil', step: 2, prevQuestId: 'ygg_1',
     title: '大樹の試練',
-    story: '苗木から小さな風の精霊が顔を出した。さらなる魔力を求めているようだ。',
-    condition: { type: 'dungeon_clear', dungeonId: 'abyss_catacomb', count: 2, label: '「深淵の地下墓地」を2回踏破' },
-    rewards: { familiarId: 'sylph' }
+    story: '苗木から神聖な輝きが溢れ出した。さらなる深淵の魔力を求めているようだ。',
+    condition: { type: 'dungeon_clear', dungeonId: 'abyss_catacomb', count: 3, label: '「深淵の地下墓地」を3回踏破' },
+    rewards: { gold: 1200, items: { class_crest: 2 } }
   },
   {
     id: 'ygg_3', seriesId: 'yggdrasil', step: 3, prevQuestId: 'ygg_2',
     title: 'ユグドラシルの祝福',
-    story: '輪廻転生を経験した魂の輝きに共鳴し、世界樹の若芽が仲間に加わった！',
-    condition: { type: 'reclass_count', count: 1, label: '誰か1回「初期職への転職」を実行' },
+    story: '輪廻転生を繰り返した魂の輝きに共鳴し、世界樹の若芽が仲間に加わった！',
+    condition: { type: 'reclass_count', count: 2, label: '「初期職への転職」を累計2回実行' },
     rewards: { familiarId: 'yggdrasil_sprout' }
   },
 
@@ -1599,21 +1599,21 @@ export const QUESTS = [
     id: 'cat_1', seriesId: 'old_cat', step: 1, prevQuestId: null,
     title: '日向ぼっこのお供',
     story: '「ニャー…（新米の割には悪くない目をしてるニャ。少し強くなったらまた来いニャ）」',
-    condition: { type: 'max_level', level: 5, label: '誰か1人が Lv.5 に到達' },
-    rewards: { gold: 100 }
+    condition: { type: 'max_level', level: 10, label: '誰か1人が Lv.10 に到達' },
+    rewards: { gold: 300 }
   },
   {
     id: 'cat_2', seriesId: 'old_cat', step: 2, prevQuestId: 'cat_1',
     title: '夜のパトロール',
     story: '「ニャア！（洞窟の魔物がうるさいニャ！静かにしてこいニャ！）」',
-    condition: { type: 'area_clear', areaId: 'cave', count: 10, label: '「薄暗い洞窟」で10回勝利' },
-    rewards: { gold: 300, items: { class_crest: 1 } }
+    condition: { type: 'area_clear', areaId: 'cave', count: 80, label: '「薄暗い洞窟」で80回勝利' },
+    rewards: { gold: 900, items: { class_crest: 1 } }
   },
   {
     id: 'cat_3', seriesId: 'old_cat', step: 3, prevQuestId: 'cat_2',
     title: '招き猫の恩返し',
     story: '「ニャーン♪（気に入ったニャ！ワシの秘蔵っ子をお前さんたちに預けるニャ！）」',
-    condition: { type: 'dungeon_clear', dungeonId: 'abyss_catacomb', count: 1, label: '「深淵の地下墓地」を1回踏破' },
+    condition: { type: 'dungeon_clear', dungeonId: 'abyss_catacomb', count: 3, label: '「深淵の地下墓地」を3回踏破' },
     rewards: { familiarId: 'fortune_cat' }
   },
 
@@ -1622,22 +1622,22 @@ export const QUESTS = [
     id: 'mage_1', seriesId: 'legend_mage', step: 1, prevQuestId: null,
     title: '魔力の残滓',
     story: '「ふぉっふぉっ、ワシこそ伝説の魔法使い！…え、杖？遺跡に忘れてきたんじゃよ」',
-    condition: { type: 'area_clear', areaId: 'ruins', count: 12, label: '「古代遺跡」で12回勝利' },
-    rewards: { gold: 400 }
+    condition: { type: 'area_clear', areaId: 'ruins', count: 60, label: '「古代遺跡」で60回勝利' },
+    rewards: { gold: 800 }
   },
   {
     id: 'mage_2', seriesId: 'legend_mage', step: 2, prevQuestId: 'mage_1',
     title: '古文書の解読',
-    story: '「ほほう、Tier 3 の高みに至った者がおるのか！使い魔のフクロウも驚いておるわ」',
+    story: '「ほほう、Tier 3 の高みに至った者がおるのか！大した修行の成果じゃな」',
     condition: { type: 'max_tier', tier: 3, label: '誰か1人が Tier 3 以上の職業に到達' },
-    rewards: { familiarId: 'minerva_owl' }
+    rewards: { gold: 1500, items: { hero_crest: 1 } }
   },
   {
     id: 'mage_3', seriesId: 'legend_mage', step: 3, prevQuestId: 'mage_2',
     title: '時空の真理',
-    story: '「実はワシ、時空を超えてきた魔導士なんじゃ。特別にその奥義を伝授しよう！」',
-    condition: { type: 'dungeon_clear', dungeonId: 'eternal_abyss', count: 1, label: '「永劫の竜宮」を1回踏破' },
-    rewards: { unlockClassId: 'chrono_mage', gold: 1000 }
+    story: '「実はワシ、時空を超えてきた魔導士なんじゃ。奥義と賢者のフクロウを授けよう！」',
+    condition: { type: 'dungeon_clear', dungeonId: 'eternal_abyss', count: 3, label: '「永劫の竜宮」を3回踏破' },
+    rewards: { unlockClassId: 'chrono_mage', familiarId: 'minerva_owl' }
   },
 
   // 🔨 見習い鍛冶師
@@ -1645,21 +1645,21 @@ export const QUESTS = [
     id: 'smith_1', seriesId: 'blacksmith', step: 1, prevQuestId: null,
     title: '鉄くず集め',
     story: '「兄ちゃん、鍛冶の練習に鉱石が足りねえんだ！洞窟でひと暴れしてきてくれよ！」',
-    condition: { type: 'area_clear', areaId: 'cave', count: 8, label: '「薄暗い洞窟」で8回勝利' },
-    rewards: { gold: 250 }
+    condition: { type: 'area_clear', areaId: 'cave', count: 50, label: '「薄暗い洞窟」で50回勝利' },
+    rewards: { gold: 500 }
   },
   {
     id: 'smith_2', seriesId: 'blacksmith', step: 2, prevQuestId: 'smith_1',
     title: '灼熱の鍛錬',
-    story: '「火山の炎なら伝説の鋼も打てるはずだ！マグマ地帯の様子を見てきてくれ！」',
-    condition: { type: 'area_clear', areaId: 'volcano', count: 12, label: '「灼熱の火山」で12回勝利' },
-    rewards: { gold: 500, items: { class_crest: 1 } }
+    story: '「火山の炎なら伝説の鋼も打てるはずだ！マグマ地帯の魔物を蹴散らしてきてくれ！」',
+    condition: { type: 'area_clear', areaId: 'volcano', count: 100, label: '「灼熱の火山」で100回勝利' },
+    rewards: { gold: 1200, items: { class_crest: 2 } }
   },
   {
     id: 'smith_3', seriesId: 'blacksmith', step: 3, prevQuestId: 'smith_2',
     title: '魂を打つ槌',
-    story: '「俺も一人前になれたよ！ルーンを刻む鍛冶師の技、あんたたちにも教えてやるぜ！」',
-    condition: { type: 'dungeon_clear', dungeonId: 'goblin_fort', count: 3, label: '「ゴブリンの砦」を3回踏破' },
+    story: '「俺も一人前になれたよ！ルーンを刻む鍛冶師の技と特製鎧、受け取ってくれ！」',
+    condition: { type: 'dungeon_clear', dungeonId: 'goblin_fort', count: 5, label: '「ゴブリンの砦」を5回踏破' },
     rewards: { unlockClassId: 'rune_smith', uniqueEquip: { slot: 'armor', templateId: 'knight_plate', rarity: 'epic', traits: ['sturdy', 'ward', 'vital'] } }
   },
 
@@ -1668,15 +1668,15 @@ export const QUESTS = [
     id: 'ghost_1', seriesId: 'ghost_knight', step: 1, prevQuestId: null,
     title: '古城の噂',
     story: '「私はかつて王に仕えた騎士……自分が守るべき場所を思い出せないのだ」',
-    condition: { type: 'area_clear', areaId: 'ruins', count: 15, label: '「古代遺跡」で15回勝利' },
-    rewards: { gold: 350 }
+    condition: { type: 'area_clear', areaId: 'ruins', count: 100, label: '「古代遺跡」で100回勝利' },
+    rewards: { gold: 1000 }
   },
   {
     id: 'ghost_2', seriesId: 'ghost_knight', step: 2, prevQuestId: 'ghost_1',
     title: '安らかな眠り',
     story: '「思い出した……！感謝する、友よ。この英雄の証を未来ある君たちに託そう」',
-    condition: { type: 'dungeon_clear', dungeonId: 'abyss_catacomb', count: 2, label: '「深淵の地下墓地」を2回踏破' },
-    rewards: { gold: 700, items: { hero_crest: 1 } }
+    condition: { type: 'dungeon_clear', dungeonId: 'abyss_catacomb', count: 5, label: '「深淵の地下墓地」を5回踏破' },
+    rewards: { gold: 2000, items: { hero_crest: 2 } }
   },
 
   // 🧭 放浪の吟遊詩人
@@ -1684,15 +1684,15 @@ export const QUESTS = [
     id: 'bard_1', seriesId: 'bard', step: 1, prevQuestId: null,
     title: '酒場の出会い',
     story: '「やあ旅人！いい物語は強い仲間から生まれるものさ。団員を増やしてみないかい？」',
-    condition: { type: 'roster_count', count: 5, label: '仲間キャラクターを合計5人以上にする' },
-    rewards: { gold: 180 }
+    condition: { type: 'roster_count', count: 6, label: '仲間キャラクターを合計6人以上にする' },
+    rewards: { gold: 400 }
   },
   {
     id: 'bard_2', seriesId: 'bard', step: 2, prevQuestId: 'bard_1',
     title: '千の戦いの詩',
     story: '「素晴らしい武勇伝だ！君たちの旅がさらに広がるようにこれを贈ろう！」',
-    condition: { type: 'victories', count: 50, label: '戦闘で合計50回勝利' },
-    rewards: { gold: 600, items: { class_crest: 2 } }
+    condition: { type: 'victories', count: 200, label: '戦闘で合計200回勝利' },
+    rewards: { gold: 1500, items: { class_crest: 3 } }
   },
 
   // 🌟 星詠みの巫女
@@ -1700,21 +1700,21 @@ export const QUESTS = [
     id: 'miko_1', seriesId: 'oracle_miko', step: 1, prevQuestId: null,
     title: '星々の観測',
     story: '「星々が新たな英雄の誕生を告げています…まずはこの大地を巡ってみてください」',
-    condition: { type: 'area_clear', areaId: 'meadow', count: 15, label: '「風車の草原」で15回勝利' },
-    rewards: { gold: 200 }
+    condition: { type: 'area_clear', areaId: 'meadow', count: 100, label: '「風車の草原」で100回勝利' },
+    rewards: { gold: 600 }
   },
   {
     id: 'miko_2', seriesId: 'oracle_miko', step: 2, prevQuestId: 'miko_1',
     title: '聖なる祈り',
-    story: '「貴方の魂は清らかな光を放っています。蒼海の精霊も微笑んでいますわ」',
-    condition: { type: 'max_level', level: 10, label: '誰か1人が Lv.10 に到達' },
-    rewards: { familiarId: 'undine' }
+    story: '「貴方の魂は清らかな光を放っています。さらなる高みを目指してくださいませ」',
+    condition: { type: 'max_level', level: 20, label: '誰か1人が Lv.20 に到達' },
+    rewards: { gold: 1500, items: { hero_crest: 1 } }
   },
   {
     id: 'miko_3', seriesId: 'oracle_miko', step: 3, prevQuestId: 'miko_2',
     title: '終末の星を超えて',
     story: '「深淵の竜宮すら踏破したのですね…星々の祝福が、永遠に貴方と共にありますように」',
-    condition: { type: 'dungeon_clear', dungeonId: 'eternal_abyss', count: 2, label: '「永劫の竜宮」を2回踏破' },
-    rewards: { gold: 2000, items: { hero_crest: 2 } }
+    condition: { type: 'dungeon_clear', dungeonId: 'eternal_abyss', count: 5, label: '「永劫の竜宮」を5回踏破' },
+    rewards: { gold: 5000, items: { hero_crest: 2 }, familiarId: 'undine' }
   }
 ];

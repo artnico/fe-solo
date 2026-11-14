@@ -105,7 +105,10 @@ function createInitialState() {
     selectedAreaId: 'meadow',
     exploreMode: 'watch',
     settings: {
-      skipLevelUpPopup: false
+      skipLevelUpPopup: false,
+      debugMode: false,
+      battleIntervalMs: 1000,
+      expMultiplier: 1
     },
     stats: {
       totalBattles: 0,
@@ -168,7 +171,11 @@ function migrateState(parsed) {
     parsed.items.hero_crest = 0;
   }
   if (!parsed.settings) {
-    parsed.settings = { skipLevelUpPopup: false };
+    parsed.settings = { skipLevelUpPopup: false, debugMode: false, battleIntervalMs: 1000, expMultiplier: 1 };
+  } else {
+    if (parsed.settings.debugMode === undefined) parsed.settings.debugMode = false;
+    if (parsed.settings.battleIntervalMs === undefined) parsed.settings.battleIntervalMs = 1000;
+    if (parsed.settings.expMultiplier === undefined) parsed.settings.expMultiplier = 1;
   }
   if (!Array.isArray(parsed.armors)) {
     parsed.armors = [];
@@ -316,9 +323,11 @@ class GameStore {
     }
 
     const party = this.getPartyCharacters();
+    const expMult = this.state.settings?.debugMode ? Number(this.state.settings.expMultiplier || 1) : 1;
+    const earnedExp = Math.round((rewards.exp || 0) * expMult);
     for (const char of party) {
       const fam = this.getEquipByUid('familiar', char.equippedFamiliarUid);
-      char.exp += rewards.exp;
+      char.exp += earnedExp;
       let needed = getExpForNextLevel(char.level);
       while (char.exp >= needed) {
         char.exp -= needed;
