@@ -9,11 +9,11 @@ import {
 
 function rollRarity(rarityBonus = 0) {
   const r = Math.random();
-  const mythicChance = rarityBonus >= 0.5 ? (rarityBonus - 0.35) * 0.03 : 0;
-  const legendaryChance = rarityBonus >= 0.25 ? 0.02 + rarityBonus * 0.06 : 0;
-  const epicChance = 0.03 + rarityBonus * 0.12;
-  const rareChance = 0.12 + rarityBonus * 0.22;
-  const uncommonChance = 0.35 + rarityBonus * 0.20;
+  const mythicChance = rarityBonus >= 0.55 ? (rarityBonus - 0.45) * 0.02 : 0;
+  const legendaryChance = rarityBonus >= 0.30 ? 0.01 + (rarityBonus - 0.25) * 0.05 : 0;
+  const epicChance = 0.005 + rarityBonus * 0.06;
+  const rareChance = 0.05 + rarityBonus * 0.12;
+  const uncommonChance = 0.22 + rarityBonus * 0.18;
 
   if (r < mythicChance) return 'mythic';
   if (r < mythicChance + legendaryChance) return 'legendary';
