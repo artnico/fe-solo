@@ -25,7 +25,9 @@ import {
   CLASS_TREES,
   getClassActiveSkill,
   QUEST_SERIES,
-  QUESTS
+  QUESTS,
+  STAR_BLESSINGS,
+  STAR_EXCHANGES
 } from '../data/masterData.js';
 import {
   calculateCombatStats,
@@ -48,6 +50,8 @@ let lastDungeonSummary = null;
 let levelUpQueue = [];
 let levelUpAutoTimer = null;
 let showSettingsModal = false;
+let showAltarModal = false;
+let altarSubTab = 'blessing';
 let selectedCharId = store.state.partyIds[0] || store.state.roster[0]?.id;
 let swapSourceIndex = null;
 let equipTargetCharId = store.state.partyIds[0] || store.state.roster[0]?.id;
@@ -89,6 +93,10 @@ function updateHeader() {
   const heroCrestEl = document.getElementById('header-hero-crest');
   if (heroCrestEl) {
     heroCrestEl.textContent = `👑 ${store.state.items?.hero_crest || 0}`;
+  }
+  const starStoneEl = document.getElementById('header-star-stones');
+  if (starStoneEl) {
+    starStoneEl.textContent = String(store.state.starStones || 0);
   }
   const questBadge = document.getElementById('quest-nav-badge');
   if (questBadge) {
@@ -585,7 +593,11 @@ function renderPartyTab() {
     const cls = CLASSES[detailChar.classId];
     const pers = PERSONALITIES[detailChar.personalityId];
     const equips = store.getCharacterEquips(detailChar);
-    const rates = getGrowthRates(detailChar, equips.familiar);
+    const rates = getGrowthRates(
+      detailChar,
+      equips.familiar,
+      store.getBlessingBonus('growth_boost')
+    );
     const combat = calculateCombatStats(detailChar, equips);
     const neededExp = getExpForNextLevel(detailChar.level);
 
@@ -1657,6 +1669,114 @@ function renderModal() {
     levelUpAutoTimer = null;
   }
 
+  if (showAltarModal) {
+    const stones = store.state.starStones || 0;
+    const totalKills = store.state.stats?.totalKills || 0;
+    const remainForBonus = 100 - (totalKills % 100);
+
+    const blessingsHtml = STAR_BLESSINGS.map(b => {
+      const lv = store.getBlessingLevel(b.id);
+      const isMax = lv >= b.maxLevel;
+      const cost = store.getBlessingCost(b.id);
+      const canBuy = !isMax && stones >= cost;
+      return `
+        <div class="setting-row" style="align-items:center;gap:8px;">
+          <div style="min-width:0;flex:1;">
+            <div style="font-weight:700;font-size:12px;">
+              ${escapeHtml(b.name)}
+              <span style="color:var(--accent-gold);margin-left:4px;">Lv.${lv}/${b.maxLevel}</span>
+            </div>
+            <div style="font-size:11px;color:var(--accent-blue);margin-top:2px;">
+              現在: ${escapeHtml(b.formatEffect(lv))}
+            </div>
+          </div>
+          ${
+            isMax
+              ? `<span style="font-size:11px;color:var(--accent-green);font-weight:700;">MAX</span>`
+              : `<button class="btn btn-sm ${canBuy ? 'btn-primary' : ''}" ${canBuy ? '' : 'disabled'} data-upgrade-blessing="${b.id}">💠 ${cost}</button>`
+          }
+        </div>
+      `;
+    }).join('');
+
+    const exchangesHtml = STAR_EXCHANGES.map(ex => {
+      const canBuy = stones >= ex.cost;
+      return `
+        <div class="setting-row" style="align-items:center;gap:8px;">
+          <div style="min-width:0;flex:1;">
+            <div style="font-weight:700;font-size:12px;">${escapeHtml(ex.name)}</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${escapeHtml(ex.description)}</div>
+          </div>
+          <button class="btn btn-sm ${canBuy ? 'btn-primary' : ''}" ${canBuy ? '' : 'disabled'} data-exchange-star="${ex.id}">
+            💠 ${ex.cost}
+          </button>
+        </div>
+      `;
+    }).join('');
+
+    root.innerHTML = `
+      <div class="modal-backdrop" id="modal-backdrop">
+        <div class="settings-card" style="max-height:85vh;overflow-y:auto;">
+          <div class="card-title">
+            <span>💠 星屑の祭壇</span>
+            <button class="btn btn-sm" id="btn-close-altar">✕</button>
+          </div>
+          <div class="preview-box" style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+            <span>所持輝石: <strong style="color:var(--accent-blue);font-size:13px;">💠 ${stones}</strong></span>
+            <span style="font-size:11px;color:var(--text-muted);">累計討伐 ${totalKills}体（次+3個まであと ${remainForBonus}体）</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">
+            <button class="btn btn-sm ${altarSubTab === 'blessing' ? 'btn-primary' : ''}" id="btn-altar-tab-blessing">✨ 永続の祝福</button>
+            <button class="btn btn-sm ${altarSubTab === 'exchange' ? 'btn-primary' : ''}" id="btn-altar-tab-exchange">🎁 秘宝交換所</button>
+          </div>
+          ${altarSubTab === 'blessing' ? blessingsHtml : exchangesHtml}
+        </div>
+      </div>
+    `;
+
+    document.getElementById('btn-close-altar')?.addEventListener('click', () => {
+      showAltarModal = false;
+      renderModal();
+    });
+    document.getElementById('modal-backdrop')?.addEventListener('click', e => {
+      if (e.target.id === 'modal-backdrop') {
+        showAltarModal = false;
+        renderModal();
+      }
+    });
+    document.getElementById('btn-altar-tab-blessing')?.addEventListener('click', () => {
+      altarSubTab = 'blessing';
+      renderModal();
+    });
+    document.getElementById('btn-altar-tab-exchange')?.addEventListener('click', () => {
+      altarSubTab = 'exchange';
+      renderModal();
+    });
+    document.querySelectorAll('[data-upgrade-blessing]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const res = store.upgradeBlessing(btn.dataset.upgradeBlessing);
+        if (!res.ok) alert(res.reason);
+        updateHeader();
+        render();
+        renderModal();
+      });
+    });
+    document.querySelectorAll('[data-exchange-star]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const res = store.exchangeStarItem(btn.dataset.exchangeStar);
+        if (!res.ok) {
+          alert(res.reason);
+        } else {
+          alert(`✨ ${res.label} を獲得しました！`);
+        }
+        updateHeader();
+        render();
+        renderModal();
+      });
+    });
+    return;
+  }
+
   if (showSettingsModal) {
     const skipPopup = Boolean(store.state.settings?.skipLevelUpPopup);
     const debugMode = Boolean(store.state.settings?.debugMode);
@@ -1875,7 +1995,14 @@ document.querySelectorAll('.nav-tab').forEach(tab => {
 });
 
 document.getElementById('btn-open-settings')?.addEventListener('click', () => {
+  showAltarModal = false;
   showSettingsModal = true;
+  renderModal();
+});
+
+document.getElementById('btn-open-altar')?.addEventListener('click', () => {
+  showSettingsModal = false;
+  showAltarModal = true;
   renderModal();
 });
 

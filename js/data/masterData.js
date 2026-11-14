@@ -1718,3 +1718,116 @@ export const QUESTS = [
     rewards: { gold: 5000, items: { hero_crest: 2 }, familiarId: 'undine' }
   }
 ];
+
+// 星屑の祭壇：永続祝福マスター
+export const STAR_BLESSINGS = [
+  {
+    id: 'rarity_boost',
+    name: '幸運の祝福（レア率UP）',
+    maxLevel: 10,
+    baseCost: 5,
+    costStep: 3,
+    perLevel: 0.03,
+    unit: 'rarityBonus',
+    formatEffect: lv => `装備レア度補正 +${(lv * 0.03).toFixed(2)}`
+  },
+  {
+    id: 'battle_speed',
+    name: '疾風の加護（戦闘間隔緩和）',
+    maxLevel: 5,
+    baseCost: 8,
+    costStep: 6,
+    perLevel: 100,
+    unit: 'ms',
+    formatEffect: lv => `基本戦闘間隔 ${1000 - lv * 100}ms (-${lv * 100}ms)`
+  },
+  {
+    id: 'growth_boost',
+    name: '成長の祝福（基礎成長率UP）',
+    maxLevel: 10,
+    baseCost: 6,
+    costStep: 4,
+    perLevel: 1,
+    unit: '%',
+    formatEffect: lv => `全基礎ステ成長率 +${lv}%`
+  },
+  {
+    id: 'training_boost',
+    name: '極限鍛錬の加護',
+    maxLevel: 10,
+    baseCost: 8,
+    costStep: 5,
+    perLevel: 0.002,
+    unit: 'chance',
+    formatEffect: lv => `踏破時ステ+1確率 +${(lv * 0.2).toFixed(1)}%`
+  },
+  {
+    id: 'exp_gold_boost',
+    name: '導きの祝福（EXP & G）',
+    maxLevel: 10,
+    baseCost: 4,
+    costStep: 3,
+    perLevel: 0.1,
+    unit: 'mult',
+    formatEffect: lv => `獲得EXP・ゴールド +${lv * 10}%`
+  }
+];
+
+// 星屑の輝石：秘宝交換所マスター
+export const STAR_EXCHANGES = [
+  {
+    id: 'ex_class_crest',
+    name: '転職の証 ×1',
+    cost: 12,
+    kind: 'item',
+    itemId: 'class_crest',
+    qty: 1,
+    description: 'Tier 3〜4 クラスチェンジに必要な貴重な証。'
+  },
+  {
+    id: 'ex_hero_crest',
+    name: '英雄の証 ×1',
+    cost: 35,
+    kind: 'item',
+    itemId: 'hero_crest',
+    qty: 1,
+    description: '最終職（Tier 5）へのクラスチェンジに必要な伝説の証。'
+  },
+  {
+    id: 'ex_salamander',
+    name: '使い魔「紅蓮の火精」',
+    cost: 40,
+    kind: 'familiar',
+    familiarId: 'salamander',
+    description: '火属性付与＋力/魔力成長率+5%＋スキル発動率+5%。'
+  },
+  {
+    id: 'ex_fortune_cat',
+    name: '使い魔「黄金の招き猫」',
+    cost: 60,
+    kind: 'familiar',
+    familiarId: 'fortune_cat',
+    description: '幸運+10%・魅力+8%成長率＋ドロップ率+25%。'
+  },
+  {
+    id: 'ex_mythic_blade',
+    name: '[伝説] ミスリルソード',
+    cost: 80,
+    kind: 'uniqueEquip',
+    uniqueEquip: {
+      slot: 'weapon',
+      templateId: 'mithril_sword',
+      rarity: 'legendary',
+      traits: ['sharp', 'deadly', 'vampiric', 'swift']
+    },
+    description: '鋭利・必殺・吸血・疾風の4特性が付いた伝説の魔剣。'
+  },
+  {
+    id: 'ex_yggdrasil',
+    name: '使い魔「世界樹の若芽」',
+    cost: 100,
+    kind: 'familiar',
+    familiarId: 'yggdrasil_sprout',
+    description: '全基礎ステ成長率+4〜5%＋回復量+10%＋スキル発動率+10%。'
+  }
+];

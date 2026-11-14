@@ -36,11 +36,12 @@ export class AutoExploreController {
     }
     const encounter =
       area.encounters[Math.floor(Math.random() * area.encounters.length)];
+    const rarityBonus = (area.rarityBonus || 0) + store.getBlessingBonus('rarity_boost');
     this.currentBattle = createBattleSession(
       party,
       encounter,
       c => store.getCharacterEquips(c),
-      area.rarityBonus || 0
+      rarityBonus
     );
     this.addExploreLog(`⚔️ [${area.name}] で敵グループと遭遇！`);
     return this.currentBattle;
@@ -92,7 +93,8 @@ export class AutoExploreController {
 
     const mode = store.state.exploreMode;
     const settings = store.state.settings || {};
-    const stepInterval = settings.debugMode ? Number(settings.battleIntervalMs || 1000) : 1000;
+    const baseInterval = Math.max(400, 1000 - store.getBlessingBonus('battle_speed'));
+    const stepInterval = settings.debugMode ? Number(settings.battleIntervalMs || baseInterval) : baseInterval;
 
     if (mode === 'fast') {
       // 高速周回モード

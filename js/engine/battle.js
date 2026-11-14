@@ -519,8 +519,12 @@ function finalizeBattle(session, result) {
 
     const droppedWeapons = [];
     const droppedItems = [];
+    let starStones = 0;
 
     for (const enemy of session.enemies) {
+      if (Math.random() < (enemy.isBoss ? 0.08 : 0.015)) {
+        starStones += 1;
+      }
       for (const d of enemy.drops || []) {
         if (Math.random() < d.rate * dropMultiplier) {
           if (d.kind === 'item') {
@@ -546,12 +550,15 @@ function finalizeBattle(session, result) {
       exp: expTotal,
       gold: goldTotal,
       droppedWeapons,
-      droppedItems
+      droppedItems,
+      starStones,
+      killCount: session.enemies.length
     };
 
     const dropLabels = [
       ...droppedWeapons.map(w => w.name),
-      ...droppedItems.map(id => ITEMS[id]?.name || id)
+      ...droppedItems.map(id => ITEMS[id]?.name || id),
+      ...(starStones > 0 ? [`💠 星屑の輝石×${starStones}`] : [])
     ];
 
     session.logs.push({

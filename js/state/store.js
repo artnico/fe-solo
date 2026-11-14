@@ -20,6 +20,8 @@ import {
   RARITIES,
   CLASSES,
   QUESTS,
+  STAR_BLESSINGS,
+  STAR_EXCHANGES,
   getAllowedArmors
 } from '../data/masterData.js';
 
@@ -102,6 +104,8 @@ function createInitialState() {
       class_crest: 0,
       hero_crest: 0
     },
+    starStones: 0,
+    blessings: {},
     selectedAreaId: 'meadow',
     exploreMode: 'watch',
     settings: {
@@ -113,6 +117,7 @@ function createInitialState() {
     stats: {
       totalBattles: 0,
       victories: 0,
+      totalKills: 0,
       areaClears: {},
       dungeonClears: {},
       reclassCount: 0
@@ -198,6 +203,9 @@ function migrateState(parsed) {
     }
   }
   if (!parsed.stats) parsed.stats = { totalBattles: 0, victories: 0 };
+  if (parsed.stats.totalKills === undefined) parsed.stats.totalKills = 0;
+  if (parsed.starStones === undefined) parsed.starStones = 0;
+  if (!parsed.blessings) parsed.blessings = {};
   if (!parsed.stats.areaClears) parsed.stats.areaClears = {};
   if (!parsed.stats.dungeonClears) parsed.stats.dungeonClears = {};
   if (parsed.stats.reclassCount === undefined) parsed.stats.reclassCount = 0;
@@ -307,7 +315,29 @@ class GameStore {
       if (!this.state.stats.areaClears) this.state.stats.areaClears = {};
       this.state.stats.areaClears[areaId] = (this.state.stats.areaClears[areaId] || 0) + 1;
     }
-    this.state.gold += rewards.gold;
+
+    const egMult = 1 + this.getBlessingBonus('exp_gold_boost');
+    const earnedGold = Math.round((rewards.gold || 0) * egMult);
+    this.state.gold += earnedGold;
+
+    if (rewards.starStones > 0) {
+      this.state.starStones = (this.state.starStones || 0) + rewards.starStones;
+      messages.push(`💠 星屑の輝石×${rewards.starStones} を拾った！`);
+    }
+
+    const kills = rewards.killCount || 0;
+    if (kills > 0) {
+      const prevKills = this.state.stats.totalKills || 0;
+      const newKills = prevKills + kills;
+      this.state.stats.totalKills = newKills;
+      const prevMilestone = Math.floor(prevKills / 100);
+      const newMilestone = Math.floor(newKills / 100);
+      if (newMilestone > prevMilestone) {
+        const bonusStones = (newMilestone - prevMilestone) * 3;
+        this.state.starStones = (this.state.starStones || 0) + bonusStones;
+        messages.push(`🌟 討伐${newMilestone * 100}体達成！ 💠 星屑の輝石×${bonusStones} を獲得！`);
+      }
+    }
 
     for (const eq of rewards.droppedWeapons || []) {
       const slot = eq.slot || 'weapon';
@@ -323,8 +353,10 @@ class GameStore {
     }
 
     const party = this.getPartyCharacters();
-    const expMult = this.state.settings?.debugMode ? Number(this.state.settings.expMultiplier || 1) : 1;
+    const expMult =
+      (this.state.settings?.debugMode ? Number(this.state.settings.expMultiplier || 1) : 1) * egMult;
     const earnedExp = Math.round((rewards.exp || 0) * expMult);
+    const growthBonusPct = this.getBlessingBonus('growth_boost');
     for (const char of party) {
       const fam = this.getEquipByUid('familiar', char.equippedFamiliarUid);
       char.exp += earnedExp;
@@ -332,7 +364,7 @@ class GameStore {
       while (char.exp >= needed) {
         char.exp -= needed;
         const oldLevel = char.level;
-        const gains = levelUpCharacter(char, fam);
+        const gains = levelUpCharacter(char, fam, growthBonusPct);
         if (!gains) {
           char.exp = 0;
           break;
@@ -703,6 +735,76 @@ class GameStore {
     this.state.quests.completed.push(questId);
     this.save();
     return { ok: true, messages };
+  }
+
+  getBlessingLevel(id) {
+    return this.state.blessings?.[id] || 0;
+  }
+
+  getBlessingBonus(id) {
+    const def = STAR_BLESSINGS.find(b => b.id === id);
+    if (!def) return 0;
+    return this.getBlessingLevel(id) * def.perLevel;
+  }
+
+  getBlessingCost(id) {
+    const def = STAR_BLESSINGS.find(b => b.id === id);
+    if (!def) return 9999;
+    const lv = this.getBlessingLevel(id);
+    return def.baseCost + lv * def.costStep;
+  }
+
+  upgradeBlessing(id) {
+    const def = STAR_BLESSINGS.find(b => b.id === id);
+    if (!def) return { ok: false, reason: '祝福が見つかりません' };
+    const lv = this.getBlessingLevel(id);
+    if (lv >= def.maxLevel) return { ok: false, reason: 'すでに最大レベルです' };
+    const cost = this.getBlessingCost(id);
+    if ((this.state.starStones || 0) < cost) {
+      return { ok: false, reason: `星屑の輝石が ${cost}個 必要です` };
+    }
+    this.state.starStones -= cost;
+    if (!this.state.blessings) this.state.blessings = {};
+    this.state.blessings[id] = lv + 1;
+    this.save();
+    return { ok: true };
+  }
+
+  exchangeStarItem(exchangeId) {
+    const ex = STAR_EXCHANGES.find(e => e.id === exchangeId);
+    if (!ex) return { ok: false, reason: '交換品が見つかりません' };
+    if ((this.state.starStones || 0) < ex.cost) {
+      return { ok: false, reason: `星屑の輝石が ${ex.cost}個 必要です` };
+    }
+    this.state.starStones -= ex.cost;
+    let label = ex.name;
+
+    if (ex.kind === 'item') {
+      this.state.items[ex.itemId] = (this.state.items[ex.itemId] || 0) + (ex.qty || 1);
+    } else if (ex.kind === 'familiar') {
+      const fam = generateFamiliarInstance(ex.familiarId);
+      this.state.familiars.push(fam);
+      label = `使い魔「${fam.name}」`;
+    } else if (ex.kind === 'uniqueEquip') {
+      const ue = ex.uniqueEquip;
+      const inst =
+        ue.slot === 'armor'
+          ? generateArmorInstance(ue.templateId, { rarity: ue.rarity, traits: ue.traits })
+          : ue.slot === 'accessory'
+          ? generateAccessoryInstance(ue.templateId, { rarity: ue.rarity, traits: ue.traits })
+          : generateWeaponInstance(ue.templateId, { rarity: ue.rarity, traits: ue.traits });
+      this.getEquipListBySlot(ue.slot).push(inst);
+      label = `[${RARITIES[inst.rarity]?.name || ''}] ${inst.name}`;
+    }
+
+    this.save();
+    return { ok: true, label };
+  }
+
+  addStarStones(amount) {
+    if (!amount || amount <= 0) return;
+    this.state.starStones = (this.state.starStones || 0) + amount;
+    this.save();
   }
 }
 

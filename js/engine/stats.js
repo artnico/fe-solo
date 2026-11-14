@@ -63,7 +63,7 @@ export function createCharacter({
  * キャラクターの成長率(%)を計算
  * 最低5%保証
  */
-export function getGrowthRates(character, familiar = null) {
+export function getGrowthRates(character, familiar = null, extraGrowthPct = 0) {
   const race = RACES[character.raceId];
   const cls = CLASSES[character.classId];
   const personality = PERSONALITIES[character.personalityId];
@@ -74,7 +74,8 @@ export function getGrowthRates(character, familiar = null) {
       (race?.growthRates[key] || 0) +
       (cls?.growthMod[key] || 0) +
       (personality?.growthMod[key] || 0) +
-      (familiar?.growthBonus?.[key] || 0);
+      (familiar?.growthBonus?.[key] || 0) +
+      (extraGrowthPct || 0);
     rates[key] = Math.max(5, raw);
   }
   return rates;
@@ -83,14 +84,14 @@ export function getGrowthRates(character, familiar = null) {
 /**
  * FE式確率成長によるレベルアップ処理
  */
-export function levelUpCharacter(character, familiar = null) {
+export function levelUpCharacter(character, familiar = null, extraGrowthPct = 0) {
   const cls = CLASSES[character.classId];
   const maxLv = cls?.maxLevel || 10;
   if (character.level >= maxLv) {
     return null;
   }
 
-  const rates = getGrowthRates(character, familiar);
+  const rates = getGrowthRates(character, familiar, extraGrowthPct);
   const gains = {};
   character.level += 1;
 

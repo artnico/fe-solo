@@ -100,7 +100,7 @@ export class DungeonController {
       floorSteps: buildFloorSteps(dungeon),
       partyHpMp,
       buffs: { atkPct: 0, defPct: 0, dropPct: 0 },
-      lootBag: { gold: 0, exp: 0, weapons: [], items: {} },
+      lootBag: { gold: 0, exp: 0, weapons: [], items: {}, starStones: 0, killCount: 0 },
       phase: 'map',
       activeNode: null,
       activeEvent: null,
@@ -269,7 +269,7 @@ export class DungeonController {
       party,
       encounter,
       c => store.getCharacterEquips(c),
-      rarityBonus,
+      rarityBonus + store.getBlessingBonus('rarity_boost'),
       {
         initialAllyHpMp: this.run.partyHpMp,
         partyBuffs: this.run.buffs
@@ -291,6 +291,8 @@ export class DungeonController {
       const rw = session.rewards;
       this.run.lootBag.gold += rw.gold;
       this.run.lootBag.exp += rw.exp;
+      this.run.lootBag.starStones = (this.run.lootBag.starStones || 0) + (rw.starStones || 0);
+      this.run.lootBag.killCount = (this.run.lootBag.killCount || 0) + (rw.killCount || 0);
       for (const wpn of rw.droppedWeapons || []) {
         this.run.lootBag.weapons.push(wpn);
       }
@@ -359,7 +361,9 @@ export class DungeonController {
       gold: bag.gold,
       exp: bag.exp,
       droppedWeapons: bag.weapons,
-      droppedItems: Object.entries(bag.items).flatMap(([id, cnt]) => Array(cnt).fill(id))
+      droppedItems: Object.entries(bag.items).flatMap(([id, cnt]) => Array(cnt).fill(id)),
+      starStones: bag.starStones || 0,
+      killCount: bag.killCount || 0
     };
     const { messages, levelUps } = store.applyBattleRewards(rewardObj);
     let allMsgs = [...messages];
@@ -367,8 +371,13 @@ export class DungeonController {
 
     if (isFullClear) {
       store.recordDungeonClear(dungeon?.id);
-      const training = store.applyDungeonTraining(dungeon?.trainingChance ?? 0.05);
+      const trainingChance = (dungeon?.trainingChance ?? 0.01) + store.getBlessingBonus('training_boost');
+      const training = store.applyDungeonTraining(trainingChance);
       allMsgs.push(...training.messages);
+      const clearStoneMap = { goblin_fort: 2, abyss_catacomb: 4, eternal_abyss: 8 };
+      const clearStones = clearStoneMap[dungeon?.id] || 2;
+      store.addStarStones(clearStones);
+      allMsgs.push(`💠 ダンジョン踏破報酬：星屑の輝石×${clearStones} を獲得！`);
       allEvents.push(...training.trainingEvents);
     }
 
