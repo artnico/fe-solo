@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FESOLO - FE風育成×オートバトラー×ハクスラRPG</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- ヘッダー -->
+    <header class="app-header">
+      <div class="header-title">
+        <span class="badge-phase">Phase 4</span>
+        <h1>FESOLO</h1>
+      </div>
+      <div class="header-meta">
+        <span class="crest-pill" id="header-hero-crest" title="英雄の証" style="border-color:rgba(232,185,84,0.6);color:var(--accent-gold);">👑 0</span>
+        <span class="crest-pill" id="header-crest" title="転職の証">🏅 0</span>
+        <span class="gold-pill" id="header-gold">0 G</span>
+        <button class="btn-icon" id="btn-open-settings" title="設定">⚙️</button>
+      </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="app-main" id="app-main"></main>
+
+    <!-- モーダルルート -->
+    <div id="modal-root"></div>
+
+    <!-- 下部固定ナビゲーション -->
+    <nav class="bottom-nav" id="bottom-nav">
+      <button class="nav-tab active" data-tab="explore">
+        <span class="nav-icon">⚔️</span>
+        <span class="nav-label">探索</span>
+      </button>
+      <button class="nav-tab" data-tab="party">
+        <span class="nav-icon">🛡️</span>
+        <span class="nav-label">編成・育成</span>
+      </button>
+      <button class="nav-tab" data-tab="equip">
+        <span class="nav-icon">🗡️</span>
+        <span class="nav-label">装備・倉庫</span>
+      </button>
+      <button class="nav-tab" data-tab="tavern">
+        <span class="nav-icon">🍺</span>
+        <span class="nav-label">酒場・募集</span>
+      </button>
+      <button class="nav-tab" data-tab="quest" style="position:relative;">
+        <span class="nav-icon">📜</span>
+        <span class="nav-label">クエスト</span>
+        <span class="nav-badge" id="quest-nav-badge" style="display:none;">0</span>
+      </button>
+    </nav>
+  </div>
+
+  <script type="module" src="js/ui/app.js"></script>
+</body>
+</html>
