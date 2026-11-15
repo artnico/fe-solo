@@ -233,7 +233,11 @@ export function getRaceSkillEffects(character) {
   for (const sk of race.raceSkills) {
     if (lv >= sk.unlockLv && sk.effects) {
       for (const [k, v] of Object.entries(sk.effects)) {
-        fx[k] = (fx[k] || 0) + v;
+        if (typeof v === 'boolean') {
+          if (v) fx[k] = true;
+        } else {
+          fx[k] = (fx[k] || 0) + v;
+        }
       }
     }
   }
@@ -401,6 +405,7 @@ export function calculateCombatStats(character, equipArg = null) {
     initiativeBonus,
     skillChanceBonus,
     hateBonus,
+    raceFx,
     lifestealPct: traitFx.lifestealPct + (raceFx.lifestealPct || 0),
     attackElement,
     weapon,

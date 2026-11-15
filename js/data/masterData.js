@@ -73,8 +73,8 @@ export const RACES = {
     growthRates: { hp: 60, mp: 40, str: 45, mag: 40, skl: 45, spd: 45, lck: 50, def: 40, res: 40, cha: 55 },
     raceSkills: [
       { unlockLv: 5, name: '開拓者の勘', description: 'ドロップ率+10% / 命中+5%', effects: { dropRateBonus: 10, hitBonus: 5 } },
-      { unlockLv: 20, name: '適応力', description: 'スキル発動率+8% / 追撃率+5%', effects: { skillChanceBonus: 8, followUpBonus: 5 } },
-      { unlockLv: 50, name: '英雄の資質', description: '物攻・魔攻+12% / 会心率+10%', effects: { atkPct: 12, magPct: 12, critBonus: 10 } }
+      { unlockLv: 20, name: '適応力', description: 'スキル発動+8% / 追撃+5% / 味方HP50%以下で与ダメ+15%', effects: { skillChanceBonus: 8, followUpBonus: 5, humanAdapt: true } },
+      { unlockLv: 50, name: '英雄の資質', description: '物攻・魔攻+12% / 会心+10% / 1戦1回HP1で耐える(不屈)', effects: { atkPct: 12, magPct: 12, critBonus: 10, guts: true } }
     ]
   },
   elf: {
@@ -85,8 +85,8 @@ export const RACES = {
     growthRates: { hp: 45, mp: 60, str: 30, mag: 60, skl: 60, spd: 55, lck: 40, def: 25, res: 55, cha: 50 },
     raceSkills: [
       { unlockLv: 5, name: '森の加護', description: '回避+8% / 命中+8%', effects: { evaBonus: 8, hitBonus: 8 } },
-      { unlockLv: 20, name: '精霊の詠唱', description: '魔攻+12% / 魔法貫通+10%', effects: { magPct: 12, magPenBonus: 10 } },
-      { unlockLv: 50, name: '悠久の叡智', description: '魔攻+18% / スキル発動+12% / 会心ダメ+25%', effects: { magPct: 18, skillChanceBonus: 12, critDmgBonus: 25 } }
+      { unlockLv: 20, name: '精霊の詠唱', description: '魔攻+12% / 魔貫+10% / 毎ターンMP2回復', effects: { magPct: 12, magPenBonus: 10, elfMpRegen: 2 } },
+      { unlockLv: 50, name: '悠久の叡智', description: '魔攻+18% / スキル発動+12% / 30%でスキルMP消費0', effects: { magPct: 18, skillChanceBonus: 12, critDmgBonus: 25, elfFreeCast: true } }
     ]
   },
   dwarf: {
@@ -97,8 +97,8 @@ export const RACES = {
     growthRates: { hp: 75, mp: 25, str: 60, mag: 20, skl: 40, spd: 25, lck: 40, def: 60, res: 35, cha: 30 },
     raceSkills: [
       { unlockLv: 5, name: '鍛冶屋の魂', description: '物防+6 / 物攻+6%', effects: { defBonus: 6, atkPct: 6 } },
-      { unlockLv: 20, name: '岩の体躯', description: '物理被ダメ-10% / 最大HP+12%', effects: { physDmgRedBonus: 10, hpPct: 12 } },
-      { unlockLv: 50, name: '不屈の巨匠', description: '物理貫通+15% / 反撃率+15% / 物理被ダメ-12%', effects: { physPenBonus: 15, counterBonus: 15, physDmgRedBonus: 12 } }
+      { unlockLv: 20, name: '岩の体躯', description: '物理被ダメ-10% / 最大HP+12% / ラウンド終了時HP5%回復', effects: { physDmgRedBonus: 10, hpPct: 12, dwarfRegenPct: 5 } },
+      { unlockLv: 50, name: '不屈の巨匠', description: '物貫+15% / 反撃+15% / 1戦1回HP1で耐える(不屈)', effects: { physPenBonus: 15, counterBonus: 15, physDmgRedBonus: 12, guts: true } }
     ]
   },
   beastkin: {
@@ -109,8 +109,8 @@ export const RACES = {
     growthRates: { hp: 65, mp: 30, str: 55, mag: 25, skl: 50, spd: 65, lck: 50, def: 35, res: 20, cha: 35 },
     raceSkills: [
       { unlockLv: 5, name: '野性の勘', description: '先制+10 / 回避+6%', effects: { initiativeBonus: 10, evaBonus: 6 } },
-      { unlockLv: 20, name: '疾風連撃', description: '追撃率+12% / 会心率+8%', effects: { followUpBonus: 12, critBonus: 8 } },
-      { unlockLv: 50, name: '獣王の咆哮', description: '物攻+15% / 会心ダメ+35% / 吸血8%', effects: { atkPct: 15, critDmgBonus: 35, lifestealPct: 8 } }
+      { unlockLv: 20, name: '疾風連撃', description: '追撃+12% / 会心+8% / 敵撃破時に別敵へ追撃', effects: { followUpBonus: 12, critBonus: 8, beastCleave: true } },
+      { unlockLv: 50, name: '獣王の咆哮', description: '物攻+15% / 会心ダメ+35% / HP50%以下で与ダメ+25%', effects: { atkPct: 15, critDmgBonus: 35, lifestealPct: 8, beastFrenzy: true } }
     ]
   },
   dragonkin: {
@@ -121,8 +121,8 @@ export const RACES = {
     growthRates: { hp: 80, mp: 35, str: 65, mag: 40, skl: 45, spd: 30, lck: 40, def: 60, res: 55, cha: 45 },
     raceSkills: [
       { unlockLv: 5, name: '竜鱗の守り', description: '物理・魔法被ダメ-5%', effects: { physDmgRedBonus: 5, magDmgRedBonus: 5 } },
-      { unlockLv: 20, name: '竜の血脈', description: '最大HP+15% / 物攻・魔攻+10%', effects: { hpPct: 15, atkPct: 10, magPct: 10 } },
-      { unlockLv: 50, name: '古竜の威厳', description: '物攻+20% / 全被ダメ-12% / ヘイト+15', effects: { atkPct: 20, physDmgRedBonus: 12, magDmgRedBonus: 12, hateBonus: 15 } }
+      { unlockLv: 20, name: '竜の血脈', description: '最大HP+15% / 物攻・魔攻+10% / ラウンド終了時HP6%回復', effects: { hpPct: 15, atkPct: 10, magPct: 10, dragonRegenPct: 6 } },
+      { unlockLv: 50, name: '古竜の威厳', description: '物攻+20% / 全被ダメ-12% / 攻撃時25%で竜炎ブレス追撃', effects: { atkPct: 20, physDmgRedBonus: 12, magDmgRedBonus: 12, hateBonus: 15, dragonBreath: true } }
     ]
   },
   spirit: {
@@ -133,8 +133,8 @@ export const RACES = {
     growthRates: { hp: 40, mp: 75, str: 20, mag: 70, skl: 55, spd: 55, lck: 60, def: 20, res: 65, cha: 60 },
     raceSkills: [
       { unlockLv: 5, name: '魔力の泉', description: '最大MP+15% / 魔法被ダメ-8%', effects: { mpPct: 15, magDmgRedBonus: 8 } },
-      { unlockLv: 20, name: '星霊の祝福', description: '回復量+20% / 魔法貫通+12%', effects: { healBonusPct: 20, magPenBonus: 12 } },
-      { unlockLv: 50, name: '原初の輝き', description: '魔攻+25% / スキル発動+15% / 回避+10%', effects: { magPct: 25, skillChanceBonus: 15, evaBonus: 10 } }
+      { unlockLv: 20, name: '星霊の祝福', description: '回復量+20% / 魔貫+12% / 毎ターンMP3回復&味方小回復', effects: { healBonusPct: 20, magPenBonus: 12, spiritMpRegen: 3, spiritAllyHeal: true } },
+      { unlockLv: 50, name: '原初の輝き', description: '魔攻+25% / スキル発動+15% / ラウンド終了時味方全体HP3%回復', effects: { magPct: 25, skillChanceBonus: 15, evaBonus: 10, spiritAuraPct: 3 } }
     ]
   }
 };

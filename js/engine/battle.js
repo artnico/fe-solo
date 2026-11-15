@@ -72,7 +72,8 @@ function createUnitFromCharacter(char, index, weaponInstance, options = {}) {
     statusResist: 0,
     isBoss: false,
     statuses: {},
-    isDefending: false
+    isDefending: false,
+    gutsUsed: false
   };
 }
 
@@ -309,11 +310,43 @@ function processRoundEndStatuses(session) {
       });
     }
 
+    if (u.hp > 0 && (u.combat?.raceFx?.dwarfRegenPct || u.combat?.raceFx?.dragonRegenPct)) {
+      const pct = (u.combat.raceFx.dwarfRegenPct || 0) + (u.combat.raceFx.dragonRegenPct || 0);
+      const heal = Math.max(1, Math.round((u.maxHp * pct) / 100));
+      const before = u.hp;
+      u.hp = Math.min(u.maxHp, u.hp + heal);
+      if (u.hp > before) {
+        session.logs.push({
+          type: 'heal',
+          text: `🌿 ${u.name}の種族再生！ HPが ${u.hp - before} 回復！`
+        });
+      }
+    }
+
     for (const [stId, stObj] of Object.entries(u.statuses)) {
       if (stId === 'freeze') continue;
       stObj.remaining -= 1;
       if (stObj.remaining <= 0) {
         delete u.statuses[stId];
+      }
+    }
+  }
+
+  // 精霊族Lv.50「原初の輝き」: ラウンド終了時味方全体HP3%回復
+  const auraPct = session.allies
+    .filter(a => a.hp > 0 && a.combat?.raceFx?.spiritAuraPct)
+    .reduce((max, a) => Math.max(max, a.combat.raceFx.spiritAuraPct), 0);
+  if (auraPct > 0) {
+    for (const ally of session.allies) {
+      if (ally.hp <= 0) continue;
+      const heal = Math.max(1, Math.round((ally.maxHp * auraPct) / 100));
+      const before = ally.hp;
+      ally.hp = Math.min(ally.maxHp, ally.hp + heal);
+      if (ally.hp > before) {
+        session.logs.push({
+          type: 'heal',
+          text: `✨ 原初の輝きにより ${ally.name}のHPが ${ally.hp - before} 回復！`
+        });
       }
     }
   }
@@ -444,6 +477,18 @@ function executeSingleAttack(session, actor, target, dmgScale = 1.0, label = '',
 
   baseDmg *= dmgScale;
 
+  // 人間Lv.20「適応力」: 味方にHP50%以下がいると与ダメ+15%
+  if (actor.combat?.raceFx?.humanAdapt) {
+    const friends = actor.side === 'ally' ? session.allies : session.enemies;
+    if (friends.some(f => f.hp > 0 && f.hp <= f.maxHp * 0.5)) {
+      baseDmg *= 1.15;
+    }
+  }
+  // 獣人Lv.50「獣王の咆哮」: 自身のHP50%以下で与ダメ+25%
+  if (actor.combat?.raceFx?.beastFrenzy && actor.hp <= actor.maxHp * 0.5) {
+    baseDmg *= 1.25;
+  }
+
   let elemMult = getElementMultiplier(actor.element, target.element);
   if (target.statuses?.wet) {
     if (actor.element === 'thunder' || actor.element === 'ice') {
@@ -468,6 +513,14 @@ function executeSingleAttack(session, actor, target, dmgScale = 1.0, label = '',
 
   const finalDmg = Math.max(1, Math.round(baseDmg));
   target.hp = Math.max(0, target.hp - finalDmg);
+
+  // 人間/ドワーフLv.50「不屈」: 1戦闘1回、致死ダメージをHP1で耐える
+  let gutsTag = '';
+  if (target.hp === 0 && target.combat?.raceFx?.guts && !target.gutsUsed) {
+    target.hp = 1;
+    target.gutsUsed = true;
+    gutsTag = ' 【不屈！HP1で耐えた！】';
+  }
 
   // 吸血特性・スキル吸収
   let drainText = '';
@@ -495,11 +548,42 @@ function executeSingleAttack(session, actor, target, dmgScale = 1.0, label = '',
 
   session.logs.push({
     type: isCrit ? 'crit' : actor.side === 'ally' ? 'ally-atk' : 'enemy-atk',
-    text: `${actor.name}の${label}攻撃！ ${target.name}に ${finalDmg} ダメージ${elemTag}${critTag}${defTag}${drainText}${koTag}`
+    text: `${actor.name}の${label}攻撃！ ${target.name}に ${finalDmg} ダメージ${elemTag}${critTag}${defTag}${drainText}${gutsTag}${koTag}`
   });
 
   if (target.hp > 0 && actor.element && actor.element !== 'none') {
     applyStatusAilment(session, actor, target, actor.element);
+  }
+
+  // 竜人Lv.50「古竜の威厳」: 25%で竜炎ブレス追撃
+  if (
+    target.hp > 0 &&
+    actor.combat?.raceFx?.dragonBreath &&
+    !options.isBreath &&
+    Math.random() < 0.25
+  ) {
+    const breathDmg = Math.max(
+      5,
+      Math.round((actor.combat.physAtk + actor.combat.magAtk) * 0.3)
+    );
+    target.hp = Math.max(0, target.hp - breathDmg);
+    const breathKo = target.hp === 0 ? ` → ${target.name}は倒れた！` : '';
+    session.logs.push({
+      type: actor.side === 'ally' ? 'ally-atk' : 'enemy-atk',
+      text: `🔥 ${actor.name}の古竜のブレス追撃！ ${target.name}に ${breathDmg} ダメージ！${breathKo}`
+    });
+  }
+
+  // 獣人Lv.20「疾風連撃」: 敵撃破時に別の敵へ追加攻撃
+  if (target.hp === 0 && actor.combat?.raceFx?.beastCleave && !options.isCleave) {
+    const enemyTeam = actor.side === 'ally' ? session.enemies : session.allies;
+    const nextTarget = getLivingUnits(enemyTeam)[0];
+    if (nextTarget) {
+      executeSingleAttack(session, actor, nextTarget, 0.75, '疾風連撃', {
+        ...options,
+        isCleave: true
+      });
+    }
   }
 
   return { hit: true, crit: isCrit, dmg: finalDmg };
@@ -594,10 +678,13 @@ function tryExecuteActiveSkill(session, actor, friendlyTeam, enemyTeam) {
   const chance = getActiveSkillActivationChance(actor, skill);
   if (Math.random() * 100 >= chance) return false;
 
-  actor.mp -= skill.mpCost;
+  const isFreeCast = Boolean(actor.combat?.raceFx?.elfFreeCast && Math.random() < 0.3);
+  if (!isFreeCast) {
+    actor.mp -= skill.mpCost;
+  }
   session.logs.push({
     type: 'system',
-    text: `✨ ${actor.name}のスキル【${skill.name}】発動！（MP-${skill.mpCost}）`
+    text: `✨ ${actor.name}のスキル【${skill.name}】発動！（${isFreeCast ? '悠久の叡智: MP消費0!' : `MP-${skill.mpCost}`}）`
   });
 
   if (skill.type === 'heal') {
@@ -756,6 +843,29 @@ export function stepBattle(session) {
 
   const livingFriends = getLivingUnits(friendlyTeam);
   const livingEnemies = getLivingUnits(enemyTeam);
+
+  // エルフLv.20 / 精霊族Lv.20: ターン開始時MP自然回復 & 精霊族味方小回復
+  const turnMpRegen =
+    (actor.combat?.raceFx?.elfMpRegen || 0) + (actor.combat?.raceFx?.spiritMpRegen || 0);
+  if (turnMpRegen > 0 && actor.mp < actor.maxMp) {
+    actor.mp = Math.min(actor.maxMp, actor.mp + turnMpRegen);
+  }
+  if (actor.combat?.raceFx?.spiritAllyHeal && livingFriends.length > 0) {
+    const lowest = [...livingFriends]
+      .filter(f => f.hp < f.maxHp)
+      .sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
+    if (lowest) {
+      const healAmt = Math.max(4, Math.round(actor.combat.magAtk * 0.25));
+      const before = lowest.hp;
+      lowest.hp = Math.min(lowest.maxHp, lowest.hp + healAmt);
+      if (lowest.hp > before) {
+        session.logs.push({
+          type: 'heal',
+          text: `🌟 ${actor.name}の星霊の祝福！ ${lowest.name}のHPが ${lowest.hp - before} 回復！`
+        });
+      }
+    }
+  }
 
   if (livingEnemies.length === 0) {
     finalizeBattle(session, actor.side === 'ally' ? 'victory' : 'defeat');
