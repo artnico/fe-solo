@@ -612,19 +612,20 @@ function finalizeBattle(session, result) {
       }
       for (const d of enemy.drops || []) {
         if (Math.random() < d.rate * dropMultiplier) {
+          const dropRarityBonus = (session.areaRarityBonus || 0) + (d.rarityBonus || 0);
           if (d.kind === 'item') {
             droppedItems.push(d.id);
           } else if (d.kind === 'armor') {
             droppedWeapons.push(
-              generateArmorInstance(d.id, { rarityBonus: session.areaRarityBonus })
+              generateArmorInstance(d.id, { rarityBonus: dropRarityBonus })
             );
           } else if (d.kind === 'accessory') {
             droppedWeapons.push(
-              generateAccessoryInstance(d.id, { rarityBonus: session.areaRarityBonus })
+              generateAccessoryInstance(d.id, { rarityBonus: dropRarityBonus })
             );
           } else {
             droppedWeapons.push(
-              generateWeaponInstance(d.id, { rarityBonus: session.areaRarityBonus })
+              generateWeaponInstance(d.id, { rarityBonus: dropRarityBonus })
             );
           }
         }

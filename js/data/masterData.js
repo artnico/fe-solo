@@ -1043,7 +1043,9 @@ export const ARMORS = {
   astral_coat: { id: 'astral_coat', name: '星辰の軽衣', type: 'light_armor', hp: 24, mp: 6, def: 12, res: 11, eva: 11 },
   apprentice_robe: { id: 'apprentice_robe', name: '見習いのローブ', type: 'robe', hp: 5, mp: 6, def: 2, res: 6, eva: 2 },
   sage_vestment: { id: 'sage_vestment', name: '賢者の法衣', type: 'robe', hp: 10, mp: 12, def: 4, res: 11, eva: 4 },
-  seraph_robe: { id: 'seraph_robe', name: '熾天使の神衣', type: 'robe', hp: 18, mp: 22, def: 8, res: 19, eva: 8 }
+  seraph_robe: { id: 'seraph_robe', name: '熾天使の神衣', type: 'robe', hp: 18, mp: 22, def: 8, res: 19, eva: 8 },
+  ancient_bark_mail: { id: 'ancient_bark_mail', name: '古樹の盾鎧', type: 'heavy_armor', hp: 28, mp: 2, def: 12, res: 8, eva: -1 },
+  flame_scale_armor: { id: 'flame_scale_armor', name: '灼熱の竜鱗鎧', type: 'heavy_armor', hp: 45, mp: 6, def: 20, res: 14, eva: 1 }
 };
 
 // アクセサリーテンプレートマスター
@@ -1055,7 +1057,11 @@ export const ACCESSORIES = {
   ward_amulet: { id: 'ward_amulet', name: '魔除けの護符', type: 'amulet', hp: 10, mp: 6, def: 2, res: 7, dropBonus: 0 },
   swift_bracelet: { id: 'swift_bracelet', name: '俊敏の腕輪', type: 'bracelet', hp: 5, mp: 0, hit: 5, eva: 6, initiativeBonus: 5 },
   hero_bracelet: { id: 'hero_bracelet', name: '勇者の腕輪', type: 'bracelet', hp: 15, mp: 4, atk: 3, mag: 3, hit: 5, eva: 4 },
-  eternal_crown: { id: 'eternal_crown', name: '永劫の王冠', type: 'amulet', hp: 28, mp: 14, atk: 6, mag: 6, def: 5, res: 8, dropBonus: 20 }
+  eternal_crown: { id: 'eternal_crown', name: '永劫の王冠', type: 'amulet', hp: 28, mp: 14, atk: 6, mag: 6, def: 5, res: 8, dropBonus: 20 },
+  slime_ring: { id: 'slime_ring', name: 'スライムゼリー環', type: 'ring', hp: 12, mp: 6, def: 2, res: 3, eva: 2 },
+  boar_fang_charm: { id: 'boar_fang_charm', name: '猪牙の首飾り', type: 'amulet', hp: 10, mp: 0, atk: 5, mag: 0, crit: 4, eva: 0 },
+  storm_feather_ring: { id: 'storm_feather_ring', name: '嵐羽の指輪', type: 'ring', hp: 8, mp: 4, atk: 5, mag: 5, eva: 10, initiativeBonus: 10 },
+  astral_ring: { id: 'astral_ring', name: '星幽の指輪', type: 'ring', hp: 10, mp: 18, atk: 0, mag: 10, crit: 10, dropBonus: 15 }
 };
 
 // 武器テンプレートマスター
@@ -1087,7 +1093,15 @@ export const WEAPONS = {
   abyssal_grimoire: { id: 'abyssal_grimoire', name: '深淵の魔導書', type: 'tome', element: 'ice', atk: 0, mag: 21, hit: 15, crit: 12 },
   dragon_slayer: { id: 'dragon_slayer', name: '竜殺しの大剣', type: 'sword', element: 'lava', atk: 27, mag: 0, hit: 12, crit: 15 },
   celestial_bow: { id: 'celestial_bow', name: '天穹の聖弓', type: 'bow', element: 'wind', atk: 24, mag: 0, hit: 22, crit: 18 },
-  genesis_staff: { id: 'genesis_staff', name: '創世の聖杖', type: 'staff', element: 'water', atk: 5, mag: 26, hit: 20, crit: 10 }
+  genesis_staff: { id: 'genesis_staff', name: '創世の聖杖', type: 'staff', element: 'water', atk: 5, mag: 26, hit: 20, crit: 10 },
+
+  // モンスター固有レアドロップ武器
+  stinger_rapier: { id: 'stinger_rapier', name: '蜂針の細剣', type: 'sword', element: 'wind', atk: 9, mag: 0, hit: 12, crit: 12 },
+  sprite_wand: { id: 'sprite_wand', name: '森精の魔杖', type: 'staff', element: 'wind', atk: 2, mag: 14, hit: 15, crit: 8 },
+  wolf_claw_dagger: { id: 'wolf_claw_dagger', name: '人狼の爪牙', type: 'dagger', element: 'wind', atk: 12, mag: 0, hit: 14, crit: 18 },
+  colossus_axe: { id: 'colossus_axe', name: '巨像の重斧', type: 'axe', element: 'earth', atk: 22, mag: 0, hit: -5, crit: 12 },
+  lament_grimoire: { id: 'lament_grimoire', name: '嘆きの氷書', type: 'tome', element: 'ice', atk: 0, mag: 18, hit: 12, crit: 10 },
+  seraph_blade: { id: 'seraph_blade', name: '熾天使の聖剣', type: 'sword', element: 'thunder', atk: 30, mag: 12, hit: 15, crit: 18 }
 };
 
 // 特殊アイテム（転職の証など）
@@ -1115,7 +1129,28 @@ export const MONSTERS = {
       { kind: 'weapon', id: 'iron_dagger', rate: 0.14 },
       { kind: 'weapon', id: 'water_tome', rate: 0.06 },
       { kind: 'weapon', id: 'heal_staff', rate: 0.06 },
-      { kind: 'armor', id: 'leather_vest', rate: 0.08 }
+      { kind: 'armor', id: 'leather_vest', rate: 0.08 },
+      { kind: 'accessory', id: 'slime_ring', rate: 0.025, rarityBonus: 0.4 }
+    ]
+  },
+  hornet: {
+    id: 'hornet', name: 'ジャイアントホーネット', element: 'wind',
+    level: 2, exp: 16, gold: 16,
+    stats: { hp: 11, mp: 2, str: 9, mag: 2, skl: 10, spd: 11, lck: 5, def: 4, res: 3, cha: 1 },
+    weaponType: 'dagger', atk: 7, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'iron_dagger', rate: 0.12 },
+      { kind: 'weapon', id: 'stinger_rapier', rate: 0.03, rarityBonus: 0.45 }
+    ]
+  },
+  wild_boar: {
+    id: 'wild_boar', name: '暴れ猪', element: 'earth',
+    level: 3, exp: 20, gold: 22,
+    stats: { hp: 19, mp: 0, str: 12, mag: 1, skl: 6, spd: 6, lck: 4, def: 7, res: 3, cha: 1 },
+    weaponType: 'axe', atk: 8, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'hand_axe', rate: 0.12 },
+      { kind: 'accessory', id: 'boar_fang_charm', rate: 0.03, rarityBonus: 0.45 }
     ]
   },
   goblin: {
@@ -1151,7 +1186,28 @@ export const MONSTERS = {
       { kind: 'weapon', id: 'silver_dagger', rate: 0.08 },
       { kind: 'weapon', id: 'thunder_katana', rate: 0.04 },
       { kind: 'armor', id: 'wind_jerkin', rate: 0.08 },
-      { kind: 'accessory', id: 'crit_ring', rate: 0.05 }
+      { kind: 'accessory', id: 'crit_ring', rate: 0.05 },
+      { kind: 'weapon', id: 'wolf_claw_dagger', rate: 0.03, rarityBonus: 0.5 }
+    ]
+  },
+  treant: {
+    id: 'treant', name: '古樹のトレント', element: 'earth', statusResist: 15,
+    level: 9, exp: 52, gold: 55,
+    stats: { hp: 48, mp: 6, str: 20, mag: 8, skl: 12, spd: 8, lck: 5, def: 18, res: 12, cha: 3 },
+    weaponType: 'axe', atk: 15, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'battle_axe', rate: 0.06 },
+      { kind: 'armor', id: 'ancient_bark_mail', rate: 0.03, rarityBonus: 0.5 }
+    ]
+  },
+  forest_sprite: {
+    id: 'forest_sprite', name: '森の精霊', element: 'wind',
+    level: 9, exp: 48, gold: 52,
+    stats: { hp: 28, mp: 18, str: 6, mag: 23, skl: 16, spd: 18, lck: 10, def: 9, res: 17, cha: 6 },
+    weaponType: 'staff', atk: 0, mag: 16,
+    drops: [
+      { kind: 'weapon', id: 'wind_tome', rate: 0.08 },
+      { kind: 'weapon', id: 'sprite_wand', rate: 0.03, rarityBonus: 0.5 }
     ]
   },
   dark_mage: {
@@ -1190,6 +1246,28 @@ export const MONSTERS = {
       { kind: 'weapon', id: 'thunder_katana', rate: 0.10 },
       { kind: 'accessory', id: 'hero_bracelet', rate: 0.08 },
       { kind: 'item', id: 'class_crest', rate: 0.15 }
+    ]
+  },
+  stone_golem: {
+    id: 'stone_golem', name: 'ストーンゴーレム', element: 'earth', statusResist: 30,
+    level: 18, exp: 130, gold: 145,
+    stats: { hp: 105, mp: 0, str: 42, mag: 2, skl: 15, spd: 8, lck: 6, def: 38, res: 16, cha: 2 },
+    weaponType: 'axe', atk: 28, mag: 0,
+    drops: [
+      { kind: 'armor', id: 'steel_armor', rate: 0.10 },
+      { kind: 'weapon', id: 'colossus_axe', rate: 0.03, rarityBonus: 0.5 },
+      { kind: 'item', id: 'class_crest', rate: 0.10 }
+    ]
+  },
+  banshee: {
+    id: 'banshee', name: '嘆きのバンシー', element: 'ice', statusResist: 20,
+    level: 17, exp: 120, gold: 135,
+    stats: { hp: 58, mp: 26, str: 10, mag: 40, skl: 21, spd: 20, lck: 10, def: 18, res: 30, cha: 6 },
+    weaponType: 'tome', atk: 0, mag: 28,
+    drops: [
+      { kind: 'armor', id: 'sage_vestment', rate: 0.10 },
+      { kind: 'weapon', id: 'lament_grimoire', rate: 0.03, rarityBonus: 0.5 },
+      { kind: 'item', id: 'class_crest', rate: 0.10 }
     ]
   },
   goblin_king: {
@@ -1246,6 +1324,48 @@ export const MONSTERS = {
       { kind: 'item', id: 'hero_crest', rate: 0.05 }
     ]
   },
+  flame_drake: {
+    id: 'flame_drake', name: 'フレイムドレイク', element: 'fire', statusResist: 20,
+    level: 28, exp: 270, gold: 300,
+    stats: { hp: 145, mp: 14, str: 62, mag: 24, skl: 28, spd: 24, lck: 14, def: 42, res: 32, cha: 8 },
+    weaponType: 'sword', atk: 42, mag: 0,
+    drops: [
+      { kind: 'armor', id: 'flame_scale_armor', rate: 0.03, rarityBonus: 0.55 },
+      { kind: 'item', id: 'class_crest', rate: 0.15 }
+    ]
+  },
+  storm_harpy: {
+    id: 'storm_harpy', name: 'ストームハルピュイア', element: 'thunder',
+    level: 27, exp: 250, gold: 280,
+    stats: { hp: 110, mp: 18, str: 48, mag: 34, skl: 32, spd: 36, lck: 16, def: 30, res: 30, cha: 10 },
+    weaponType: 'bow', atk: 36, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'hunter_bow', rate: 0.12 },
+      { kind: 'accessory', id: 'storm_feather_ring', rate: 0.03, rarityBonus: 0.55 }
+    ]
+  },
+  seraph_knight: {
+    id: 'seraph_knight', name: '星界の熾天使', element: 'thunder', statusResist: 40,
+    level: 40, exp: 520, gold: 600,
+    stats: { hp: 245, mp: 36, str: 86, mag: 76, skl: 42, spd: 38, lck: 22, def: 58, res: 58, cha: 18 },
+    weaponType: 'sword', atk: 58, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'seraph_blade', rate: 0.025, rarityBonus: 0.6 },
+      { kind: 'armor', id: 'seraph_robe', rate: 0.12 },
+      { kind: 'item', id: 'hero_crest', rate: 0.14 }
+    ]
+  },
+  void_warlock: {
+    id: 'void_warlock', name: '虚無の魔導師', element: 'ice', statusResist: 35,
+    level: 39, exp: 500, gold: 580,
+    stats: { hp: 205, mp: 48, str: 32, mag: 88, skl: 40, spd: 34, lck: 20, def: 46, res: 64, cha: 14 },
+    weaponType: 'tome', atk: 0, mag: 60,
+    drops: [
+      { kind: 'accessory', id: 'astral_ring', rate: 0.025, rarityBonus: 0.6 },
+      { kind: 'weapon', id: 'genesis_staff', rate: 0.10 },
+      { kind: 'item', id: 'hero_crest', rate: 0.12 }
+    ]
+  },
   celestial_warden: {
     id: 'celestial_warden', name: '星界の番人', element: 'thunder', statusResist: 35,
     level: 38, exp: 480, gold: 560,
@@ -1282,7 +1402,8 @@ export const AREAS = [
     description: 'スライムやゴブリンが徘徊する初心者向けの探索エリア。',
     encounters: [
       ['slime', 'slime'],
-      ['slime', 'goblin'],
+      ['slime', 'hornet'],
+      ['goblin', 'wild_boar'],
       ['goblin', 'goblin', 'goblin_archer']
     ]
   },
@@ -1291,11 +1412,12 @@ export const AREAS = [
     name: '霧の深い森',
     recommendedLv: 4,
     rarityBonus: 0.15,
-    description: '人狼や闇の術師が潜む森。レア装備や「転職の証」も稀にドロップ。',
+    description: '人狼や古樹、精霊が潜む森。レア装備や「転職の証」も稀にドロップ。',
     encounters: [
       ['goblin', 'wolf', 'goblin_archer'],
       ['wolf', 'wolf', 'dark_mage'],
-      ['goblin', 'goblin', 'wolf', 'dark_mage']
+      ['treant', 'forest_sprite', 'wolf'],
+      ['treant', 'goblin', 'dark_mage', 'forest_sprite']
     ]
   },
   {
@@ -1303,11 +1425,12 @@ export const AREAS = [
     name: '古代遺跡の外縁',
     recommendedLv: 8,
     rarityBonus: 0.35,
-    description: 'オーク戦士や守護者が守る危険地帯。上位装備と転職の証が狙いやすい。',
+    description: 'オーク戦士やゴーレム、守護者が守る危険地帯。上位装備と転職の証が狙いやすい。',
     encounters: [
       ['orc_warrior', 'wolf', 'dark_mage'],
-      ['orc_warrior', 'orc_warrior', 'goblin_archer', 'dark_mage'],
-      ['ruin_guardian', 'orc_warrior', 'dark_mage']
+      ['stone_golem', 'orc_warrior', 'banshee'],
+      ['ruin_guardian', 'orc_warrior', 'dark_mage'],
+      ['stone_golem', 'ruin_guardian', 'banshee']
     ]
   },
   {
@@ -1315,11 +1438,12 @@ export const AREAS = [
     name: '竜の峰',
     recommendedLv: 15,
     rarityBonus: 0.65,
-    description: 'ワイバーンや竜騎士が舞う霊峰。伝説級装備や「英雄の証」のドロップも狙える。',
+    description: 'ワイバーンやドレイク、竜騎士が舞う霊峰。伝説級装備や「英雄の証」のドロップも狙える。',
     encounters: [
       ['wyvern', 'wyvern'],
-      ['wyvern', 'dragon_knight', 'dark_mage'],
-      ['dragon_knight', 'dragon_knight', 'wyvern']
+      ['flame_drake', 'storm_harpy', 'wyvern'],
+      ['wyvern', 'dragon_knight', 'storm_harpy'],
+      ['dragon_knight', 'flame_drake', 'wyvern']
     ]
   },
   {
@@ -1327,10 +1451,11 @@ export const AREAS = [
     name: '星界の神殿',
     recommendedLv: 24,
     rarityBonus: 1.0,
-    description: '神話級の秘宝と「英雄の証」を求めて挑む最難関の通常エリア。',
+    description: '熾天使や星界の番人が守る最難関の通常エリア。神話級の秘宝と「英雄の証」を狙える。',
     encounters: [
       ['celestial_warden', 'dragon_knight'],
-      ['celestial_warden', 'celestial_warden', 'wyvern']
+      ['seraph_knight', 'void_warlock', 'celestial_warden'],
+      ['celestial_warden', 'seraph_knight', 'void_warlock']
     ]
   }
 ];
