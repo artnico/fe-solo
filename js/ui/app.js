@@ -86,14 +86,6 @@ function updateHeader() {
   if (goldEl) {
     goldEl.textContent = `${store.state.gold.toLocaleString()} G`;
   }
-  const crestEl = document.getElementById('header-crest');
-  if (crestEl) {
-    crestEl.textContent = `🏅 ${store.state.items?.class_crest || 0}`;
-  }
-  const heroCrestEl = document.getElementById('header-hero-crest');
-  if (heroCrestEl) {
-    heroCrestEl.textContent = `👑 ${store.state.items?.hero_crest || 0}`;
-  }
   const starStoneEl = document.getElementById('header-star-stones');
   if (starStoneEl) {
     starStoneEl.textContent = String(store.state.starStones || 0);
@@ -332,8 +324,8 @@ function renderDungeonSection() {
           このまま次の階層へ挑むか、戦利品を持って安全に帰還するかを選択できます。
         </p>
         <div class="btn-row">
-          <button class="btn btn-primary" id="btn-dungeon-next-floor">⬇️ 第${run.floor + 1}階層へ進む</button>
           <button class="btn btn-blue" id="btn-dungeon-retreat">🎒 戦利品を持って帰還</button>
+          <button class="btn btn-primary" id="btn-dungeon-next-floor">⬇️ 第${run.floor + 1}階層へ進む</button>
         </div>
       </section>
     `;

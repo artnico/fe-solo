@@ -1220,7 +1220,7 @@ export const MONSTERS = {
       { kind: 'weapon', id: 'saint_staff', rate: 0.05 },
       { kind: 'armor', id: 'sage_vestment', rate: 0.07 },
       { kind: 'accessory', id: 'magic_ring', rate: 0.06 },
-      { kind: 'item', id: 'class_crest', rate: 0.04 }
+      { kind: 'item', id: 'class_crest', rate: 0.015 }
     ]
   },
   orc_warrior: {
@@ -1233,7 +1233,7 @@ export const MONSTERS = {
       { kind: 'weapon', id: 'knight_lance', rate: 0.07 },
       { kind: 'armor', id: 'steel_armor', rate: 0.09 },
       { kind: 'accessory', id: 'lucky_amulet', rate: 0.05 },
-      { kind: 'item', id: 'class_crest', rate: 0.06 }
+      { kind: 'item', id: 'class_crest', rate: 0.02 }
     ]
   },
   ruin_guardian: {
@@ -1245,7 +1245,7 @@ export const MONSTERS = {
       { kind: 'weapon', id: 'knight_lance', rate: 0.14 },
       { kind: 'weapon', id: 'thunder_katana', rate: 0.10 },
       { kind: 'accessory', id: 'hero_bracelet', rate: 0.08 },
-      { kind: 'item', id: 'class_crest', rate: 0.15 }
+      { kind: 'item', id: 'class_crest', rate: 0.04 }
     ]
   },
   stone_golem: {
@@ -1256,7 +1256,7 @@ export const MONSTERS = {
     drops: [
       { kind: 'armor', id: 'steel_armor', rate: 0.10 },
       { kind: 'weapon', id: 'colossus_axe', rate: 0.03, rarityBonus: 0.5 },
-      { kind: 'item', id: 'class_crest', rate: 0.10 }
+      { kind: 'item', id: 'class_crest', rate: 0.03 }
     ]
   },
   banshee: {
@@ -1267,7 +1267,7 @@ export const MONSTERS = {
     drops: [
       { kind: 'armor', id: 'sage_vestment', rate: 0.10 },
       { kind: 'weapon', id: 'lament_grimoire', rate: 0.03, rarityBonus: 0.5 },
-      { kind: 'item', id: 'class_crest', rate: 0.10 }
+      { kind: 'item', id: 'class_crest', rate: 0.03 }
     ]
   },
   goblin_king: {
@@ -1277,7 +1277,7 @@ export const MONSTERS = {
     weaponType: 'axe', atk: 16, mag: 0,
     drops: [
       { kind: 'weapon', id: 'goblin_slayer_blade', rate: 0.35 },
-      { kind: 'item', id: 'class_crest', rate: 0.25 }
+      { kind: 'item', id: 'class_crest', rate: 0.08 }
     ]
   },
   skeleton_knight: {
@@ -1287,7 +1287,7 @@ export const MONSTERS = {
     weaponType: 'sword', atk: 27, mag: 0,
     drops: [
       { kind: 'weapon', id: 'steel_sword', rate: 0.15 },
-      { kind: 'item', id: 'class_crest', rate: 0.10 }
+      { kind: 'item', id: 'class_crest', rate: 0.03 }
     ]
   },
   lich_lord: {
@@ -1298,7 +1298,7 @@ export const MONSTERS = {
     drops: [
       { kind: 'weapon', id: 'abyssal_grimoire', rate: 0.35 },
       { kind: 'weapon', id: 'soul_reaper_scythe', rate: 0.30 },
-      { kind: 'item', id: 'class_crest', rate: 0.50 }
+      { kind: 'item', id: 'class_crest', rate: 0.15 }
     ]
   },
   wyvern: {
@@ -1309,7 +1309,7 @@ export const MONSTERS = {
     drops: [
       { kind: 'armor', id: 'astral_coat', rate: 0.12 },
       { kind: 'weapon', id: 'thunder_katana', rate: 0.10 },
-      { kind: 'item', id: 'class_crest', rate: 0.14 }
+      { kind: 'item', id: 'class_crest', rate: 0.04 }
     ]
   },
   dragon_knight: {
@@ -1320,8 +1320,8 @@ export const MONSTERS = {
     drops: [
       { kind: 'armor', id: 'dragon_mail', rate: 0.12 },
       { kind: 'weapon', id: 'dragon_slayer', rate: 0.08 },
-      { kind: 'item', id: 'class_crest', rate: 0.18 },
-      { kind: 'item', id: 'hero_crest', rate: 0.05 }
+      { kind: 'item', id: 'class_crest', rate: 0.05 },
+      { kind: 'item', id: 'hero_crest', rate: 0.015 }
     ]
   },
   flame_drake: {
@@ -1331,7 +1331,7 @@ export const MONSTERS = {
     weaponType: 'sword', atk: 42, mag: 0,
     drops: [
       { kind: 'armor', id: 'flame_scale_armor', rate: 0.03, rarityBonus: 0.55 },
-      { kind: 'item', id: 'class_crest', rate: 0.15 }
+      { kind: 'item', id: 'class_crest', rate: 0.04 }
     ]
   },
   storm_harpy: {
@@ -1352,7 +1352,7 @@ export const MONSTERS = {
     drops: [
       { kind: 'weapon', id: 'seraph_blade', rate: 0.025, rarityBonus: 0.6 },
       { kind: 'armor', id: 'seraph_robe', rate: 0.12 },
-      { kind: 'item', id: 'hero_crest', rate: 0.14 }
+      { kind: 'item', id: 'hero_crest', rate: 0.035 }
     ]
   },
   void_warlock: {
@@ -1363,7 +1363,7 @@ export const MONSTERS = {
     drops: [
       { kind: 'accessory', id: 'astral_ring', rate: 0.025, rarityBonus: 0.6 },
       { kind: 'weapon', id: 'genesis_staff', rate: 0.10 },
-      { kind: 'item', id: 'hero_crest', rate: 0.12 }
+      { kind: 'item', id: 'hero_crest', rate: 0.03 }
     ]
   },
 
@@ -1417,7 +1417,7 @@ export const MONSTERS = {
     drops: [
       { kind: 'weapon', id: 'thunder_katana', rate: 0.30, rarityBonus: 0.4 },
       { kind: 'weapon', id: 'saint_staff', rate: 0.25 },
-      { kind: 'item', id: 'class_crest', rate: 0.35 }
+      { kind: 'item', id: 'class_crest', rate: 0.10 }
     ]
   },
   wraith: {
@@ -1427,7 +1427,7 @@ export const MONSTERS = {
     weaponType: 'tome', atk: 0, mag: 32,
     drops: [
       { kind: 'weapon', id: 'lament_grimoire', rate: 0.06, rarityBonus: 0.5 },
-      { kind: 'item', id: 'class_crest', rate: 0.12 }
+      { kind: 'item', id: 'class_crest', rate: 0.035 }
     ]
   },
   crimson_hatchling: {
@@ -1437,7 +1437,7 @@ export const MONSTERS = {
     weaponType: 'sword', atk: 36, mag: 0,
     drops: [
       { kind: 'armor', id: 'dragon_mail', rate: 0.10 },
-      { kind: 'item', id: 'class_crest', rate: 0.15 }
+      { kind: 'item', id: 'class_crest', rate: 0.04 }
     ]
   },
   crimson_wyrm: {
@@ -1448,7 +1448,7 @@ export const MONSTERS = {
     drops: [
       { kind: 'weapon', id: 'dragon_slayer', rate: 0.35, rarityBonus: 0.5 },
       { kind: 'armor', id: 'flame_scale_armor', rate: 0.25, rarityBonus: 0.5 },
-      { kind: 'item', id: 'hero_crest', rate: 0.25 }
+      { kind: 'item', id: 'hero_crest', rate: 0.08 }
     ]
   },
   abyss_sentinel: {
@@ -1458,7 +1458,7 @@ export const MONSTERS = {
     weaponType: 'lance', atk: 56, mag: 0,
     drops: [
       { kind: 'weapon', id: 'soul_reaper_scythe', rate: 0.14, rarityBonus: 0.5 },
-      { kind: 'item', id: 'hero_crest', rate: 0.14 }
+      { kind: 'item', id: 'hero_crest', rate: 0.035 }
     ]
   },
   celestial_warden: {
@@ -1470,7 +1470,7 @@ export const MONSTERS = {
       { kind: 'weapon', id: 'celestial_bow', rate: 0.12 },
       { kind: 'weapon', id: 'genesis_staff', rate: 0.10 },
       { kind: 'armor', id: 'seraph_robe', rate: 0.12 },
-      { kind: 'item', id: 'hero_crest', rate: 0.12 }
+      { kind: 'item', id: 'hero_crest', rate: 0.03 }
     ]
   },
   abyss_dragon: {
@@ -1482,7 +1482,7 @@ export const MONSTERS = {
       { kind: 'weapon', id: 'dragon_slayer', rate: 0.45 },
       { kind: 'weapon', id: 'genesis_staff', rate: 0.35 },
       { kind: 'accessory', id: 'eternal_crown', rate: 0.40 },
-      { kind: 'item', id: 'hero_crest', rate: 0.65 }
+      { kind: 'item', id: 'hero_crest', rate: 0.20 }
     ]
   }
 };
