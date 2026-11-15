@@ -344,6 +344,10 @@ body {
   border-top: 2px solid var(--accent-red);
 }
 
+.unit-card.midline {
+  border-top: 2px solid var(--accent-gold);
+}
+
 .unit-card.backline {
   border-top: 2px solid var(--accent-blue);
 }
@@ -488,6 +492,11 @@ body {
 .slot-badge.front {
   background: rgba(224, 93, 93, 0.2);
   color: #ff9c9c;
+}
+
+.slot-badge.mid {
+  background: rgba(242, 193, 78, 0.2);
+  color: var(--accent-gold);
 }
 
 .slot-badge.back {

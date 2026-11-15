@@ -427,12 +427,13 @@ function renderAutoExploreSection() {
     const indices = Array.from({ length: slotCount }, (_, i) => i);
     const slots = indices.map(pos => {
       const u = units[pos];
+      const lineClass = !isEnemy && pos === 2 ? 'midline' : pos < 2 ? 'frontline' : 'backline';
       if (!u) {
-        return `<div class="unit-card ${pos < 2 ? 'frontline' : 'backline'}" style="opacity:0.25;justify-content:center;align-items:center;font-size:10px;">空</div>`;
+        return `<div class="unit-card ${lineClass}" style="opacity:0.25;justify-content:center;align-items:center;font-size:10px;">空</div>`;
       }
       const hpPct = Math.max(0, Math.min(100, Math.round((u.hp / u.maxHp) * 100)));
       const mpPct = u.maxMp > 0 ? Math.max(0, Math.min(100, Math.round((u.mp / u.maxMp) * 100))) : 0;
-      const posLabel = pos < 2 ? `前${pos + 1}` : `後${pos + 1}`;
+      const posLabel = !isEnemy && pos === 2 ? `中${pos + 1}` : pos < 2 ? `前${pos + 1}` : `後${pos + 1}`;
       const deadClass = u.hp <= 0 ? 'dead' : '';
       const elemDef = u.element && u.element !== 'none' ? ELEMENTS[u.element] : null;
       const elemBadge = elemDef
@@ -451,7 +452,7 @@ function renderAutoExploreSection() {
               .join('')}</div>`
           : '';
       return `
-        <div class="unit-card ${pos < 2 ? 'frontline' : 'backline'} ${deadClass}">
+        <div class="unit-card ${lineClass} ${deadClass}">
           <div class="unit-pos-tag">
             <span>${posLabel} ${elemBadge}</span>
             <span>${isEnemy ? u.className : ''}</span>
@@ -551,7 +552,7 @@ function renderAutoExploreSection() {
       <div>
         <div class="team-label">
           <span>味方パーティ（左から1〜5番目）</span>
-          <span>前衛:赤 / 後衛:青</span>
+          <span>前衛:赤 / 中衛:黄 / 後衛:青</span>
         </div>
         ${renderUnitGrid(allyDisplayUnits, false)}
       </div>
@@ -583,14 +584,15 @@ function renderPartyTab() {
   const slotsHtml = [0, 1, 2, 3, 4]
     .map(idx => {
       const c = party[idx];
-      const isFront = idx < 2;
+      const lineType = idx < 2 ? 'front' : idx === 2 ? 'mid' : 'back';
+      const lineLabel = idx < 2 ? '前衛' : idx === 2 ? '中衛' : '後衛';
       const isSelected = c && detailChar && c.id === detailChar.id;
       const isSwapSource = swapSourceIndex === idx;
       if (!c) {
         return `
           <div class="party-slot-item" data-slot-idx="${idx}">
             <div>
-              <span class="slot-badge ${isFront ? 'front' : 'back'}">${isFront ? '前衛' : '後衛'} ${idx + 1}</span>
+              <span class="slot-badge ${lineType}">${lineLabel} ${idx + 1}</span>
               <span style="color:var(--text-muted)">空きスロット</span>
             </div>
           </div>
@@ -601,7 +603,7 @@ function renderPartyTab() {
       return `
         <div class="party-slot-item ${isSelected ? 'selected' : ''}" data-slot-idx="${idx}" data-char-id="${c.id}">
           <div>
-            <span class="slot-badge ${isFront ? 'front' : 'back'}">${isFront ? '前衛' : '後衛'} ${idx + 1}</span>
+            <span class="slot-badge ${lineType}">${lineLabel} ${idx + 1}</span>
             <strong>${escapeHtml(c.name)}</strong>
             <span style="font-size:11px;color:var(--text-muted);margin-left:4px;">Lv.${c.level} ${race?.name}/${cls?.name}</span>
           </div>
@@ -869,7 +871,7 @@ function renderPartyTab() {
   return `
     <section class="card">
       <div class="card-title">
-        <span>パーティ隊列（1〜2前衛 / 3〜5後衛）</span>
+        <span>パーティ隊列（1〜2前衛 / 3中衛 / 4〜5後衛）</span>
         <span style="font-size:11px;color:var(--text-muted)">入替ボタンで順変更</span>
       </div>
       <div class="party-slot-list">${slotsHtml}</div>

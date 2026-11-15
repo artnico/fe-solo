@@ -388,7 +388,8 @@ function chooseAttackTarget(actor, enemies) {
 
 function executeSingleAttack(session, actor, target, dmgScale = 1.0, label = '', options = {}) {
   const isActorFront = actor.position < 2;
-  const isTargetBack = target.position >= 2;
+  const isActorMid = actor.side === 'ally' && actor.position === 2;
+  const isTargetBack = target.side === 'ally' ? target.position >= 3 : target.position >= 2;
   const weaponType = actor.combat.weaponType;
   const isMelee = weaponType.range === 'melee';
   const isRanged = weaponType.range === 'ranged';
@@ -459,7 +460,7 @@ function executeSingleAttack(session, actor, target, dmgScale = 1.0, label = '',
   baseDmg *= frontRangedMod;
 
   if (!isActorFront && isMelee && isTargetBack) {
-    baseDmg *= 0.5;
+    baseDmg *= isActorMid ? 0.85 : 0.5;
   }
 
   if (isMelee && isTargetBack) {
