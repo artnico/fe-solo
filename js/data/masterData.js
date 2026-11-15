@@ -1043,7 +1043,7 @@ export const RARITIES = {
   rare: { id: 'rare', name: 'レア', short: 'レ', statMult: 1.3, traitCount: 2, sellPrice: 140 },
   epic: { id: 'epic', name: 'エピック', short: 'エ', statMult: 1.5, traitCount: 3, sellPrice: 320 },
   legendary: { id: 'legendary', name: '伝説', short: '伝', statMult: 1.75, traitCount: 4, sellPrice: 750 },
-  mythic: { id: 'mythic', name: '神話', short: 'ミ', statMult: 2.05, traitCount: 4, sellPrice: 1800 }
+  mythic: { id: 'mythic', name: '神話', short: 'ミ', statMult: 2.05, traitCount: 5, sellPrice: 1800 }
 };
 
 // ランダムエンチャント武器特性マスター

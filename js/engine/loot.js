@@ -9,8 +9,8 @@ import {
 
 function rollRarity(rarityBonus = 0) {
   const r = Math.random();
-  const mythicChance = rarityBonus >= 0.55 ? (rarityBonus - 0.45) * 0.02 : 0;
-  const legendaryChance = rarityBonus >= 0.30 ? 0.01 + (rarityBonus - 0.25) * 0.05 : 0;
+  const mythicChance = rarityBonus >= 0.80 ? (rarityBonus - 0.70) * 0.008 : 0;
+  const legendaryChance = rarityBonus >= 0.35 ? 0.006 + (rarityBonus - 0.30) * 0.032 : 0;
   const epicChance = 0.005 + rarityBonus * 0.06;
   const rareChance = 0.05 + rarityBonus * 0.12;
   const uncommonChance = 0.22 + rarityBonus * 0.18;

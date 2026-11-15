@@ -165,7 +165,7 @@ export class DungeonController {
   resolveTreasure() {
     const dungeon = this.getDungeonDef();
     const hasThief = this.hasThiefInParty();
-    const bonus = (dungeon?.rarityBonus || 0) + (hasThief ? 0.25 : 0);
+    const bonus = (dungeon?.rarityBonus || 0) + (hasThief ? 0.10 : 0);
 
     // 罠判定（盗賊がいれば完全回避）
     if (!hasThief && Math.random() < 0.25) {
@@ -231,7 +231,7 @@ export class DungeonController {
         const dungeon = this.getDungeonDef();
         const pool = dungeon?.exclusiveLootIds || ['steel_sword'];
         const tplId = pool[Math.floor(Math.random() * pool.length)];
-        const wpn = generateWeaponInstance(tplId, { rarityBonus: (dungeon?.rarityBonus || 0) + 0.4 });
+        const wpn = generateWeaponInstance(tplId, { rarityBonus: (dungeon?.rarityBonus || 0) + 0.15 });
         this.run.lootBag.weapons.push(wpn);
         this.addLog(`✨ 遺物箱から [${RARITIES[wpn.rarity]?.name}] ${wpn.name} を獲得！`);
       }
@@ -257,10 +257,10 @@ export class DungeonController {
 
     if (nodeType === 'boss') {
       encounter = dungeon.bossEncounter;
-      rarityBonus += 0.35;
+      rarityBonus += 0.15;
     } else if (nodeType === 'elite') {
       encounter = dungeon.eliteEncounters[Math.floor(Math.random() * dungeon.eliteEncounters.length)];
-      rarityBonus += 0.2;
+      rarityBonus += 0.08;
     } else {
       encounter = dungeon.normalEncounters[Math.floor(Math.random() * dungeon.normalEncounters.length)];
     }
