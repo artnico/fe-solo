@@ -706,7 +706,7 @@ export const CLASSES = {
 
   // ===== 隠し職業（クエスト報酬で解放） =====
   dragon_knight: {
-    id: 'dragon_knight', name: '竜騎士', tier: 3, maxLevel: 35, requiresCrest: true, hiddenUnlock: true,
+    id: 'dragon_knight', name: '竜騎士', tier: 3, maxLevel: 50, requiresCrest: true, hiddenUnlock: true,
     allowedWeapons: ['lance', 'sword', 'katana'],
     allowedArmors: ['heavy_armor', 'light_armor'],
     passiveDescription: '【隠し職】物理貫通+20%、追撃+20%、ヘイト+20%。古竜の力を宿す天空の槍使い。',
@@ -716,7 +716,7 @@ export const CLASSES = {
     nextClasses: []
   },
   rune_smith: {
-    id: 'rune_smith', name: 'ルーン鍛冶師', tier: 3, maxLevel: 35, requiresCrest: true, hiddenUnlock: true,
+    id: 'rune_smith', name: 'ルーン鍛冶師', tier: 3, maxLevel: 50, requiresCrest: true, hiddenUnlock: true,
     allowedWeapons: ['axe', 'sword', 'lance'],
     allowedArmors: ['heavy_armor', 'light_armor'],
     passiveDescription: '【隠し職】被物理-15%、反撃率+20%、ドロップ率+20%。魔導ルーンを刻む剛腕の匠。',
@@ -726,7 +726,7 @@ export const CLASSES = {
     nextClasses: []
   },
   chrono_mage: {
-    id: 'chrono_mage', name: '時空魔導士', tier: 3, maxLevel: 35, requiresCrest: true, hiddenUnlock: true,
+    id: 'chrono_mage', name: '時空魔導士', tier: 3, maxLevel: 50, requiresCrest: true, hiddenUnlock: true,
     allowedWeapons: ['tome', 'staff'],
     allowedArmors: ['robe', 'light_armor'],
     passiveDescription: '【隠し職】先制+20、魔法与ダメ+35%、魔法貫通+20%。時空を操る禁断の魔導師。',
@@ -736,7 +736,7 @@ export const CLASSES = {
     nextClasses: []
   },
   valkyrie: {
-    id: 'valkyrie', name: '戦乙女', tier: 4, maxLevel: 40, requiresCrest: true, hiddenUnlock: true,
+    id: 'valkyrie', name: '戦乙女', tier: 4, maxLevel: 50, requiresCrest: true, hiddenUnlock: true,
     allowedWeapons: ['lance', 'sword', 'bow'],
     allowedArmors: ['heavy_armor', 'light_armor'],
     passiveDescription: '【隠し職】先制+25、与回復+30%、物理貫通+15%、会心+15%。戦場を駆ける天空の聖騎士。',
@@ -746,7 +746,7 @@ export const CLASSES = {
     nextClasses: []
   },
   necromancer: {
-    id: 'necromancer', name: '死霊術師', tier: 4, maxLevel: 40, requiresCrest: true, hiddenUnlock: true,
+    id: 'necromancer', name: '死霊術師', tier: 4, maxLevel: 50, requiresCrest: true, hiddenUnlock: true,
     allowedWeapons: ['tome', 'staff', 'dagger'],
     allowedArmors: ['robe', 'light_armor'],
     passiveDescription: '【隠し職】魔法貫通+25%、スキル発動+12%、魔法与ダメ+20%。深淵の禁術を操る闇の賢者。',
@@ -1097,7 +1097,10 @@ export const ARMORS = {
   seraph_robe: { id: 'seraph_robe', name: '熾天使の神衣', type: 'robe', hp: 18, mp: 22, def: 8, res: 19, eva: 8 },
   ancient_bark_mail: { id: 'ancient_bark_mail', name: '古樹の盾鎧', type: 'heavy_armor', hp: 28, mp: 2, def: 12, res: 8, eva: -1 },
   flame_scale_armor: { id: 'flame_scale_armor', name: '灼熱の竜鱗鎧', type: 'heavy_armor', hp: 45, mp: 6, def: 20, res: 14, eva: 1 },
-  knight_plate: { id: 'knight_plate', name: '騎士のルーン鎧', type: 'heavy_armor', hp: 30, mp: 4, def: 14, res: 10, eva: 0 }
+  knight_plate: { id: 'knight_plate', name: '騎士のルーン鎧', type: 'heavy_armor', hp: 30, mp: 4, def: 14, res: 10, eva: 0 },
+  void_aegis_armor: { id: 'void_aegis_armor', name: '虚無の聖鎧', type: 'heavy_armor', hp: 60, mp: 10, def: 26, res: 20, eva: 2 },
+  origin_phantom_coat: { id: 'origin_phantom_coat', name: '原初の幻衣', type: 'light_armor', hp: 38, mp: 12, def: 18, res: 18, eva: 16 },
+  eternal_oracle_robe: { id: 'eternal_oracle_robe', name: '永劫の法衣', type: 'robe', hp: 28, mp: 34, def: 12, res: 28, eva: 12 }
 };
 
 // アクセサリーテンプレートマスター
@@ -1113,7 +1116,10 @@ export const ACCESSORIES = {
   slime_ring: { id: 'slime_ring', name: 'スライムゼリー環', type: 'ring', hp: 12, mp: 6, def: 2, res: 3, eva: 2 },
   boar_fang_charm: { id: 'boar_fang_charm', name: '猪牙の首飾り', type: 'amulet', hp: 10, mp: 0, atk: 5, mag: 0, crit: 4, eva: 0 },
   storm_feather_ring: { id: 'storm_feather_ring', name: '嵐羽の指輪', type: 'ring', hp: 8, mp: 4, atk: 5, mag: 5, eva: 10, initiativeBonus: 10 },
-  astral_ring: { id: 'astral_ring', name: '星幽の指輪', type: 'ring', hp: 10, mp: 18, atk: 0, mag: 10, crit: 10, dropBonus: 15 }
+  astral_ring: { id: 'astral_ring', name: '星幽の指輪', type: 'ring', hp: 10, mp: 18, atk: 0, mag: 10, crit: 10, dropBonus: 15 },
+  void_core_ring: { id: 'void_core_ring', name: '虚無核の指輪', type: 'ring', hp: 18, mp: 12, atk: 10, mag: 10, crit: 10, eva: 6 },
+  origin_crest_amulet: { id: 'origin_crest_amulet', name: '原初神の護符', type: 'amulet', hp: 40, mp: 20, atk: 8, mag: 8, def: 8, res: 12, dropBonus: 25 },
+  chronos_bracelet: { id: 'chronos_bracelet', name: '時空の腕輪', type: 'bracelet', hp: 22, mp: 14, atk: 7, mag: 7, hit: 10, eva: 10, initiativeBonus: 15 }
 };
 
 // 武器テンプレートマスター
@@ -1154,7 +1160,16 @@ export const WEAPONS = {
   colossus_axe: { id: 'colossus_axe', name: '巨像の重斧', type: 'axe', element: 'earth', atk: 22, mag: 0, hit: -5, crit: 12 },
   lament_grimoire: { id: 'lament_grimoire', name: '嘆きの氷書', type: 'tome', element: 'ice', atk: 0, mag: 18, hit: 12, crit: 10 },
   seraph_blade: { id: 'seraph_blade', name: '熾天使の聖剣', type: 'sword', element: 'thunder', atk: 30, mag: 12, hit: 15, crit: 18 },
-  mithril_sword: { id: 'mithril_sword', name: 'ミスリルソード', type: 'sword', atk: 16, mag: 4, hit: 12, crit: 12 }
+  mithril_sword: { id: 'mithril_sword', name: 'ミスリルソード', type: 'sword', atk: 16, mag: 4, hit: 12, crit: 12 },
+
+  // エンドコンテンツ武器テンプレート
+  void_breaker: { id: 'void_breaker', name: '虚無を断つ聖剣', type: 'sword', element: 'thunder', atk: 38, mag: 14, hit: 18, crit: 20 },
+  origin_lance: { id: 'origin_lance', name: '原初の神槍', type: 'lance', element: 'wind', atk: 36, mag: 0, hit: 16, crit: 18 },
+  chaos_axe: { id: 'chaos_axe', name: '混沌の戦斧', type: 'axe', element: 'fire', atk: 44, mag: 0, hit: 5, crit: 20 },
+  astral_katana: { id: 'astral_katana', name: '妖刀・星斬', type: 'katana', element: 'ice', atk: 35, mag: 8, hit: 20, crit: 26 },
+  chronos_dagger: { id: 'chronos_dagger', name: '時空の双短剣', type: 'dagger', element: 'wind', atk: 31, mag: 0, hit: 25, crit: 25 },
+  apocalypse_tome: { id: 'apocalypse_tome', name: '終焉の魔導書', type: 'tome', element: 'ice', atk: 0, mag: 38, hit: 20, crit: 16 },
+  origin_staff: { id: 'origin_staff', name: '原初の聖杖', type: 'staff', element: 'water', atk: 8, mag: 36, hit: 25, crit: 14 }
 };
 
 // 特殊アイテム（転職の証など）
@@ -1537,6 +1552,91 @@ export const MONSTERS = {
       { kind: 'accessory', id: 'eternal_crown', rate: 0.40 },
       { kind: 'item', id: 'hero_crest', rate: 0.20 }
     ]
+  },
+  chaos_knight: {
+    id: 'chaos_knight', name: '混沌の騎士', element: 'thunder', statusResist: 40,
+    level: 46, exp: 680, gold: 760,
+    stats: { hp: 310, mp: 32, str: 96, mag: 54, skl: 46, spd: 42, lck: 22, def: 70, res: 58, cha: 18 },
+    weaponType: 'sword', atk: 66, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'void_breaker', rate: 0.08, rarityBonus: 0.5 },
+      { kind: 'armor', id: 'void_aegis_armor', rate: 0.10, rarityBonus: 0.4 },
+      { kind: 'item', id: 'hero_crest', rate: 0.04 }
+    ]
+  },
+  elder_lich: {
+    id: 'elder_lich', name: '太古のリッチ', element: 'ice', statusResist: 45,
+    level: 48, exp: 740, gold: 820,
+    stats: { hp: 270, mp: 80, str: 36, mag: 108, skl: 48, spd: 40, lck: 24, def: 54, res: 76, cha: 18 },
+    weaponType: 'tome', atk: 0, mag: 72,
+    drops: [
+      { kind: 'weapon', id: 'apocalypse_tome', rate: 0.09, rarityBonus: 0.5 },
+      { kind: 'armor', id: 'eternal_oracle_robe', rate: 0.10, rarityBonus: 0.4 },
+      { kind: 'accessory', id: 'void_core_ring', rate: 0.07, rarityBonus: 0.5 },
+      { kind: 'item', id: 'hero_crest', rate: 0.045 }
+    ]
+  },
+  void_behemoth: {
+    id: 'void_behemoth', name: '虚無の巨獣', element: 'earth', statusResist: 45,
+    level: 50, exp: 820, gold: 900,
+    stats: { hp: 380, mp: 20, str: 112, mag: 40, skl: 42, spd: 34, lck: 20, def: 80, res: 60, cha: 16 },
+    weaponType: 'axe', atk: 76, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'chaos_axe', rate: 0.10, rarityBonus: 0.5 },
+      { kind: 'armor', id: 'void_aegis_armor', rate: 0.12, rarityBonus: 0.5 },
+      { kind: 'item', id: 'hero_crest', rate: 0.05 }
+    ]
+  },
+  astral_valkyrie: {
+    id: 'astral_valkyrie', name: '星天の戦乙女', element: 'wind', statusResist: 50,
+    level: 54, exp: 980, gold: 1120,
+    stats: { hp: 360, mp: 46, str: 116, mag: 76, skl: 58, spd: 54, lck: 28, def: 74, res: 72, cha: 24 },
+    weaponType: 'lance', atk: 80, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'origin_lance', rate: 0.10, rarityBonus: 0.6 },
+      { kind: 'weapon', id: 'astral_katana', rate: 0.08, rarityBonus: 0.6 },
+      { kind: 'armor', id: 'origin_phantom_coat', rate: 0.11, rarityBonus: 0.5 },
+      { kind: 'accessory', id: 'chronos_bracelet', rate: 0.08, rarityBonus: 0.6 },
+      { kind: 'item', id: 'hero_crest', rate: 0.055 }
+    ]
+  },
+  origin_seraph: {
+    id: 'origin_seraph', name: '原初の熾天使', element: 'water', statusResist: 55,
+    level: 56, exp: 1100, gold: 1260,
+    stats: { hp: 350, mp: 90, str: 64, mag: 124, skl: 56, spd: 52, lck: 30, def: 70, res: 86, cha: 28 },
+    weaponType: 'staff', atk: 20, mag: 84,
+    drops: [
+      { kind: 'weapon', id: 'origin_staff', rate: 0.11, rarityBonus: 0.6 },
+      { kind: 'weapon', id: 'chronos_dagger', rate: 0.09, rarityBonus: 0.6 },
+      { kind: 'armor', id: 'eternal_oracle_robe', rate: 0.12, rarityBonus: 0.5 },
+      { kind: 'accessory', id: 'origin_crest_amulet', rate: 0.07, rarityBonus: 0.6 },
+      { kind: 'item', id: 'hero_crest', rate: 0.06 }
+    ]
+  },
+  void_emperor: {
+    id: 'void_emperor', name: '虚無皇帝ゼノス', element: 'thunder', statusResist: 75, isBoss: true,
+    level: 58, exp: 1850, gold: 2800,
+    stats: { hp: 580, mp: 80, str: 126, mag: 110, skl: 58, spd: 50, lck: 28, def: 84, res: 80, cha: 26 },
+    weaponType: 'sword', atk: 88, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'void_breaker', rate: 0.45, rarityBonus: 0.7 },
+      { kind: 'weapon', id: 'apocalypse_tome', rate: 0.40, rarityBonus: 0.7 },
+      { kind: 'accessory', id: 'void_core_ring', rate: 0.45, rarityBonus: 0.6 },
+      { kind: 'item', id: 'hero_crest', rate: 0.25 }
+    ]
+  },
+  origin_god: {
+    id: 'origin_god', name: '原初神アストラル', element: 'heatwave', statusResist: 85, isBoss: true,
+    level: 65, exp: 2800, gold: 4500,
+    stats: { hp: 780, mp: 120, str: 142, mag: 144, skl: 66, spd: 58, lck: 34, def: 96, res: 96, cha: 32 },
+    weaponType: 'tome', atk: 0, mag: 98,
+    drops: [
+      { kind: 'weapon', id: 'origin_lance', rate: 0.45, rarityBonus: 0.8 },
+      { kind: 'weapon', id: 'origin_staff', rate: 0.45, rarityBonus: 0.8 },
+      { kind: 'weapon', id: 'astral_katana', rate: 0.35, rarityBonus: 0.8 },
+      { kind: 'accessory', id: 'origin_crest_amulet', rate: 0.50, rarityBonus: 0.8 },
+      { kind: 'item', id: 'hero_crest', rate: 0.35 }
+    ]
   }
 };
 
@@ -1599,11 +1699,35 @@ export const AREAS = [
     name: '星界の神殿',
     recommendedLv: 24,
     rarityBonus: 1.0,
-    description: '熾天使や星界の番人が守る最難関の通常エリア。神話級の秘宝と「英雄の証」を狙える。',
+    description: '熾天使や星界の番人が守る高難度エリア。神話級の秘宝と「英雄の証」を狙える。',
     encounters: [
       ['celestial_warden', 'dragon_knight'],
       ['seraph_knight', 'void_warlock', 'celestial_warden'],
       ['celestial_warden', 'seraph_knight', 'void_warlock']
+    ]
+  },
+  {
+    id: 'void_rift',
+    name: '虚無の狭間',
+    recommendedLv: 36,
+    rarityBonus: 1.35,
+    description: '次元の裂け目に広がる混沌の領域。隠し職業や最上級職の育成に最適なエンドコンテンツエリア。',
+    encounters: [
+      ['chaos_knight', 'elder_lich'],
+      ['void_behemoth', 'chaos_knight', 'void_warlock'],
+      ['chaos_knight', 'elder_lich', 'void_behemoth']
+    ]
+  },
+  {
+    id: 'origin_throne',
+    name: '原初の玉座',
+    recommendedLv: 46,
+    rarityBonus: 1.7,
+    description: '星天の戦乙女と原初の熾天使が守護する終末の聖地。最高峰の神話級武具が眠る。',
+    encounters: [
+      ['astral_valkyrie', 'chaos_knight'],
+      ['origin_seraph', 'astral_valkyrie', 'elder_lich'],
+      ['astral_valkyrie', 'origin_seraph', 'void_behemoth']
     ]
   }
 ];
@@ -1754,7 +1878,7 @@ export const DUNGEONS = [
     stepsPerFloor: 7,
     rarityBonus: 1.0,
     trainingChance: 0.01,
-    description: '深淵竜バハムートが眠る最終ダンジョン。伝説・神話級装備と「英雄の証」が狙える。',
+    description: '深淵竜バハムートが眠る竜の聖域。伝説・神話級装備と「英雄の証」が狙える。',
     normalEncounters: [
       ['abyss_sentinel', 'dragon_knight'],
       ['abyss_sentinel', 'void_warlock', 'wraith']
@@ -1767,6 +1891,52 @@ export const DUNGEONS = [
     exclusiveLootIds: ['dragon_slayer', 'celestial_bow', 'genesis_staff'],
     familiarPool: ['valkyrie_drake', 'yggdrasil_sprout', 'minerva_owl'],
     familiarDropRate: 0.12
+  },
+  {
+    id: 'void_labyrinth',
+    sourceAreaId: 'void_rift',
+    name: '虚無の迷宮',
+    recommendedLv: 45,
+    totalFloors: 5,
+    stepsPerFloor: 7,
+    rarityBonus: 1.4,
+    trainingChance: 0.015,
+    description: '虚無皇帝ゼノスが支配する深層迷宮。神話級装備と隠し職向けの極限育成に挑める。',
+    normalEncounters: [
+      ['chaos_knight', 'abyss_sentinel'],
+      ['elder_lich', 'chaos_knight', 'void_warlock']
+    ],
+    eliteEncounters: [
+      ['void_behemoth', 'chaos_knight'],
+      ['void_behemoth', 'elder_lich', 'seraph_knight']
+    ],
+    bossEncounter: ['void_emperor', 'chaos_knight', 'elder_lich'],
+    exclusiveLootIds: ['void_breaker', 'chaos_axe', 'apocalypse_tome'],
+    familiarPool: ['valkyrie_drake', 'yggdrasil_sprout', 'minerva_owl'],
+    familiarDropRate: 0.14
+  },
+  {
+    id: 'origin_sanctuary',
+    sourceAreaId: 'origin_throne',
+    name: '原初の聖域',
+    recommendedLv: 55,
+    totalFloors: 6,
+    stepsPerFloor: 8,
+    rarityBonus: 1.8,
+    trainingChance: 0.02,
+    description: '原初神アストラルが待ち受ける真の最終ダンジョン。最上級の神話武具と英雄の証が眠る。',
+    normalEncounters: [
+      ['astral_valkyrie', 'chaos_knight'],
+      ['origin_seraph', 'elder_lich', 'void_behemoth']
+    ],
+    eliteEncounters: [
+      ['astral_valkyrie', 'origin_seraph'],
+      ['astral_valkyrie', 'origin_seraph', 'void_behemoth']
+    ],
+    bossEncounter: ['origin_god', 'astral_valkyrie', 'origin_seraph'],
+    exclusiveLootIds: ['origin_lance', 'astral_katana', 'chronos_dagger', 'origin_staff'],
+    familiarPool: ['valkyrie_drake', 'yggdrasil_sprout', 'minerva_owl'],
+    familiarDropRate: 0.16
   }
 ];
 
