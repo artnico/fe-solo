@@ -734,6 +734,36 @@ export const CLASSES = {
     promotionBonus: { mp: 6, mag: 5, spd: 5 },
     growthMod: { hp: 10, mp: 45, str: -5, mag: 40, skl: 20, spd: 30, lck: 20, def: 5, res: 30, cha: 20 },
     nextClasses: []
+  },
+  valkyrie: {
+    id: 'valkyrie', name: '戦乙女', tier: 4, maxLevel: 40, requiresCrest: true, hiddenUnlock: true,
+    allowedWeapons: ['lance', 'sword', 'bow'],
+    allowedArmors: ['heavy_armor', 'light_armor'],
+    passiveDescription: '【隠し職】先制+25、与回復+30%、物理貫通+15%、会心+15%。戦場を駆ける天空の聖騎士。',
+    passives: { initiativeBonus: 25, healBonusPct: 30, physPenBonus: 15, critBonus: 15 },
+    promotionBonus: { hp: 6, str: 5, spd: 5, skl: 4 },
+    growthMod: { hp: 35, mp: 20, str: 35, mag: 20, skl: 35, spd: 35, lck: 25, def: 25, res: 25, cha: 25 },
+    nextClasses: []
+  },
+  necromancer: {
+    id: 'necromancer', name: '死霊術師', tier: 4, maxLevel: 40, requiresCrest: true, hiddenUnlock: true,
+    allowedWeapons: ['tome', 'staff', 'dagger'],
+    allowedArmors: ['robe', 'light_armor'],
+    passiveDescription: '【隠し職】魔法貫通+25%、スキル発動+12%、魔法与ダメ+20%。深淵の禁術を操る闇の賢者。',
+    passives: { magPenBonus: 25, skillChanceBonus: 12, magicDmgBonusPct: 20 },
+    promotionBonus: { mp: 8, mag: 7, res: 4, skl: 4 },
+    growthMod: { hp: 15, mp: 50, str: 0, mag: 50, skl: 30, spd: 25, lck: 25, def: 15, res: 40, cha: 15 },
+    nextClasses: []
+  },
+  shadow_monarch: {
+    id: 'shadow_monarch', name: '影の君主', tier: 5, maxLevel: 50, requiresHeroCrest: true, hiddenUnlock: true,
+    allowedWeapons: ['dagger', 'katana', 'sword'],
+    allowedArmors: ['light_armor', 'robe'],
+    passiveDescription: '【隠し職】回避+25%、追撃+25%、会心ダメ+45%、ドロップ+40%。影より出でて全てを刈り取る覇者。',
+    passives: { evaBonus: 25, followUpBonus: 25, critDmgBonus: 45, dropRateBonus: 40 },
+    promotionBonus: { str: 7, skl: 7, spd: 8, lck: 5 },
+    growthMod: { hp: 30, mp: 25, str: 40, mag: 15, skl: 45, spd: 50, lck: 40, def: 20, res: 20, cha: 30 },
+    nextClasses: []
   }
 };
 
@@ -911,6 +941,24 @@ export const ACTIVE_SKILLS = {
     type: 'aoe_attack', power: 1.35, forceMagic: true, penBonus: 20,
     baseChance: 25, scaleStat: 'spd', statFactor: 0.65,
     description: '時空の彼方から隕石を呼び寄せ、敵全体に貫通+20%・1.35倍の魔法攻撃。'
+  },
+  valkyrie_charge: {
+    id: 'valkyrie_charge', name: 'ヴァルキリーチャージ', mpCost: 8,
+    type: 'attack_and_ally_heal', power: 1.75, healScale: 0.8, critBonus: 20,
+    baseChance: 25, scaleStat: 'spd', statFactor: 0.65,
+    description: '聖槍で1.75倍撃を放ちつつ、最も傷ついた味方を回復する。'
+  },
+  soul_harvest: {
+    id: 'soul_harvest', name: 'ソウルハーベスト', mpCost: 9,
+    type: 'aoe_attack', power: 1.35, forceMagic: true, drainPct: 30,
+    baseChance: 25, scaleStat: 'mag', statFactor: 0.65,
+    description: '敵全体に1.35倍の闇魔法を放ち、与ダメの30%を吸収する。'
+  },
+  shadow_execution: {
+    id: 'shadow_execution', name: '影の処刑', mpCost: 9,
+    type: 'multi_attack', hits: 3, power: 0.9, critBonus: 30,
+    baseChance: 28, scaleStat: 'spd', statFactor: 0.7,
+    description: '影より3連撃(各0.9倍・会心+30%)を叩き込む必殺奥義。'
   }
 };
 
@@ -938,7 +986,10 @@ export function getClassActiveSkill(classId) {
     templar: 'holy_fist', sacred_brawler: 'holy_fist', enlightened_one: 'holy_fist',
     dragon_knight: 'dragon_dive',
     rune_smith: 'rune_forge_strike',
-    chrono_mage: 'chrono_meteor'
+    chrono_mage: 'chrono_meteor',
+    valkyrie: 'valkyrie_charge',
+    necromancer: 'soul_harvest',
+    shadow_monarch: 'shadow_execution'
   };
   const skillId = map[classId];
   return skillId ? ACTIVE_SKILLS[skillId] : null;
@@ -2053,6 +2104,54 @@ export const QUESTS = [
     story: '「深淵の竜宮すら踏破したのですね…星々の祝福が、永遠に貴方と共にありますように」',
     condition: { type: 'dungeon_clear', dungeonId: 'eternal_abyss', count: 5, label: '「永劫の竜宮」を5回踏破' },
     rewards: { gold: 5000, items: { hero_crest: 2 }, familiarId: 'undine' }
+  },
+
+  // ⚔️ 天空の戦乙女
+  {
+    id: 'valk_1', seriesId: 'valkyrie_trial', step: 1, prevQuestId: null,
+    title: '霊峰の試練',
+    story: '「気高き戦士たちよ。竜の峰を制する力があるなら、その武を示してみせよ！」',
+    condition: { type: 'area_clear', areaId: 'dragon_peak', count: 60, label: '「竜の峰」で60回勝利' },
+    rewards: { gold: 1500 }
+  },
+  {
+    id: 'valk_2', seriesId: 'valkyrie_trial', step: 2, prevQuestId: 'valk_1',
+    title: '戦乙女の資格',
+    story: '「見事だ。紅蓮の竜巣を乗り越えた貴方たちに、秘伝の隠し職『戦乙女』を授けよう！」',
+    condition: { type: 'dungeon_clear', dungeonId: 'dragon_nest', count: 3, label: '「紅蓮の竜巣」を3回踏破' },
+    rewards: { unlockClassId: 'valkyrie', items: { class_crest: 1 } }
+  },
+
+  // 💀 禁断の古文書
+  {
+    id: 'necro_1', seriesId: 'forbidden_tome', step: 1, prevQuestId: null,
+    title: '墓地の囁き',
+    story: '「クク…死者の王リッチを何度も退けた者がいるとはな。興味深い…」',
+    condition: { type: 'dungeon_clear', dungeonId: 'abyss_catacomb', count: 5, label: '「深淵の地下墓地」を5回踏破' },
+    rewards: { gold: 1800 }
+  },
+  {
+    id: 'necro_2', seriesId: 'forbidden_tome', step: 2, prevQuestId: 'necro_1',
+    title: '深淵の禁術',
+    story: '「深淵すら恐れぬその魂に敬意を表し、隠し職『死霊術師』の禁書を解放しよう」',
+    condition: { type: 'dungeon_clear', dungeonId: 'eternal_abyss', count: 2, label: '「永劫の竜宮」を2回踏破' },
+    rewards: { unlockClassId: 'necromancer', items: { class_crest: 1 } }
+  },
+
+  // 🌑 影の王座
+  {
+    id: 'shadow_1', seriesId: 'shadow_throne', step: 1, prevQuestId: null,
+    title: '数多の影を越えて',
+    story: '「……強者を探している。500もの魔物を屠った先に、真の影が待っている」',
+    condition: { type: 'total_kills', count: 500, label: 'モンスターを累計500体討伐' },
+    rewards: { gold: 2500, items: { hero_crest: 1 } }
+  },
+  {
+    id: 'shadow_2', seriesId: 'shadow_throne', step: 2, prevQuestId: 'shadow_1',
+    title: '影の君主',
+    story: '「深淵竜をも退けたか…認めよう。お前こそが隠し職『影の君主』を継ぐ者だ」',
+    condition: { type: 'dungeon_clear', dungeonId: 'eternal_abyss', count: 5, label: '「永劫の竜宮」を5回踏破' },
+    rewards: { unlockClassId: 'shadow_monarch' }
   }
 ];
 

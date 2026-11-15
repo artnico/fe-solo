@@ -656,6 +656,9 @@ class GameStore {
       case 'victories':
         current = stats.victories || 0;
         break;
+      case 'total_kills':
+        current = stats.totalKills || 0;
+        break;
       case 'reclass_count':
         current = stats.reclassCount || 0;
         break;

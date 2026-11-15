@@ -2,6 +2,7 @@ import {
   STAT_KEYS,
   RACES,
   CLASSES,
+  CLASS_TREES,
   PERSONALITIES,
   WEAPONS,
   WEAPON_TYPES,
@@ -67,6 +68,7 @@ export function getGrowthRates(character, familiar = null, extraGrowthPct = 0) {
   const race = RACES[character.raceId];
   const cls = CLASSES[character.classId];
   const personality = PERSONALITIES[character.personalityId];
+  const reclassBonus = Math.min(20, (character.reclassCount || 0) * 2);
 
   const rates = {};
   for (const key of STAT_KEYS) {
@@ -75,6 +77,7 @@ export function getGrowthRates(character, familiar = null, extraGrowthPct = 0) {
       (cls?.growthMod[key] || 0) +
       (personality?.growthMod[key] || 0) +
       (familiar?.growthBonus?.[key] || 0) +
+      reclassBonus +
       (extraGrowthPct || 0);
     rates[key] = Math.max(5, raw);
   }
@@ -120,18 +123,76 @@ export function levelUpCharacter(character, familiar = null, extraGrowthPct = 0)
 /**
  * クラスチェンジ可能か判定
  */
+export function isLineageTier5Unlocked(character, targetClassId) {
+  const targetCls = CLASSES[targetClassId];
+  if (!targetCls || targetCls.tier !== 5) return false;
+  const history = character?.classHistory || [character?.classId];
+  for (const tree of CLASS_TREES) {
+    const treeClasses = new Set(tree.branches.flat());
+    if (!treeClasses.has(targetClassId)) continue;
+    const learnedInTree = history.filter(cid => treeClasses.has(cid));
+    const hasHighInTree = learnedInTree.some(cid => (CLASSES[cid]?.tier || 1) >= 3);
+    if (learnedInTree.length >= 2 || hasHighInTree) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export function getAvailablePromotionIds(character, unlockedHiddenClasses = []) {
+  const currentCls = CLASSES[character?.classId];
+  if (!currentCls) return [];
+  const result = new Set(currentCls.nextClasses || []);
+
+  // クエストで解放された隠し職業
+  for (const hiddenId of unlockedHiddenClasses || []) {
+    if (CLASSES[hiddenId]?.hiddenUnlock && hiddenId !== character.classId) {
+      result.add(hiddenId);
+    }
+  }
+
+  // 同系統の職業を習得済み（2職以上またはTier3以上）の場合、その系統のTier5最上級職を解禁
+  const history = character?.classHistory || [character?.classId];
+  for (const tree of CLASS_TREES) {
+    const treeClasses = new Set(tree.branches.flat());
+    const learnedInTree = history.filter(cid => treeClasses.has(cid));
+    const hasHighInTree = learnedInTree.some(cid => (CLASSES[cid]?.tier || 1) >= 3);
+    if (learnedInTree.length >= 2 || hasHighInTree) {
+      for (const branch of tree.branches) {
+        const topId = branch[branch.length - 1];
+        if (topId && topId !== character.classId && CLASSES[topId]?.tier === 5) {
+          result.add(topId);
+        }
+      }
+    }
+  }
+
+  return [...result];
+}
+
 export function canClassChange(character, targetClassId, itemsOrCrestCount = 0, unlockedHiddenClasses = []) {
   const currentCls = CLASSES[character.classId];
   const targetCls = CLASSES[targetClassId];
   if (!currentCls || !targetCls) return { ok: false, reason: '職業データ不正' };
-  if (!(currentCls.nextClasses || []).includes(targetClassId)) {
+  const isNormalNext = (currentCls.nextClasses || []).includes(targetClassId);
+  const isUnlockedHidden = Boolean(
+    targetCls.hiddenUnlock && (unlockedHiddenClasses || []).includes(targetClassId)
+  );
+  const isLineageMastery = isLineageTier5Unlocked(character, targetClassId);
+
+  if (!isNormalNext && !isUnlockedHidden && !isLineageMastery) {
     return { ok: false, reason: '派生先ではありません' };
   }
   if (targetCls.hiddenUnlock && !(unlockedHiddenClasses || []).includes(targetClassId)) {
     return { ok: false, reason: 'クエストで解放が必要' };
   }
-  if (character.level < currentCls.maxLevel) {
-    return { ok: false, reason: `Lv.${currentCls.maxLevel} 到達が必要` };
+
+  const requiredLv = isNormalNext
+    ? currentCls.maxLevel
+    : Math.min(currentCls.maxLevel, targetCls.tier >= 5 ? 20 : 15);
+
+  if (character.level < requiredLv) {
+    return { ok: false, reason: `Lv.${requiredLv} 到達が必要` };
   }
   const crestCount =
     typeof itemsOrCrestCount === 'number'
@@ -202,9 +263,10 @@ export function applyReclassToTier1(character, targetClassId) {
   }
 
   for (const key of STAT_KEYS) {
-    character.baseStats[key] = Math.max(1, Math.floor((character.baseStats[key] || 1) / 2));
+    character.baseStats[key] = Math.max(1, Math.floor((character.baseStats[key] || 1) * 0.8));
   }
 
+  character.reclassCount = (character.reclassCount || 0) + 1;
   character.classId = targetClassId;
   if (!character.classHistory.includes(targetClassId)) {
     character.classHistory.push(targetClassId);

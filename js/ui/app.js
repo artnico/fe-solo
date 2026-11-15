@@ -35,7 +35,9 @@ import {
   getExpForNextLevel,
   canClassChange,
   canReclassToTier1,
-  getActiveSkillActivationChance
+  getActiveSkillActivationChance,
+  getAvailablePromotionIds,
+  isLineageTier5Unlocked
 } from '../engine/stats.js';
 import { store } from '../state/store.js';
 import { AutoExploreController } from '../engine/explore.js';
@@ -633,12 +635,14 @@ function renderPartyTab() {
     if (combat.thresholds.sklTier > 0) thresholds.push(`技閾値: 会心ダメ+${combat.thresholds.sklTier * 10}%`);
 
     // クラスチェンジセクション
-    const nextClassIds = cls?.nextClasses || [];
+    const nextClassIds = getAvailablePromotionIds(detailChar, store.state.unlockedHiddenClasses);
     let ccHtml = '';
     if (nextClassIds.length > 0) {
       const optionsHtml = nextClassIds
         .map(nextId => {
           const nextCls = CLASSES[nextId];
+          const isNormalNext = (cls?.nextClasses || []).includes(nextId);
+          const isLineageUnlock = !isNormalNext && !nextCls.hiddenUnlock && isLineageTier5Unlocked(detailChar, nextId);
           const check = canClassChange(
             detailChar,
             nextId,
@@ -656,6 +660,8 @@ function renderPartyTab() {
                 <div>
                   <strong>${escapeHtml(nextCls.name)}</strong>
                   <span style="font-size:10px;color:var(--accent-blue);margin-left:4px;">Tier ${nextCls.tier} (上限Lv.${nextCls.maxLevel})</span>
+                  ${nextCls.hiddenUnlock ? `<span style="font-size:10px;color:var(--accent-gold);margin-left:4px;">[隠し職]</span>` : ''}
+                  ${isLineageUnlock ? `<span style="font-size:10px;color:#8be9a8;margin-left:4px;">[系統習得解禁]</span>` : ''}
                 </div>
                 ${
                   check.ok
@@ -1583,7 +1589,7 @@ function bindMainEvents() {
       const targetName = CLASSES[targetClassId]?.name || targetClassId;
       if (
         !confirm(
-          `${targetChar.name} を初期職業「${targetName}」へ転職させますか？\n※ 現在の基礎ステータスが半減し、Lv.1 に戻ります（職歴は記録されます）。`
+          `${targetChar.name} を初期職業「${targetName}」へ転職させますか？\n※ 現在の基礎ステータスの80%を引き継いで Lv.1 に戻り、転生ボーナス（全成長率+2%）を獲得します（職歴は記録されます）。`
         )
       ) {
         return;
