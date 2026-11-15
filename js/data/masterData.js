@@ -70,42 +70,72 @@ export const RACES = {
     name: '人間',
     description: 'すべてが平均的。魅力と幸運がやや高く扱いやすい万能型。',
     baseStats: { hp: 10, mp: 5, str: 6, mag: 5, skl: 6, spd: 6, lck: 7, def: 5, res: 5, cha: 8 },
-    growthRates: { hp: 60, mp: 40, str: 45, mag: 40, skl: 45, spd: 45, lck: 50, def: 40, res: 40, cha: 55 }
+    growthRates: { hp: 60, mp: 40, str: 45, mag: 40, skl: 45, spd: 45, lck: 50, def: 40, res: 40, cha: 55 },
+    raceSkills: [
+      { unlockLv: 5, name: '開拓者の勘', description: 'ドロップ率+10% / 命中+5%', effects: { dropRateBonus: 10, hitBonus: 5 } },
+      { unlockLv: 20, name: '適応力', description: 'スキル発動率+8% / 追撃率+5%', effects: { skillChanceBonus: 8, followUpBonus: 5 } },
+      { unlockLv: 50, name: '英雄の資質', description: '物攻・魔攻+12% / 会心率+10%', effects: { atkPct: 12, magPct: 12, critBonus: 10 } }
+    ]
   },
   elf: {
     id: 'elf',
     name: 'エルフ',
     description: '魔力・技・速さに優れる。物理耐久（HP・守備）が低い。',
     baseStats: { hp: 8, mp: 8, str: 4, mag: 8, skl: 8, spd: 8, lck: 5, def: 3, res: 7, cha: 7 },
-    growthRates: { hp: 45, mp: 60, str: 30, mag: 60, skl: 60, spd: 55, lck: 40, def: 25, res: 55, cha: 50 }
+    growthRates: { hp: 45, mp: 60, str: 30, mag: 60, skl: 60, spd: 55, lck: 40, def: 25, res: 55, cha: 50 },
+    raceSkills: [
+      { unlockLv: 5, name: '森の加護', description: '回避+8% / 命中+8%', effects: { evaBonus: 8, hitBonus: 8 } },
+      { unlockLv: 20, name: '精霊の詠唱', description: '魔攻+12% / 魔法貫通+10%', effects: { magPct: 12, magPenBonus: 10 } },
+      { unlockLv: 50, name: '悠久の叡智', description: '魔攻+18% / スキル発動+12% / 会心ダメ+25%', effects: { magPct: 18, skillChanceBonus: 12, critDmgBonus: 25 } }
+    ]
   },
   dwarf: {
     id: 'dwarf',
     name: 'ドワーフ',
     description: 'HP・力・守備が極めて高い前衛向き。速さと魔力は苦手。',
     baseStats: { hp: 13, mp: 3, str: 8, mag: 3, skl: 5, spd: 4, lck: 5, def: 8, res: 4, cha: 4 },
-    growthRates: { hp: 75, mp: 25, str: 60, mag: 20, skl: 40, spd: 25, lck: 40, def: 60, res: 35, cha: 30 }
+    growthRates: { hp: 75, mp: 25, str: 60, mag: 20, skl: 40, spd: 25, lck: 40, def: 60, res: 35, cha: 30 },
+    raceSkills: [
+      { unlockLv: 5, name: '鍛冶屋の魂', description: '物防+6 / 物攻+6%', effects: { defBonus: 6, atkPct: 6 } },
+      { unlockLv: 20, name: '岩の体躯', description: '物理被ダメ-10% / 最大HP+12%', effects: { physDmgRedBonus: 10, hpPct: 12 } },
+      { unlockLv: 50, name: '不屈の巨匠', description: '物理貫通+15% / 反撃率+15% / 物理被ダメ-12%', effects: { physPenBonus: 15, counterBonus: 15, physDmgRedBonus: 12 } }
+    ]
   },
   beastkin: {
     id: 'beastkin',
     name: '獣人',
     description: '速さ・力・幸運が高い物理アタッカー気質。魔防が低い。',
     baseStats: { hp: 11, mp: 4, str: 7, mag: 3, skl: 7, spd: 9, lck: 7, def: 5, res: 3, cha: 5 },
-    growthRates: { hp: 65, mp: 30, str: 55, mag: 25, skl: 50, spd: 65, lck: 50, def: 35, res: 20, cha: 35 }
+    growthRates: { hp: 65, mp: 30, str: 55, mag: 25, skl: 50, spd: 65, lck: 50, def: 35, res: 20, cha: 35 },
+    raceSkills: [
+      { unlockLv: 5, name: '野性の勘', description: '先制+10 / 回避+6%', effects: { initiativeBonus: 10, evaBonus: 6 } },
+      { unlockLv: 20, name: '疾風連撃', description: '追撃率+12% / 会心率+8%', effects: { followUpBonus: 12, critBonus: 8 } },
+      { unlockLv: 50, name: '獣王の咆哮', description: '物攻+15% / 会心ダメ+35% / 吸血8%', effects: { atkPct: 15, critDmgBonus: 35, lifestealPct: 8 } }
+    ]
   },
   dragonkin: {
     id: 'dragonkin',
     name: '竜人',
     description: 'HP・力・守備・魔防が高い大器晩成型。速さは控えめ。',
     baseStats: { hp: 14, mp: 5, str: 9, mag: 6, skl: 5, spd: 4, lck: 5, def: 8, res: 7, cha: 6 },
-    growthRates: { hp: 80, mp: 35, str: 65, mag: 40, skl: 45, spd: 30, lck: 40, def: 60, res: 55, cha: 45 }
+    growthRates: { hp: 80, mp: 35, str: 65, mag: 40, skl: 45, spd: 30, lck: 40, def: 60, res: 55, cha: 45 },
+    raceSkills: [
+      { unlockLv: 5, name: '竜鱗の守り', description: '物理・魔法被ダメ-5%', effects: { physDmgRedBonus: 5, magDmgRedBonus: 5 } },
+      { unlockLv: 20, name: '竜の血脈', description: '最大HP+15% / 物攻・魔攻+10%', effects: { hpPct: 15, atkPct: 10, magPct: 10 } },
+      { unlockLv: 50, name: '古竜の威厳', description: '物攻+20% / 全被ダメ-12% / ヘイト+15', effects: { atkPct: 20, physDmgRedBonus: 12, magDmgRedBonus: 12, hateBonus: 15 } }
+    ]
   },
   spirit: {
     id: 'spirit',
     name: '精霊族',
     description: 'MP・魔力・魔防・幸運が極めて高い魔法特化型。物理耐久は低い。',
     baseStats: { hp: 7, mp: 10, str: 3, mag: 10, skl: 7, spd: 7, lck: 8, def: 2, res: 9, cha: 8 },
-    growthRates: { hp: 40, mp: 75, str: 20, mag: 70, skl: 55, spd: 55, lck: 60, def: 20, res: 65, cha: 60 }
+    growthRates: { hp: 40, mp: 75, str: 20, mag: 70, skl: 55, spd: 55, lck: 60, def: 20, res: 65, cha: 60 },
+    raceSkills: [
+      { unlockLv: 5, name: '魔力の泉', description: '最大MP+15% / 魔法被ダメ-8%', effects: { mpPct: 15, magDmgRedBonus: 8 } },
+      { unlockLv: 20, name: '星霊の祝福', description: '回復量+20% / 魔法貫通+12%', effects: { healBonusPct: 20, magPenBonus: 12 } },
+      { unlockLv: 50, name: '原初の輝き', description: '魔攻+25% / スキル発動+15% / 回避+10%', effects: { magPct: 25, skillChanceBonus: 15, evaBonus: 10 } }
+    ]
   }
 };
 

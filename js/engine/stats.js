@@ -225,6 +225,21 @@ export function getActiveSkillActivationChance(characterOrUnit, skill, familiar 
   return Math.max(10, Math.min(90, raw));
 }
 
+export function getRaceSkillEffects(character) {
+  const race = RACES[character?.raceId];
+  const lv = character?.level || 1;
+  const fx = {};
+  if (!race || !Array.isArray(race.raceSkills)) return fx;
+  for (const sk of race.raceSkills) {
+    if (lv >= sk.unlockLv && sk.effects) {
+      for (const [k, v] of Object.entries(sk.effects)) {
+        fx[k] = (fx[k] || 0) + v;
+      }
+    }
+  }
+  return fx;
+}
+
 /**
  * 基礎ステータス + 装備 → 戦闘ステータス変換（閾値ボーナス・武器特性含む）
  */
@@ -232,6 +247,7 @@ export function calculateCombatStats(character, equipArg = null) {
   const s = character.baseStats;
   const cls = CLASSES[character.classId] || {};
   const passives = cls.passives || {};
+  const raceFx = getRaceSkillEffects(character);
 
   let weapon = null;
   let armor = null;
@@ -277,29 +293,33 @@ export function calculateCombatStats(character, equipArg = null) {
   const counterThreshold = s.skl >= 60 ? 10 : s.skl >= 30 ? 5 : 0;
 
   const maxHp = Math.round(
-    s.hp * 5 + (armor?.hp || 0) + (accessory?.hp || 0) + (famBonus.hp || 0) + traitFx.hpBonus
+    (s.hp * 5 + (armor?.hp || 0) + (accessory?.hp || 0) + (famBonus.hp || 0) + traitFx.hpBonus) *
+      (1 + (raceFx.hpPct || 0) / 100)
   );
   const maxMp = Math.round(
-    s.mp * 2 + (armor?.mp || 0) + (accessory?.mp || 0) + (famBonus.mp || 0) + traitFx.mpBonus
+    (s.mp * 2 + (armor?.mp || 0) + (accessory?.mp || 0) + (famBonus.mp || 0) + traitFx.mpBonus) *
+      (1 + (raceFx.mpPct || 0) / 100)
   );
   const physAtk = Math.round(
-    (s.str * 2.0 + (weapon.atk || 0) + (accessory?.atk || 0) + (famBonus.atk || 0) + traitFx.atkBonus) * (1 + strTier * 0.05)
+    (s.str * 2.0 + (weapon.atk || 0) + (accessory?.atk || 0) + (famBonus.atk || 0) + traitFx.atkBonus) *
+      (1 + strTier * 0.05 + (raceFx.atkPct || 0) / 100)
   );
   const magAtk = Math.round(
-    (s.mag * 2.0 + (weapon.mag || 0) + (accessory?.mag || 0) + (famBonus.mag || 0) + traitFx.magBonus) * (1 + magTier * 0.05)
+    (s.mag * 2.0 + (weapon.mag || 0) + (accessory?.mag || 0) + (famBonus.mag || 0) + traitFx.magBonus) *
+      (1 + magTier * 0.05 + (raceFx.magPct || 0) / 100)
   );
   const physDef = Math.round(
-    s.def * 1.5 + (armor?.def || 0) + (accessory?.def || 0) + (famBonus.def || 0) + traitFx.defBonus
+    s.def * 1.5 + (armor?.def || 0) + (accessory?.def || 0) + (famBonus.def || 0) + traitFx.defBonus + (raceFx.defBonus || 0)
   );
   const magDef = Math.round(
-    s.res * 1.5 + (armor?.res || 0) + (accessory?.res || 0) + (famBonus.res || 0) + traitFx.resBonus
+    s.res * 1.5 + (armor?.res || 0) + (accessory?.res || 0) + (famBonus.res || 0) + traitFx.resBonus + (raceFx.resBonus || 0)
   );
 
-  const physDmgReductionPct = defTier * 3 + (passives.physDmgRedBonus || 0) + (famBonus.physDmgRed || 0) + traitFx.physDmgRedBonus;
-  const magDmgReductionPct = resTier * 3 + (passives.magDmgRedBonus || 0) + (famBonus.magDmgRed || 0) + traitFx.magDmgRedBonus;
+  const physDmgReductionPct = defTier * 3 + (passives.physDmgRedBonus || 0) + (famBonus.physDmgRed || 0) + traitFx.physDmgRedBonus + (raceFx.physDmgRedBonus || 0);
+  const magDmgReductionPct = resTier * 3 + (passives.magDmgRedBonus || 0) + (famBonus.magDmgRed || 0) + traitFx.magDmgRedBonus + (raceFx.magDmgRedBonus || 0);
 
   const hitRate = Math.round(
-    80 + s.skl * 1.5 + s.lck * 0.5 + (weapon.hit || 0) + (accessory?.hit || 0) + traitFx.hitBonus
+    80 + s.skl * 1.5 + s.lck * 0.5 + (weapon.hit || 0) + (accessory?.hit || 0) + traitFx.hitBonus + (raceFx.hitBonus || 0)
   );
   const evaRate = Math.round(
     s.spd * 1.5 +
@@ -309,9 +329,10 @@ export function calculateCombatStats(character, equipArg = null) {
       (accessory?.eva || 0) +
       (famBonus.eva || 0) +
       (passives.evaBonus || 0) +
-      traitFx.evaBonus
+      traitFx.evaBonus +
+      (raceFx.evaBonus || 0)
   );
-  const followUpBonusPct = spdTier * 5 + (passives.followUpBonus || 0) + (famBonus.followUp || 0) + traitFx.followUpBonus;
+  const followUpBonusPct = spdTier * 5 + (passives.followUpBonus || 0) + (famBonus.followUp || 0) + traitFx.followUpBonus + (raceFx.followUpBonus || 0);
 
   const critRateBase = Math.round(
     s.skl * 1.0 +
@@ -320,20 +341,21 @@ export function calculateCombatStats(character, equipArg = null) {
       (accessory?.crit || 0) +
       (famBonus.crit || 0) +
       (passives.critBonus || 0) +
-      traitFx.critBonus
+      traitFx.critBonus +
+      (raceFx.critBonus || 0)
   );
   const critDmgPct = Math.round(
-    150 + s.skl * 0.5 + sklTier * 10 + (passives.critDmgBonus || 0) + traitFx.critDmgBonus
+    150 + s.skl * 0.5 + sklTier * 10 + (passives.critDmgBonus || 0) + traitFx.critDmgBonus + (raceFx.critDmgBonus || 0)
   );
 
-  const physPenPct = physPenThreshold + (passives.physPenBonus || 0) + (famBonus.physPen || 0) + traitFx.physPen;
-  const magPenPct = magPenThreshold + (passives.magPenBonus || 0) + (famBonus.magPen || 0) + traitFx.magPen;
+  const physPenPct = physPenThreshold + (passives.physPenBonus || 0) + (famBonus.physPen || 0) + traitFx.physPen + (raceFx.physPenBonus || 0);
+  const magPenPct = magPenThreshold + (passives.magPenBonus || 0) + (famBonus.magPen || 0) + traitFx.magPen + (raceFx.magPenBonus || 0);
 
   const healMultiplierPct = Math.round(
-    100 + s.mag * 1.0 + s.cha * 0.5 + (passives.healBonusPct || 0) + (famBonus.healBonus || 0) + traitFx.healBonus
+    100 + s.mag * 1.0 + s.cha * 0.5 + (passives.healBonusPct || 0) + (famBonus.healBonus || 0) + traitFx.healBonus + (raceFx.healBonusPct || 0)
   );
   const counterRatePct =
-    counterThreshold + (passives.counterBonus || 0) + traitFx.counterBonus;
+    counterThreshold + (passives.counterBonus || 0) + traitFx.counterBonus + (raceFx.counterBonus || 0);
   const dropRatePct = Math.round(
     100 +
       s.lck * 0.5 +
@@ -341,16 +363,19 @@ export function calculateCombatStats(character, equipArg = null) {
       (passives.dropRateBonus || 0) +
       (accessory?.dropBonus || 0) +
       (famBonus.dropBonus || 0) +
-      traitFx.dropBonus
+      traitFx.dropBonus +
+      (raceFx.dropRateBonus || 0)
   );
 
   const initiativeBonus =
     (passives.initiativeBonus || 0) +
     (accessory?.initiativeBonus || 0) +
     (famBonus.initiativeBonus || 0) +
-    traitFx.initiativeBonus;
+    traitFx.initiativeBonus +
+    (raceFx.initiativeBonus || 0);
 
-  const skillChanceBonus = (familiar?.skillChanceBonus || 0) + traitFx.skillChanceBonus;
+  const skillChanceBonus = (familiar?.skillChanceBonus || 0) + traitFx.skillChanceBonus + (raceFx.skillChanceBonus || 0);
+  const hateBonus = (passives.hateBonus || 0) + (raceFx.hateBonus || 0);
 
   const attackElement = resolveAttackElement(weapon, traitFx);
 
@@ -375,7 +400,8 @@ export function calculateCombatStats(character, equipArg = null) {
     dropRatePct,
     initiativeBonus,
     skillChanceBonus,
-    lifestealPct: traitFx.lifestealPct,
+    hateBonus,
+    lifestealPct: traitFx.lifestealPct + (raceFx.lifestealPct || 0),
     attackElement,
     weapon,
     armor,

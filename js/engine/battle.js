@@ -41,7 +41,7 @@ function createUnitFromCharacter(char, index, weaponInstance, options = {}) {
   const isFront = index < 2;
 
   let hate = BASE_HATE[index] ?? 10;
-  hate += cls.passives?.hateBonus || 0;
+  hate += combat.hateBonus || 0;
   if (isFront && personality.hateBonus) {
     hate += personality.hateBonus;
   }

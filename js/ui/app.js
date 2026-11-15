@@ -692,12 +692,29 @@ function renderPartyTab() {
       ? getActiveSkillActivationChance(detailChar, activeSkill, equips.familiar)
       : 0;
 
+    const raceSkillsHtml = (race?.raceSkills || [])
+      .map(sk => {
+        const unlocked = detailChar.level >= sk.unlockLv;
+        return `
+          <div class="skill-item" style="${unlocked ? '' : 'opacity:0.55;'}">
+            <span class="skill-tag ${unlocked ? 'passive' : ''}" style="${unlocked ? 'border-color:var(--accent-gold);color:var(--accent-gold);' : ''}">種族Lv.${sk.unlockLv}</span>
+            <div style="flex:1;min-width:0;">
+              <strong style="font-size:12px;color:${unlocked ? 'var(--accent-gold)' : 'var(--text-muted)'};">${escapeHtml(sk.name)}</strong>
+              <span style="font-size:10px;margin-left:4px;color:${unlocked ? '#8be9a8' : 'var(--text-muted)'};">${unlocked ? '発動中' : `Lv.${sk.unlockLv}で発現`}</span>
+              <div class="skill-desc">${escapeHtml(sk.description)}</div>
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+
     const skillsHtml = `
       <div class="skill-box">
         <div class="skill-item">
           <span class="skill-tag passive">パッシブ</span>
           <span class="skill-desc">${escapeHtml(cls?.passiveDescription || 'なし')}</span>
         </div>
+        ${raceSkillsHtml}
         ${
           activeSkill
             ? `
@@ -1172,7 +1189,19 @@ function renderTavernTab() {
             .map(r => `<option value="${r.id}" ${r.id === tavernDraft.raceId ? 'selected' : ''}>${r.name}</option>`)
             .join('')}
         </select>
-        <div class="preview-box" style="margin-top:4px;">${escapeHtml(race.description)}</div>
+        <div class="preview-box" style="margin-top:4px;">
+          ${escapeHtml(race.description)}
+          ${
+            Array.isArray(race.raceSkills)
+              ? `<div style="margin-top:4px;border-top:1px solid rgba(255,255,255,0.08);padding-top:4px;">
+                  <span style="color:var(--accent-gold);font-weight:700;">種族スキル:</span><br/>
+                  ${race.raceSkills
+                    .map(sk => `・Lv.${sk.unlockLv} <strong>${escapeHtml(sk.name)}</strong>（${escapeHtml(sk.description)}）`)
+                    .join('<br/>')}
+                </div>`
+              : ''
+          }
+        </div>
       </div>
 
       <div class="form-group">
