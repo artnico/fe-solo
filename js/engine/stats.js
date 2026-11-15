@@ -123,6 +123,14 @@ export function levelUpCharacter(character, familiar = null, extraGrowthPct = 0)
 /**
  * クラスチェンジ可能か判定
  */
+function hasMasteredTreeTier5(history, tree) {
+  const treeClasses = new Set(tree.branches.flat());
+  const learnedTier5InTree = new Set(
+    (history || []).filter(cid => treeClasses.has(cid) && CLASSES[cid]?.tier === 5)
+  );
+  return learnedTier5InTree.size >= 2;
+}
+
 export function isLineageTier5Unlocked(character, targetClassId) {
   const targetCls = CLASSES[targetClassId];
   if (!targetCls || targetCls.tier !== 5) return false;
@@ -130,9 +138,7 @@ export function isLineageTier5Unlocked(character, targetClassId) {
   for (const tree of CLASS_TREES) {
     const treeClasses = new Set(tree.branches.flat());
     if (!treeClasses.has(targetClassId)) continue;
-    const learnedInTree = history.filter(cid => treeClasses.has(cid));
-    const hasHighInTree = learnedInTree.some(cid => (CLASSES[cid]?.tier || 1) >= 3);
-    if (learnedInTree.length >= 2 || hasHighInTree) {
+    if (hasMasteredTreeTier5(history, tree)) {
       return true;
     }
   }
@@ -151,13 +157,10 @@ export function getAvailablePromotionIds(character, unlockedHiddenClasses = []) 
     }
   }
 
-  // 同系統の職業を習得済み（2職以上またはTier3以上）の場合、その系統のTier5最上級職を解禁
+  // 同系統のTier5職業を2つとも習得済みの場合、その系統のTier5最上級職を解禁
   const history = character?.classHistory || [character?.classId];
   for (const tree of CLASS_TREES) {
-    const treeClasses = new Set(tree.branches.flat());
-    const learnedInTree = history.filter(cid => treeClasses.has(cid));
-    const hasHighInTree = learnedInTree.some(cid => (CLASSES[cid]?.tier || 1) >= 3);
-    if (learnedInTree.length >= 2 || hasHighInTree) {
+    if (hasMasteredTreeTier5(history, tree)) {
       for (const branch of tree.branches) {
         const topId = branch[branch.length - 1];
         if (topId && topId !== character.classId && CLASSES[topId]?.tier === 5) {
