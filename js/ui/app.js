@@ -348,13 +348,22 @@ function renderDungeonSection() {
       </section>
     `;
   } else if (run.phase === 'defeat') {
+    const b = run.lastBattle;
     actionCard = `
       <section class="card" style="border-color:var(--accent-red);">
         <div class="card-title"><span>💀 パーティ全滅…</span></div>
         <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
           全滅したため未帰還戦利品の一部を失いました。残った戦利品を回収して帰還します。
         </p>
-        <button class="btn btn-danger" id="btn-dungeon-defeat-claim" style="width:100%;">拠点へ帰還する</button>
+        <div class="btn-row" style="margin-bottom:8px;">
+          ${b ? `<button class="btn btn-sm" id="btn-toggle-dungeon-log">${run.showBattleLog ? '詳細ログを隠す' : '詳細ログを見る'}</button>` : ''}
+          <button class="btn btn-danger" id="btn-dungeon-defeat-claim" style="flex:1;">拠点へ帰還する</button>
+        </div>
+        ${
+          run.showBattleLog && b
+            ? `<div class="log-box">${b.logs.map(l => `<div class="log-line ${l.type}">${escapeHtml(l.text)}</div>`).join('')}</div>`
+            : ''
+        }
       </section>
     `;
   }

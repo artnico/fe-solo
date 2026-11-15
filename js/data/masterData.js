@@ -1165,8 +1165,8 @@ export const MONSTERS = {
   goblin_king: {
     id: 'goblin_king', name: 'ゴブリンキング', element: 'fire', statusResist: 30, isBoss: true,
     level: 12, exp: 130, gold: 240,
-    stats: { hp: 90, mp: 8, str: 30, mag: 6, skl: 17, spd: 14, lck: 8, def: 21, res: 15, cha: 6 },
-    weaponType: 'axe', atk: 22, mag: 0,
+    stats: { hp: 90, mp: 8, str: 22, mag: 6, skl: 15, spd: 13, lck: 8, def: 21, res: 15, cha: 6 },
+    weaponType: 'axe', atk: 16, mag: 0,
     drops: [
       { kind: 'weapon', id: 'goblin_slayer_blade', rate: 0.35 },
       { kind: 'item', id: 'class_crest', rate: 0.25 }
