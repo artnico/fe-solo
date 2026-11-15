@@ -1067,9 +1067,18 @@ function renderEquipTab() {
                     const owner = store.getEquipOwner(equipCategoryTab, eq.uid);
                     const sellPrice = RARITIES[eq.rarity]?.sellPrice || 20;
                     const rarityName = RARITIES[eq.rarity]?.name || '';
-                    const traitChips = (eq.traits || [])
-                      .map(tid => WEAPON_TRAITS[tid]?.label || tid)
-                      .map(lbl => `<span class="trait-chip">${escapeHtml(lbl)}</span>`)
+                    const traitCounts = {};
+                    for (const tid of eq.traits || []) {
+                      traitCounts[tid] = (traitCounts[tid] || 0) + 1;
+                    }
+                    const traitChips = Object.entries(traitCounts)
+                      .map(([tid, count]) => {
+                        const lbl = WEAPON_TRAITS[tid]?.label || tid;
+                        if (count >= 2) {
+                          return `<span class="trait-chip" style="border-color:var(--accent-gold);color:var(--accent-gold);">${escapeHtml(lbl)} ★×${count}</span>`;
+                        }
+                        return `<span class="trait-chip">${escapeHtml(lbl)}</span>`;
+                      })
                       .join('');
 
                     return `

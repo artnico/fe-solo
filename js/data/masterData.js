@@ -987,7 +987,20 @@ export const WEAPON_TRAITS = {
   elem_fire: { id: 'elem_fire', prefix: '灼熱の', label: '[火の加護] 火属性付与', element: 'fire' },
   elem_water: { id: 'elem_water', prefix: '清流の', label: '[水の加護] 水属性付与', element: 'water' },
   elem_earth: { id: 'elem_earth', prefix: '大地の', label: '[土の加護] 土属性付与', element: 'earth' },
-  elem_wind: { id: 'elem_wind', prefix: '疾風の', label: '[風の加護] 風属性付与', element: 'wind' }
+  elem_wind: { id: 'elem_wind', prefix: '疾風の', label: '[風の加護] 風属性付与', element: 'wind' },
+  elem_thunder: { id: 'elem_thunder', prefix: '雷霆の', label: '[雷の加護] 雷属性付与', element: 'thunder' },
+  elem_ice: { id: 'elem_ice', prefix: '氷結の', label: '[氷の加護] 氷属性付与', element: 'ice' },
+  fierce: { id: 'fierce', prefix: '猛攻の', label: '[猛攻] 物攻+6', atkBonus: 6 },
+  wise: { id: 'wise', prefix: '叡智の', label: '[叡智] 魔攻+6', magBonus: 6 },
+  accurate: { id: 'accurate', prefix: '必中の', label: '[必中] 命中+10%', hitBonus: 10 },
+  relentless: { id: 'relentless', prefix: '連撃の', label: '[連撃] 追撃率+8%', followUpBonus: 8 },
+  ironwall: { id: 'ironwall', prefix: '鉄壁の', label: '[鉄壁] 物理被ダメ-5%', physDmgRedBonus: 5 },
+  aegis: { id: 'aegis', prefix: '聖盾の', label: '[聖盾] 魔法被ダメ-5%', magDmgRedBonus: 5 },
+  inspired: { id: 'inspired', prefix: '霊感の', label: '[霊感] スキル発動+6%', skillChanceBonus: 6 },
+  berserk: { id: 'berserk', prefix: '狂戦士の', label: '[狂戦士] 物攻+8/会心+5%', atkBonus: 8, critBonus: 5 },
+  archmage: { id: 'archmage', prefix: '大魔導の', label: '[大魔導] 魔攻+8/MP+10', magBonus: 8, mpBonus: 10 },
+  phantom: { id: 'phantom', prefix: '幻影の', label: '[幻影] 回避+8%/先制+8', evaBonus: 8, initiativeBonus: 8 },
+  guardian: { id: 'guardian', prefix: '守護の', label: '[守護] 物防+4/魔防+4/HP+15', defBonus: 4, resBonus: 4, hpBonus: 15 }
 };
 
 // 防具テンプレートマスター

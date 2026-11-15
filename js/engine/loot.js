@@ -26,13 +26,34 @@ function rollRarity(rarityBonus = 0) {
 }
 
 function pickRandomTraits(count, pool) {
-  const copy = [...pool];
+  if (!pool || pool.length === 0) return [];
   const picked = [];
-  for (let i = 0; i < count && copy.length > 0; i++) {
-    const idx = Math.floor(Math.random() * copy.length);
-    picked.push(copy.splice(idx, 1)[0]);
+  for (let i = 0; i < count; i++) {
+    const idx = Math.floor(Math.random() * pool.length);
+    picked.push(pool[idx]);
   }
   return picked;
+}
+
+function formatTraitPrefix(traitIds) {
+  if (!Array.isArray(traitIds) || traitIds.length === 0) return '';
+  const counts = {};
+  for (const tid of traitIds) {
+    counts[tid] = (counts[tid] || 0) + 1;
+  }
+  let bestTid = traitIds[0];
+  let bestCount = counts[bestTid] || 1;
+  for (const tid of traitIds) {
+    if (counts[tid] > bestCount) {
+      bestTid = tid;
+      bestCount = counts[tid];
+    }
+  }
+  const basePrefix = WEAPON_TRAITS[bestTid]?.prefix || '';
+  if (!basePrefix) return '';
+  if (bestCount >= 3) return `極・${basePrefix}`;
+  if (bestCount === 2) return `真・${basePrefix}`;
+  return basePrefix;
 }
 
 /**
@@ -44,10 +65,13 @@ export function generateWeaponInstance(templateId, options = {}) {
 
   const rarityId = options.rarity || rollRarity(options.rarityBonus || 0);
   const rarity = RARITIES[rarityId] || RARITIES.common;
+  const armorOnly = ['vital', 'mana', 'sturdy', 'ward', 'titan', 'mirror', 'ironwall', 'aegis', 'phantom', 'guardian'];
+  const physOnly = ['sharp', 'executioner', 'fierce', 'berserk'];
+  const magOnly = ['arcane', 'blessed', 'astral', 'wise', 'archmage'];
   const pool = Object.keys(WEAPON_TRAITS).filter(id => {
-    if (['vital', 'mana', 'sturdy', 'ward', 'titan', 'mirror'].includes(id)) return false;
-    if (tpl.type === 'tome' || tpl.type === 'staff') return id !== 'sharp' && id !== 'executioner';
-    return id !== 'arcane' && id !== 'blessed' && id !== 'astral';
+    if (armorOnly.includes(id)) return false;
+    if (tpl.type === 'tome' || tpl.type === 'staff') return !physOnly.includes(id);
+    return !magOnly.includes(id);
   });
   const traitIds = options.traits || pickRandomTraits(rarity.traitCount, pool);
 
@@ -56,7 +80,7 @@ export function generateWeaponInstance(templateId, options = {}) {
   const hit = tpl.hit + (rarityId === 'rare' ? 3 : rarityId === 'epic' ? 6 : 0);
   const crit = tpl.crit + (rarityId === 'rare' ? 2 : rarityId === 'epic' ? 5 : 0);
 
-  const prefix = traitIds.length > 0 ? WEAPON_TRAITS[traitIds[0]]?.prefix || '' : '';
+  const prefix = formatTraitPrefix(traitIds);
 
   return {
     uid: `wpn_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
@@ -82,7 +106,10 @@ export function generateArmorInstance(templateId, options = {}) {
 
   const rarityId = options.rarity || rollRarity(options.rarityBonus || 0);
   const rarity = RARITIES[rarityId] || RARITIES.common;
-  const pool = ['vital', 'mana', 'sturdy', 'ward', 'swift', 'greed', 'titan', 'mirror'];
+  const pool = [
+    'vital', 'mana', 'sturdy', 'ward', 'swift', 'greed', 'titan', 'mirror',
+    'ironwall', 'aegis', 'inspired', 'phantom', 'guardian'
+  ];
   const traitIds = options.traits || pickRandomTraits(rarity.traitCount, pool);
 
   const hp = tpl.hp > 0 ? Math.round(tpl.hp * rarity.statMult) : 0;
@@ -91,7 +118,7 @@ export function generateArmorInstance(templateId, options = {}) {
   const res = tpl.res > 0 ? Math.round(tpl.res * rarity.statMult) : 0;
   const eva = tpl.eva || 0;
 
-  const prefix = traitIds.length > 0 ? WEAPON_TRAITS[traitIds[0]]?.prefix || '' : '';
+  const prefix = formatTraitPrefix(traitIds);
 
   return {
     uid: `arm_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
@@ -118,7 +145,11 @@ export function generateAccessoryInstance(templateId, options = {}) {
 
   const rarityId = options.rarity || rollRarity(options.rarityBonus || 0);
   const rarity = RARITIES[rarityId] || RARITIES.common;
-  const pool = ['vital', 'mana', 'sturdy', 'ward', 'swift', 'greed', 'deadly', 'blessed', 'elem_fire', 'elem_water', 'elem_earth', 'elem_wind'];
+  const pool = [
+    'vital', 'mana', 'sturdy', 'ward', 'swift', 'greed', 'deadly', 'blessed',
+    'fierce', 'wise', 'accurate', 'relentless', 'ironwall', 'aegis', 'inspired', 'phantom', 'guardian',
+    'elem_fire', 'elem_water', 'elem_earth', 'elem_wind', 'elem_thunder', 'elem_ice'
+  ];
   const traitIds = options.traits || pickRandomTraits(rarity.traitCount, pool);
 
   const hp = tpl.hp ? Math.round(tpl.hp * rarity.statMult) : 0;
@@ -133,7 +164,7 @@ export function generateAccessoryInstance(templateId, options = {}) {
   const dropBonus = tpl.dropBonus || 0;
   const initiativeBonus = tpl.initiativeBonus || 0;
 
-  const prefix = traitIds.length > 0 ? WEAPON_TRAITS[traitIds[0]]?.prefix || '' : '';
+  const prefix = formatTraitPrefix(traitIds);
 
   return {
     uid: `acc_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
@@ -163,6 +194,13 @@ export function generateAccessoryInstance(templateId, options = {}) {
 export function getWeaponTraitEffects(equipList) {
   const list = Array.isArray(equipList) ? equipList : [equipList];
   const effects = {
+    atkBonus: 0,
+    magBonus: 0,
+    hitBonus: 0,
+    followUpBonus: 0,
+    physDmgRedBonus: 0,
+    magDmgRedBonus: 0,
+    skillChanceBonus: 0,
     physPen: 0,
     magPen: 0,
     lifestealPct: 0,
@@ -187,25 +225,47 @@ export function getWeaponTraitEffects(equipList) {
       effects.elements.push(eq.element);
     }
     if (!Array.isArray(eq.traits)) continue;
+    const traitCounts = {};
     for (const tid of eq.traits) {
+      traitCounts[tid] = (traitCounts[tid] || 0) + 1;
+    }
+    for (const [tid, count] of Object.entries(traitCounts)) {
       const t = WEAPON_TRAITS[tid];
       if (!t) continue;
-      if (t.physPen) effects.physPen += t.physPen;
-      if (t.magPen) effects.magPen += t.magPen;
-      if (t.lifestealPct) effects.lifestealPct += t.lifestealPct;
-      if (t.snipeBackline) effects.snipeBackline = true;
-      if (t.counterBonus) effects.counterBonus += t.counterBonus;
-      if (t.dropBonus) effects.dropBonus += t.dropBonus;
-      if (t.critBonus) effects.critBonus += t.critBonus;
-      if (t.critDmgBonus) effects.critDmgBonus += t.critDmgBonus;
-      if (t.evaBonus) effects.evaBonus += t.evaBonus;
-      if (t.initiativeBonus) effects.initiativeBonus += t.initiativeBonus;
-      if (t.healBonus) effects.healBonus += t.healBonus;
-      if (t.hpBonus) effects.hpBonus += t.hpBonus;
-      if (t.mpBonus) effects.mpBonus += t.mpBonus;
-      if (t.defBonus) effects.defBonus += t.defBonus;
-      if (t.resBonus) effects.resBonus += t.resBonus;
-      if (t.element) effects.elements.push(t.element);
+      // 同一装備内で同じ特性が重なった場合、2個目以降は1.5倍ブースト
+      const mult = 1 + (count - 1) * 1.5;
+      if (t.atkBonus) effects.atkBonus += Math.round(t.atkBonus * mult);
+      if (t.magBonus) effects.magBonus += Math.round(t.magBonus * mult);
+      if (t.hitBonus) effects.hitBonus += Math.round(t.hitBonus * mult);
+      if (t.followUpBonus) effects.followUpBonus += Math.round(t.followUpBonus * mult);
+      if (t.physDmgRedBonus) effects.physDmgRedBonus += Math.round(t.physDmgRedBonus * mult);
+      if (t.magDmgRedBonus) effects.magDmgRedBonus += Math.round(t.magDmgRedBonus * mult);
+      if (t.skillChanceBonus) effects.skillChanceBonus += Math.round(t.skillChanceBonus * mult);
+      if (t.physPen) effects.physPen += Math.round(t.physPen * mult);
+      if (t.magPen) effects.magPen += Math.round(t.magPen * mult);
+      if (t.lifestealPct) effects.lifestealPct += Math.round(t.lifestealPct * mult);
+      if (t.snipeBackline) {
+        effects.snipeBackline = true;
+        if (count >= 2) effects.critBonus += (count - 1) * 8;
+      }
+      if (t.counterBonus) effects.counterBonus += Math.round(t.counterBonus * mult);
+      if (t.dropBonus) effects.dropBonus += Math.round(t.dropBonus * mult);
+      if (t.critBonus) effects.critBonus += Math.round(t.critBonus * mult);
+      if (t.critDmgBonus) effects.critDmgBonus += Math.round(t.critDmgBonus * mult);
+      if (t.evaBonus) effects.evaBonus += Math.round(t.evaBonus * mult);
+      if (t.initiativeBonus) effects.initiativeBonus += Math.round(t.initiativeBonus * mult);
+      if (t.healBonus) effects.healBonus += Math.round(t.healBonus * mult);
+      if (t.hpBonus) effects.hpBonus += Math.round(t.hpBonus * mult);
+      if (t.mpBonus) effects.mpBonus += Math.round(t.mpBonus * mult);
+      if (t.defBonus) effects.defBonus += Math.round(t.defBonus * mult);
+      if (t.resBonus) effects.resBonus += Math.round(t.resBonus * mult);
+      if (t.element) {
+        effects.elements.push(t.element);
+        if (count >= 2) {
+          effects.atkBonus += (count - 1) * 6;
+          effects.magBonus += (count - 1) * 6;
+        }
+      }
     }
   }
   return effects;
