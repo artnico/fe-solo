@@ -1045,7 +1045,8 @@ export const ARMORS = {
   sage_vestment: { id: 'sage_vestment', name: '賢者の法衣', type: 'robe', hp: 10, mp: 12, def: 4, res: 11, eva: 4 },
   seraph_robe: { id: 'seraph_robe', name: '熾天使の神衣', type: 'robe', hp: 18, mp: 22, def: 8, res: 19, eva: 8 },
   ancient_bark_mail: { id: 'ancient_bark_mail', name: '古樹の盾鎧', type: 'heavy_armor', hp: 28, mp: 2, def: 12, res: 8, eva: -1 },
-  flame_scale_armor: { id: 'flame_scale_armor', name: '灼熱の竜鱗鎧', type: 'heavy_armor', hp: 45, mp: 6, def: 20, res: 14, eva: 1 }
+  flame_scale_armor: { id: 'flame_scale_armor', name: '灼熱の竜鱗鎧', type: 'heavy_armor', hp: 45, mp: 6, def: 20, res: 14, eva: 1 },
+  knight_plate: { id: 'knight_plate', name: '騎士のルーン鎧', type: 'heavy_armor', hp: 30, mp: 4, def: 14, res: 10, eva: 0 }
 };
 
 // アクセサリーテンプレートマスター
@@ -1101,7 +1102,8 @@ export const WEAPONS = {
   wolf_claw_dagger: { id: 'wolf_claw_dagger', name: '人狼の爪牙', type: 'dagger', element: 'wind', atk: 12, mag: 0, hit: 14, crit: 18 },
   colossus_axe: { id: 'colossus_axe', name: '巨像の重斧', type: 'axe', element: 'earth', atk: 22, mag: 0, hit: -5, crit: 12 },
   lament_grimoire: { id: 'lament_grimoire', name: '嘆きの氷書', type: 'tome', element: 'ice', atk: 0, mag: 18, hit: 12, crit: 10 },
-  seraph_blade: { id: 'seraph_blade', name: '熾天使の聖剣', type: 'sword', element: 'thunder', atk: 30, mag: 12, hit: 15, crit: 18 }
+  seraph_blade: { id: 'seraph_blade', name: '熾天使の聖剣', type: 'sword', element: 'thunder', atk: 30, mag: 12, hit: 15, crit: 18 },
+  mithril_sword: { id: 'mithril_sword', name: 'ミスリルソード', type: 'sword', atk: 16, mag: 4, hit: 12, crit: 12 }
 };
 
 // 特殊アイテム（転職の証など）
@@ -1837,14 +1839,14 @@ export const QUESTS = [
     id: 'flora_1', seriesId: 'flora', step: 1, prevQuestId: null,
     title: '草原の花摘み',
     story: '「冒険者さん！風車の草原に咲く薬草をたくさん摘んできてくれませんか？」',
-    condition: { type: 'area_clear', areaId: 'meadow', count: 30, label: '「風車の草原」で30回勝利' },
+    condition: { type: 'area_clear', areaId: 'meadow', count: 30, label: '「静かな草原」で30回勝利' },
     rewards: { gold: 300 }
   },
   {
     id: 'flora_2', seriesId: 'flora', step: 2, prevQuestId: 'flora_1',
     title: '森の秘薬草',
     story: '「もっと珍しい花があれば、病気のみんなを助けられるんです！」',
-    condition: { type: 'area_clear', areaId: 'forest', count: 80, label: '「迷いの森」で80回勝利' },
+    condition: { type: 'area_clear', areaId: 'forest', count: 80, label: '「霧の深い森」で80回勝利' },
     rewards: { gold: 800, items: { class_crest: 1 } }
   },
   {
@@ -1902,7 +1904,7 @@ export const QUESTS = [
     story: '「あんたたちの強さは本物だ！家宝の剣、俺なんかよりあんたが持っててくれ！」',
     condition: { type: 'max_level', level: 25, label: '誰か1人が Lv.25 に到達' },
     rewards: {
-      uniqueEquip: { slot: 'weapon', templateId: 'mithril_sword', rarity: 'epic', traits: ['sharp', 'deadly', 'vampiric'] }
+      uniqueEquip: { slot: 'weapon', templateId: 'mithril_sword', rarity: 'epic', traits: ['sharp', 'deadly', 'vampire'] }
     }
   },
 
@@ -1911,7 +1913,7 @@ export const QUESTS = [
     id: 'ygg_1', seriesId: 'yggdrasil', step: 1, prevQuestId: null,
     title: '芽吹きの水やり',
     story: '街の片隅でかすかに光る小さな苗木。森の清らかな魔力に反応しているようだ。',
-    condition: { type: 'area_clear', areaId: 'forest', count: 60, label: '「迷いの森」で60回勝利' },
+    condition: { type: 'area_clear', areaId: 'forest', count: 60, label: '「霧の深い森」で60回勝利' },
     rewards: { gold: 500 }
   },
   {
@@ -1941,7 +1943,7 @@ export const QUESTS = [
     id: 'cat_2', seriesId: 'old_cat', step: 2, prevQuestId: 'cat_1',
     title: '夜のパトロール',
     story: '「ニャア！（洞窟の魔物がうるさいニャ！静かにしてこいニャ！）」',
-    condition: { type: 'area_clear', areaId: 'cave', count: 80, label: '「薄暗い洞窟」で80回勝利' },
+    condition: { type: 'dungeon_clear', dungeonId: 'slime_cave', count: 3, label: '「スライムの巣穴」を3回踏破' },
     rewards: { gold: 900, items: { class_crest: 1 } }
   },
   {
@@ -1980,14 +1982,14 @@ export const QUESTS = [
     id: 'smith_1', seriesId: 'blacksmith', step: 1, prevQuestId: null,
     title: '鉄くず集め',
     story: '「兄ちゃん、鍛冶の練習に鉱石が足りねえんだ！洞窟でひと暴れしてきてくれよ！」',
-    condition: { type: 'area_clear', areaId: 'cave', count: 50, label: '「薄暗い洞窟」で50回勝利' },
+    condition: { type: 'dungeon_clear', dungeonId: 'slime_cave', count: 2, label: '「スライムの巣穴」を2回踏破' },
     rewards: { gold: 500 }
   },
   {
     id: 'smith_2', seriesId: 'blacksmith', step: 2, prevQuestId: 'smith_1',
     title: '灼熱の鍛錬',
-    story: '「火山の炎なら伝説の鋼も打てるはずだ！マグマ地帯の魔物を蹴散らしてきてくれ！」',
-    condition: { type: 'area_clear', areaId: 'volcano', count: 100, label: '「灼熱の火山」で100回勝利' },
+    story: '「竜の峰の炎なら伝説の鋼も打てるはずだ！霊峰の魔物を蹴散らしてきてくれ！」',
+    condition: { type: 'area_clear', areaId: 'dragon_peak', count: 80, label: '「竜の峰」で80回勝利' },
     rewards: { gold: 1200, items: { class_crest: 2 } }
   },
   {
@@ -2035,7 +2037,7 @@ export const QUESTS = [
     id: 'miko_1', seriesId: 'oracle_miko', step: 1, prevQuestId: null,
     title: '星々の観測',
     story: '「星々が新たな英雄の誕生を告げています…まずはこの大地を巡ってみてください」',
-    condition: { type: 'area_clear', areaId: 'meadow', count: 100, label: '「風車の草原」で100回勝利' },
+    condition: { type: 'area_clear', areaId: 'meadow', count: 100, label: '「静かな草原」で100回勝利' },
     rewards: { gold: 600 }
   },
   {
@@ -2153,7 +2155,7 @@ export const STAR_EXCHANGES = [
       slot: 'weapon',
       templateId: 'mithril_sword',
       rarity: 'legendary',
-      traits: ['sharp', 'deadly', 'vampiric', 'swift']
+      traits: ['sharp', 'deadly', 'vampire', 'swift']
     },
     description: '鋭利・必殺・吸血・疾風の4特性が付いた伝説の魔剣。'
   },
