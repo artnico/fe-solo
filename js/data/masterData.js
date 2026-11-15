@@ -1366,6 +1366,101 @@ export const MONSTERS = {
       { kind: 'item', id: 'hero_crest', rate: 0.12 }
     ]
   },
+
+  // ===== インスタンスダンジョン専用モンスター＆ボス =====
+  acid_slime: {
+    id: 'acid_slime', name: 'アシッドスライム', element: 'water',
+    level: 4, exp: 26, gold: 28,
+    stats: { hp: 20, mp: 4, str: 11, mag: 6, skl: 8, spd: 7, lck: 5, def: 9, res: 8, cha: 2 },
+    weaponType: 'dagger', atk: 8, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'water_tome', rate: 0.10 },
+      { kind: 'accessory', id: 'slime_ring', rate: 0.05, rarityBonus: 0.4 }
+    ]
+  },
+  king_slime: {
+    id: 'king_slime', name: 'キングスライム', element: 'water', statusResist: 20, isBoss: true,
+    level: 7, exp: 75, gold: 140,
+    stats: { hp: 65, mp: 10, str: 16, mag: 10, skl: 11, spd: 9, lck: 8, def: 14, res: 14, cha: 5 },
+    weaponType: 'sword', atk: 12, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'steel_sword', rate: 0.30 },
+      { kind: 'weapon', id: 'heal_staff', rate: 0.25 },
+      { kind: 'accessory', id: 'slime_ring', rate: 0.15, rarityBonus: 0.5 }
+    ]
+  },
+  goblin_shaman: {
+    id: 'goblin_shaman', name: 'ゴブリンシャーマン', element: 'fire',
+    level: 7, exp: 40, gold: 45,
+    stats: { hp: 26, mp: 16, str: 6, mag: 18, skl: 12, spd: 11, lck: 6, def: 8, res: 14, cha: 4 },
+    weaponType: 'tome', atk: 0, mag: 14,
+    drops: [
+      { kind: 'weapon', id: 'fire_tome', rate: 0.14 },
+      { kind: 'armor', id: 'apprentice_robe', rate: 0.12 }
+    ]
+  },
+  cursed_fox: {
+    id: 'cursed_fox', name: '妖狐の化身', element: 'wind',
+    level: 12, exp: 70, gold: 80,
+    stats: { hp: 44, mp: 22, str: 14, mag: 30, skl: 20, spd: 24, lck: 12, def: 14, res: 22, cha: 8 },
+    weaponType: 'tome', atk: 0, mag: 22,
+    drops: [
+      { kind: 'weapon', id: 'arcane_tome', rate: 0.12 },
+      { kind: 'accessory', id: 'swift_bracelet', rate: 0.08, rarityBonus: 0.4 }
+    ]
+  },
+  ancient_spirit_guardian: {
+    id: 'ancient_spirit_guardian', name: '古社の白狼神', element: 'wind', statusResist: 35, isBoss: true,
+    level: 16, exp: 185, gold: 320,
+    stats: { hp: 120, mp: 24, str: 34, mag: 28, skl: 24, spd: 26, lck: 14, def: 22, res: 24, cha: 10 },
+    weaponType: 'katana', atk: 24, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'thunder_katana', rate: 0.30, rarityBonus: 0.4 },
+      { kind: 'weapon', id: 'saint_staff', rate: 0.25 },
+      { kind: 'item', id: 'class_crest', rate: 0.35 }
+    ]
+  },
+  wraith: {
+    id: 'wraith', name: '深淵のレイス', element: 'ice', statusResist: 25,
+    level: 19, exp: 135, gold: 150,
+    stats: { hp: 66, mp: 30, str: 12, mag: 44, skl: 24, spd: 23, lck: 12, def: 20, res: 34, cha: 6 },
+    weaponType: 'tome', atk: 0, mag: 32,
+    drops: [
+      { kind: 'weapon', id: 'lament_grimoire', rate: 0.06, rarityBonus: 0.5 },
+      { kind: 'item', id: 'class_crest', rate: 0.12 }
+    ]
+  },
+  crimson_hatchling: {
+    id: 'crimson_hatchling', name: '紅蓮の幼竜', element: 'fire',
+    level: 26, exp: 220, gold: 245,
+    stats: { hp: 118, mp: 14, str: 52, mag: 22, skl: 24, spd: 22, lck: 12, def: 34, res: 26, cha: 8 },
+    weaponType: 'sword', atk: 36, mag: 0,
+    drops: [
+      { kind: 'armor', id: 'dragon_mail', rate: 0.10 },
+      { kind: 'item', id: 'class_crest', rate: 0.15 }
+    ]
+  },
+  crimson_wyrm: {
+    id: 'crimson_wyrm', name: '紅蓮竜イグニス', element: 'fire', statusResist: 50, isBoss: true,
+    level: 33, exp: 560, gold: 880,
+    stats: { hp: 240, mp: 36, str: 68, mag: 48, skl: 34, spd: 28, lck: 18, def: 48, res: 40, cha: 14 },
+    weaponType: 'sword', atk: 48, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'dragon_slayer', rate: 0.35, rarityBonus: 0.5 },
+      { kind: 'armor', id: 'flame_scale_armor', rate: 0.25, rarityBonus: 0.5 },
+      { kind: 'item', id: 'hero_crest', rate: 0.25 }
+    ]
+  },
+  abyss_sentinel: {
+    id: 'abyss_sentinel', name: '深淵の衛士', element: 'thunder', statusResist: 35,
+    level: 39, exp: 510, gold: 590,
+    stats: { hp: 235, mp: 28, str: 84, mag: 58, skl: 40, spd: 34, lck: 20, def: 58, res: 52, cha: 14 },
+    weaponType: 'lance', atk: 56, mag: 0,
+    drops: [
+      { kind: 'weapon', id: 'soul_reaper_scythe', rate: 0.14, rarityBonus: 0.5 },
+      { kind: 'item', id: 'hero_crest', rate: 0.14 }
+    ]
+  },
   celestial_warden: {
     id: 'celestial_warden', name: '星界の番人', element: 'thunder', statusResist: 35,
     level: 38, exp: 480, gold: 560,
@@ -1491,13 +1586,13 @@ export const DUNGEONS = [
     trainingChance: 0.01,
     description: '静かな草原の地下に広がる湿った洞窟。初心者向けの最初のダンジョン。',
     normalEncounters: [
-      ['slime', 'slime'],
-      ['slime', 'goblin']
+      ['slime', 'acid_slime'],
+      ['acid_slime', 'goblin']
     ],
     eliteEncounters: [
-      ['goblin', 'goblin', 'goblin_archer']
+      ['acid_slime', 'acid_slime', 'goblin_archer']
     ],
-    bossEncounter: ['goblin_king', 'slime', 'slime'],
+    bossEncounter: ['king_slime', 'acid_slime', 'slime'],
     exclusiveLootIds: ['steel_sword', 'water_tome', 'heal_staff'],
     familiarPool: ['gnome', 'sylph'],
     familiarDropRate: 0.04
@@ -1514,14 +1609,14 @@ export const DUNGEONS = [
     description: 'ゴブリンたちが占拠する古い砦。階層ボスから限定武器「妖魔殺しの剛剣」が狙える。',
     normalEncounters: [
       ['goblin', 'goblin'],
-      ['goblin', 'goblin_archer'],
-      ['goblin', 'wolf', 'goblin_archer']
+      ['goblin', 'goblin_shaman'],
+      ['goblin', 'goblin_archer', 'goblin_shaman']
     ],
     eliteEncounters: [
-      ['orc_warrior', 'goblin_archer'],
-      ['wolf', 'wolf', 'dark_mage']
+      ['orc_warrior', 'goblin_shaman'],
+      ['wolf', 'goblin_shaman', 'goblin_archer']
     ],
-    bossEncounter: ['goblin_king', 'goblin', 'goblin_archer'],
+    bossEncounter: ['goblin_king', 'goblin_shaman', 'goblin_archer'],
     exclusiveLootIds: ['goblin_slayer_blade', 'hunter_bow', 'silver_dagger'],
     familiarPool: ['salamander', 'sylph', 'fortune_cat'],
     familiarDropRate: 0.06
@@ -1537,15 +1632,15 @@ export const DUNGEONS = [
     trainingChance: 0.01,
     description: '霧の深い森の奥に忘れられた古社。Tier 2 育成中の腕試しに最適。',
     normalEncounters: [
-      ['wolf', 'wolf'],
-      ['wolf', 'dark_mage'],
-      ['wolf', 'orc_warrior']
+      ['wolf', 'cursed_fox'],
+      ['cursed_fox', 'forest_sprite'],
+      ['treant', 'cursed_fox']
     ],
     eliteEncounters: [
-      ['orc_warrior', 'dark_mage', 'wolf'],
-      ['ruin_guardian', 'dark_mage']
+      ['treant', 'cursed_fox', 'wolf'],
+      ['ruin_guardian', 'cursed_fox']
     ],
-    bossEncounter: ['goblin_king', 'wolf', 'dark_mage'],
+    bossEncounter: ['ancient_spirit_guardian', 'cursed_fox', 'wolf'],
     exclusiveLootIds: ['arcane_tome', 'saint_staff', 'thunder_katana'],
     familiarPool: ['sylph', 'undine', 'fortune_cat'],
     familiarDropRate: 0.07
@@ -1561,15 +1656,15 @@ export const DUNGEONS = [
     trainingChance: 0.01,
     description: '骸骨騎士とリッチが統べる禁断の地下迷宮。強力な限定装備と「転職の証」が高確率でドロップ。',
     normalEncounters: [
-      ['skeleton_knight', 'dark_mage'],
-      ['orc_warrior', 'skeleton_knight', 'dark_mage'],
-      ['wolf', 'skeleton_knight', 'dark_mage']
+      ['skeleton_knight', 'wraith'],
+      ['orc_warrior', 'skeleton_knight', 'wraith'],
+      ['banshee', 'skeleton_knight', 'wraith']
     ],
     eliteEncounters: [
-      ['ruin_guardian', 'skeleton_knight', 'dark_mage'],
-      ['orc_warrior', 'ruin_guardian', 'dark_mage']
+      ['ruin_guardian', 'skeleton_knight', 'wraith'],
+      ['stone_golem', 'skeleton_knight', 'wraith']
     ],
-    bossEncounter: ['lich_lord', 'skeleton_knight', 'dark_mage'],
+    bossEncounter: ['lich_lord', 'skeleton_knight', 'wraith'],
     exclusiveLootIds: ['abyssal_grimoire', 'soul_reaper_scythe', 'thunder_katana'],
     familiarPool: ['undine', 'gnome', 'minerva_owl'],
     familiarDropRate: 0.09
@@ -1585,14 +1680,14 @@ export const DUNGEONS = [
     trainingChance: 0.01,
     description: '竜の峰の頂に隠された竜族の聖域。Tier 4 クラスの強敵が立ち塞がる。',
     normalEncounters: [
-      ['wyvern', 'wyvern'],
-      ['wyvern', 'dragon_knight']
+      ['crimson_hatchling', 'wyvern'],
+      ['crimson_hatchling', 'flame_drake']
     ],
     eliteEncounters: [
-      ['dragon_knight', 'dragon_knight'],
-      ['wyvern', 'dragon_knight', 'celestial_warden']
+      ['dragon_knight', 'crimson_hatchling'],
+      ['flame_drake', 'dragon_knight', 'storm_harpy']
     ],
-    bossEncounter: ['lich_lord', 'dragon_knight', 'wyvern'],
+    bossEncounter: ['crimson_wyrm', 'dragon_knight', 'crimson_hatchling'],
     exclusiveLootIds: ['dragon_slayer', 'thunder_katana', 'soul_reaper_scythe'],
     familiarPool: ['salamander', 'valkyrie_drake', 'minerva_owl'],
     familiarDropRate: 0.1
@@ -1608,14 +1703,14 @@ export const DUNGEONS = [
     trainingChance: 0.01,
     description: '深淵竜バハムートが眠る最終ダンジョン。伝説・神話級装備と「英雄の証」が狙える。',
     normalEncounters: [
-      ['wyvern', 'dragon_knight'],
-      ['wyvern', 'wyvern', 'skeleton_knight']
+      ['abyss_sentinel', 'dragon_knight'],
+      ['abyss_sentinel', 'void_warlock', 'wraith']
     ],
     eliteEncounters: [
-      ['celestial_warden', 'dragon_knight'],
-      ['dragon_knight', 'dragon_knight', 'celestial_warden']
+      ['celestial_warden', 'abyss_sentinel'],
+      ['seraph_knight', 'abyss_sentinel', 'void_warlock']
     ],
-    bossEncounter: ['abyss_dragon', 'celestial_warden', 'dragon_knight'],
+    bossEncounter: ['abyss_dragon', 'abyss_sentinel', 'seraph_knight'],
     exclusiveLootIds: ['dragon_slayer', 'celestial_bow', 'genesis_staff'],
     familiarPool: ['valkyrie_drake', 'yggdrasil_sprout', 'minerva_owl'],
     familiarDropRate: 0.12
