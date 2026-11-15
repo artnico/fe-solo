@@ -35,8 +35,8 @@ function pickRandomTraits(count, pool) {
   return picked;
 }
 
-function formatTraitPrefix(traitIds) {
-  if (!Array.isArray(traitIds) || traitIds.length === 0) return '';
+function formatEquipName(baseName, traitIds) {
+  if (!Array.isArray(traitIds) || traitIds.length === 0) return baseName;
   const counts = {};
   for (const tid of traitIds) {
     counts[tid] = (counts[tid] || 0) + 1;
@@ -50,10 +50,8 @@ function formatTraitPrefix(traitIds) {
     }
   }
   const basePrefix = WEAPON_TRAITS[bestTid]?.prefix || '';
-  if (!basePrefix) return '';
-  if (bestCount >= 3) return `極・${basePrefix}`;
-  if (bestCount === 2) return `真・${basePrefix}`;
-  return basePrefix;
+  const nameWithPrefix = basePrefix ? `${basePrefix}${baseName}` : baseName;
+  return bestCount >= 2 ? `${nameWithPrefix} ★${bestCount}` : nameWithPrefix;
 }
 
 /**
@@ -80,13 +78,11 @@ export function generateWeaponInstance(templateId, options = {}) {
   const hit = tpl.hit + (rarityId === 'rare' ? 3 : rarityId === 'epic' ? 6 : 0);
   const crit = tpl.crit + (rarityId === 'rare' ? 2 : rarityId === 'epic' ? 5 : 0);
 
-  const prefix = formatTraitPrefix(traitIds);
-
   return {
     uid: `wpn_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
     slot: 'weapon',
     templateId: tpl.id,
-    name: prefix ? `${prefix}${tpl.name}` : tpl.name,
+    name: formatEquipName(tpl.name, traitIds),
     type: tpl.type,
     rarity: rarityId,
     atk,
@@ -118,13 +114,11 @@ export function generateArmorInstance(templateId, options = {}) {
   const res = tpl.res > 0 ? Math.round(tpl.res * rarity.statMult) : 0;
   const eva = tpl.eva || 0;
 
-  const prefix = formatTraitPrefix(traitIds);
-
   return {
     uid: `arm_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
     slot: 'armor',
     templateId: tpl.id,
-    name: prefix ? `${prefix}${tpl.name}` : tpl.name,
+    name: formatEquipName(tpl.name, traitIds),
     type: tpl.type,
     rarity: rarityId,
     hp,
@@ -164,13 +158,11 @@ export function generateAccessoryInstance(templateId, options = {}) {
   const dropBonus = tpl.dropBonus || 0;
   const initiativeBonus = tpl.initiativeBonus || 0;
 
-  const prefix = formatTraitPrefix(traitIds);
-
   return {
     uid: `acc_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
     slot: 'accessory',
     templateId: tpl.id,
-    name: prefix ? `${prefix}${tpl.name}` : tpl.name,
+    name: formatEquipName(tpl.name, traitIds),
     type: tpl.type,
     rarity: rarityId,
     hp,
