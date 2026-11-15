@@ -40,6 +40,7 @@ import {
   isLineageTier5Unlocked
 } from '../engine/stats.js';
 import { store } from '../state/store.js';
+import { getTraitRerollCost } from '../engine/loot.js';
 import { AutoExploreController } from '../engine/explore.js';
 import { dungeonCtrl } from '../engine/dungeon.js';
 
@@ -60,6 +61,7 @@ let equipTargetCharId = store.state.partyIds[0] || store.state.roster[0]?.id;
 let equipCategoryTab = 'weapon'; // 'weapon' | 'armor' | 'accessory'
 let equipSubTypeTab = 'all';
 const expandedEquipGroups = new Set();
+let rerollTargetUid = null;
 
 const tavernDraft = {
   name: RANDOM_NAMES[0],
@@ -838,6 +840,34 @@ function renderPartyTab() {
             ? `<div style="margin-top:8px;">${thresholds.map(t => `<span class="threshold-chip">${t}</span>`).join('')}</div>`
             : `<div style="margin-top:8px;font-size:11px;color:var(--text-muted);">※基礎ステータス20以上で段階的閾値ボーナスが解放されます</div>`
         }
+
+        ${(() => {
+          const talentCount = detailChar.talentCount || 0;
+          const talentMax = store.getTalentBloomMax();
+          const bloomCost = store.getTalentBloomCost(detailChar);
+          const canAfford = bloomCost !== null && store.state.gold >= bloomCost;
+          return `
+            <div style="margin-top:10px;padding:8px 10px;border:1px solid rgba(245,158,11,0.35);border-radius:6px;background:rgba(245,158,11,0.06);">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:var(--accent-gold);">
+                    🌸 才能開花 (${talentCount} / ${talentMax})
+                  </div>
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">
+                    現在効果: 全基礎ステ +${talentCount} ／ 全成長率 +${talentCount}%（1回ごとに全基礎ステ+1＆全成長率+1%）
+                  </div>
+                </div>
+                ${
+                  bloomCost !== null
+                    ? `<button class="btn btn-sm ${canAfford ? 'btn-primary' : ''}" data-bloom-char="${detailChar.id}" ${
+                        canAfford ? '' : 'disabled style="opacity:0.5;cursor:not-allowed;"'
+                      }>🌸 開花 (${bloomCost.toLocaleString()} G)</button>`
+                    : `<span style="font-size:11px;font-weight:700;color:var(--accent-gold);">MAX</span>`
+                }
+              </div>
+            </div>
+          `;
+        })()}
       </section>
     `;
   }
@@ -1109,8 +1139,32 @@ function renderEquipTab() {
                       })
                       .join('');
 
+                    const hasTraits = Array.isArray(eq.traits) && eq.traits.length > 0;
+                    const isRerollOpen = hasTraits && rerollTargetUid === eq.uid;
+                    const rerollCost = hasTraits ? getTraitRerollCost(eq) : 0;
+                    const canAffordReroll = store.state.gold >= rerollCost;
+                    const rerollPanelHtml = isRerollOpen
+                      ? `
+                        <div style="margin-top:6px;padding:6px 8px;border-top:1px dashed var(--border-color);width:100%;">
+                          <div style="font-size:10px;color:var(--accent-gold);margin-bottom:4px;">
+                            🎲 焼き直す特性枠を選択（費用: ${rerollCost.toLocaleString()} G / 同じ特性を引くと★が増加！）
+                          </div>
+                          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                            ${eq.traits
+                              .map((tid, tIdx) => {
+                                const lbl = WEAPON_TRAITS[tid]?.label || tid;
+                                return `<button class="btn btn-sm ${canAffordReroll ? 'btn-primary' : ''}" data-reroll-uid="${eq.uid}" data-reroll-idx="${tIdx}" ${
+                                  canAffordReroll ? '' : 'disabled style="opacity:0.5;cursor:not-allowed;"'
+                                } style="font-size:10px;padding:2px 6px;">枠${tIdx + 1}: ${escapeHtml(lbl)} 🔄</button>`;
+                              })
+                              .join('')}
+                          </div>
+                        </div>
+                      `
+                      : '';
+
                     return `
-                      <div class="equip-card-item border-${eq.rarity || 'common'}">
+                      <div class="equip-card-item border-${eq.rarity || 'common'}" style="flex-wrap:wrap;">
                         <div style="flex:1;padding-right:8px;">
                           <div class="rarity-${eq.rarity}" style="font-weight:700;font-size:12px;">
                             [${rarityName}] ${escapeHtml(eq.name)}
@@ -1130,11 +1184,17 @@ function renderEquipTab() {
                               : `<span style="font-size:10px;color:var(--text-muted);">装備不可</span>`
                           }
                           ${
+                            hasTraits
+                              ? `<button class="btn btn-sm ${isRerollOpen ? 'btn-primary' : ''}" data-toggle-reroll-uid="${eq.uid}" style="font-size:10px;">🎲 リロール</button>`
+                              : ''
+                          }
+                          ${
                             !owner
                               ? `<button class="btn btn-sm btn-danger" data-sell-uid="${eq.uid}">売 ${sellPrice}G</button>`
                               : ''
                           }
                         </div>
+                        ${rerollPanelHtml}
                       </div>
                     `;
                   })
@@ -1656,6 +1716,37 @@ function bindMainEvents() {
   document.querySelectorAll('[data-sell-uid]').forEach(btn => {
     btn.addEventListener('click', () => {
       store.sellEquipment(equipCategoryTab, btn.dataset.sellUid);
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-toggle-reroll-uid]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const uid = btn.dataset.toggleRerollUid;
+      rerollTargetUid = rerollTargetUid === uid ? null : uid;
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-reroll-uid]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const uid = btn.dataset.rerollUid;
+      const idx = Number(btn.dataset.rerollIdx);
+      const res = store.rerollEquipmentTrait(equipCategoryTab, uid, idx);
+      if (!res.ok) {
+        alert(res.reason);
+      }
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-bloom-char]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const charId = btn.dataset.bloomChar;
+      const res = store.bloomCharacterTalent(charId);
+      if (!res.ok) {
+        alert(res.reason);
+      }
       render();
     });
   });

@@ -11,7 +11,9 @@ import {
   generateWeaponInstance,
   generateArmorInstance,
   generateAccessoryInstance,
-  generateFamiliarInstance
+  generateFamiliarInstance,
+  getTraitRerollCost,
+  rerollEquipmentTraitAt
 } from '../engine/loot.js';
 import {
   STAT_KEYS,
@@ -544,6 +546,59 @@ class GameStore {
     this.state.gold += earned;
     this.save();
     return { count, earned };
+  }
+
+  rerollEquipmentTrait(slot, uid, traitIndex) {
+    if (slot === 'familiar') {
+      return { ok: false, reason: '使い魔は特性リロールできません。' };
+    }
+    const list = this.getEquipListBySlot(slot);
+    const eq = list.find(e => e.uid === uid);
+    if (!eq) return { ok: false, reason: '装備が見つかりません。' };
+    if (!Array.isArray(eq.traits) || eq.traits.length === 0) {
+      return { ok: false, reason: '特性が付与されていない装備です。' };
+    }
+    const cost = getTraitRerollCost(eq);
+    if (this.state.gold < cost) {
+      return { ok: false, reason: `ゴールドが不足しています（必要: ${cost.toLocaleString()} G）。` };
+    }
+    const res = rerollEquipmentTraitAt(eq, traitIndex);
+    if (!res) return { ok: false, reason: '特性のリロールに失敗しました。' };
+
+    this.state.gold -= cost;
+    this.save();
+    return { ok: true, cost, ...res, eq };
+  }
+
+  getTalentBloomMax() {
+    return 10;
+  }
+
+  getTalentBloomCost(character) {
+    if (!character) return null;
+    const count = character.talentCount || 0;
+    const costs = [10000, 25000, 50000, 80000, 120000, 180000, 260000, 360000, 500000, 750000];
+    if (count >= costs.length) return null;
+    return costs[count];
+  }
+
+  bloomCharacterTalent(charId) {
+    const char = this.state.roster.find(c => c.id === charId);
+    if (!char) return { ok: false, reason: 'キャラクターが見つかりません。' };
+    const cost = this.getTalentBloomCost(char);
+    if (cost === null) {
+      return { ok: false, reason: '才能開花はすでに上限（Lv.10）に達しています。' };
+    }
+    if (this.state.gold < cost) {
+      return { ok: false, reason: `ゴールドが不足しています（必要: ${cost.toLocaleString()} G）。` };
+    }
+    this.state.gold -= cost;
+    char.talentCount = (char.talentCount || 0) + 1;
+    for (const key of STAT_KEYS) {
+      char.baseStats[key] = (char.baseStats[key] || 0) + 1;
+    }
+    this.save();
+    return { ok: true, cost, talentCount: char.talentCount };
   }
 
   promoteCharacter(charId, targetClassId) {

@@ -54,6 +54,83 @@ function formatEquipName(baseName, traitIds) {
   return bestCount >= 2 ? `${nameWithPrefix} ★${bestCount}` : nameWithPrefix;
 }
 
+const REROLL_BASE_COSTS = {
+  uncommon: 500,
+  rare: 1200,
+  epic: 3000,
+  legendary: 8000,
+  mythic: 20000
+};
+
+/**
+ * 装備種別に応じた特性プールを返す
+ */
+export function getTraitPoolForEquipment(slot, templateId) {
+  if (slot === 'armor') {
+    return [
+      'vital', 'mana', 'sturdy', 'ward', 'swift', 'greed', 'titan', 'mirror',
+      'ironwall', 'aegis', 'inspired', 'phantom', 'guardian'
+    ];
+  }
+  if (slot === 'accessory') {
+    return [
+      'vital', 'mana', 'sturdy', 'ward', 'swift', 'greed', 'deadly', 'blessed',
+      'fierce', 'wise', 'accurate', 'relentless', 'ironwall', 'aegis', 'inspired', 'phantom', 'guardian',
+      'elem_fire', 'elem_water', 'elem_earth', 'elem_wind', 'elem_thunder', 'elem_ice'
+    ];
+  }
+  const tpl = WEAPONS[templateId];
+  const armorOnly = ['vital', 'mana', 'sturdy', 'ward', 'titan', 'mirror', 'ironwall', 'aegis', 'phantom', 'guardian'];
+  const physOnly = ['sharp', 'executioner', 'fierce', 'berserk'];
+  const magOnly = ['arcane', 'blessed', 'astral', 'wise', 'archmage'];
+  return Object.keys(WEAPON_TRAITS).filter(id => {
+    if (armorOnly.includes(id)) return false;
+    if (tpl && (tpl.type === 'tome' || tpl.type === 'staff')) return !physOnly.includes(id);
+    return !magOnly.includes(id);
+  });
+}
+
+/**
+ * 特性リロールに必要なゴールドを計算する
+ */
+export function getTraitRerollCost(eq) {
+  if (!eq) return 0;
+  const base = REROLL_BASE_COSTS[eq.rarity] || 1000;
+  const count = eq.rerollCount || 0;
+  return Math.round(base * (1 + count * 0.2));
+}
+
+/**
+ * 装備の指定インデックスの特性を再抽選し、装備名を更新する
+ */
+export function rerollEquipmentTraitAt(eq, traitIndex) {
+  if (!eq || !Array.isArray(eq.traits) || traitIndex < 0 || traitIndex >= eq.traits.length) {
+    return null;
+  }
+  const slot = eq.slot || 'weapon';
+  const pool = getTraitPoolForEquipment(slot, eq.templateId);
+  if (!pool || pool.length === 0) return null;
+
+  const oldTraitId = eq.traits[traitIndex];
+  const candidates = pool.filter(id => id !== oldTraitId);
+  const pickPool = candidates.length > 0 ? candidates : pool;
+  const newTraitId = pickPool[Math.floor(Math.random() * pickPool.length)];
+
+  eq.traits[traitIndex] = newTraitId;
+  eq.rerollCount = (eq.rerollCount || 0) + 1;
+
+  const tpl =
+    slot === 'armor'
+      ? ARMORS[eq.templateId]
+      : slot === 'accessory'
+      ? ACCESSORIES[eq.templateId]
+      : WEAPONS[eq.templateId];
+  if (tpl) {
+    eq.name = formatEquipName(tpl.name, eq.traits);
+  }
+  return { oldTraitId, newTraitId };
+}
+
 /**
  * 武器インスタンス生成
  */

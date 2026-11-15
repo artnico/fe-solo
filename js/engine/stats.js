@@ -69,6 +69,7 @@ export function getGrowthRates(character, familiar = null, extraGrowthPct = 0) {
   const cls = CLASSES[character.classId];
   const personality = PERSONALITIES[character.personalityId];
   const reclassBonus = Math.min(20, (character.reclassCount || 0) * 2);
+  const talentBonus = Math.min(10, character.talentCount || 0);
 
   const rates = {};
   for (const key of STAT_KEYS) {
@@ -78,6 +79,7 @@ export function getGrowthRates(character, familiar = null, extraGrowthPct = 0) {
       (personality?.growthMod[key] || 0) +
       (familiar?.growthBonus?.[key] || 0) +
       reclassBonus +
+      talentBonus +
       (extraGrowthPct || 0);
     rates[key] = Math.max(5, raw);
   }
