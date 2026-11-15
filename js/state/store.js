@@ -616,7 +616,7 @@ class GameStore {
       equippedWeaponUid: wpn.uid
     });
     this.state.roster.push(newChar);
-    if (this.state.partyIds.length < 4) {
+    if (this.state.partyIds.length < 5) {
       this.state.partyIds.push(newChar.id);
     }
     this.save();

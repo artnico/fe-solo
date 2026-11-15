@@ -15,7 +15,7 @@ import {
   generateAccessoryInstance
 } from './loot.js';
 
-const BASE_HATE = [40, 30, 20, 10];
+const BASE_HATE = [38, 28, 18, 10, 6];
 
 function clamp(min, max, val) {
   return Math.max(min, Math.min(max, val));
@@ -147,7 +147,7 @@ export function createBattleSession(
   options = {}
 ) {
   const allies = partyChars
-    .slice(0, 4)
+    .slice(0, 5)
     .map((c, idx) => createUnitFromCharacter(c, idx, weaponResolver(c), options));
 
   const counts = {};

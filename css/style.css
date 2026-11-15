@@ -315,6 +315,19 @@ body {
   gap: 6px;
 }
 
+.formation-grid.ally-5 {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.formation-grid.ally-5 .unit-card {
+  padding: 5px 3px;
+}
+
+.formation-grid.ally-5 .unit-name {
+  font-size: 11px;
+}
+
 .unit-card {
   background: var(--bg-shell);
   border: 1px solid var(--border);

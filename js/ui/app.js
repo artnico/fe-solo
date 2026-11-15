@@ -423,7 +423,9 @@ function renderAutoExploreSection() {
     .join('');
 
   const renderUnitGrid = (units, isEnemy = false) => {
-    const slots = [0, 1, 2, 3].map(pos => {
+    const slotCount = isEnemy ? 4 : 5;
+    const indices = Array.from({ length: slotCount }, (_, i) => i);
+    const slots = indices.map(pos => {
       const u = units[pos];
       if (!u) {
         return `<div class="unit-card ${pos < 2 ? 'frontline' : 'backline'}" style="opacity:0.25;justify-content:center;align-items:center;font-size:10px;">空</div>`;
@@ -467,7 +469,7 @@ function renderAutoExploreSection() {
         </div>
       `;
     });
-    return `<div class="formation-grid">${slots.join('')}</div>`;
+    return `<div class="formation-grid ${isEnemy ? '' : 'ally-5'}">${slots.join('')}</div>`;
   };
 
   const battleLogsHtml = (battle?.logs || [])
@@ -548,7 +550,7 @@ function renderAutoExploreSection() {
       </div>
       <div>
         <div class="team-label">
-          <span>味方パーティ（左から1〜4番目）</span>
+          <span>味方パーティ（左から1〜5番目）</span>
           <span>前衛:赤 / 後衛:青</span>
         </div>
         ${renderUnitGrid(allyDisplayUnits, false)}
@@ -576,9 +578,9 @@ function renderPartyTab() {
   const detailChar =
     store.state.roster.find(c => c.id === selectedCharId) || party[0];
 
-  const hateLabels = ['40%', '30%', '20%', '10%'];
+  const hateLabels = ['38%', '28%', '18%', '10%', '6%'];
 
-  const slotsHtml = [0, 1, 2, 3]
+  const slotsHtml = [0, 1, 2, 3, 4]
     .map(idx => {
       const c = party[idx];
       const isFront = idx < 2;
@@ -867,7 +869,7 @@ function renderPartyTab() {
   return `
     <section class="card">
       <div class="card-title">
-        <span>パーティ隊列（1〜2前衛 / 3〜4後衛）</span>
+        <span>パーティ隊列（1〜2前衛 / 3〜5後衛）</span>
         <span style="font-size:11px;color:var(--text-muted)">入替ボタンで順変更</span>
       </div>
       <div class="party-slot-list">${slotsHtml}</div>
@@ -1541,7 +1543,7 @@ function bindMainEvents() {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const charId = btn.dataset.putParty;
-      const targetSlot = store.state.partyIds.length < 4 ? store.state.partyIds.length : 3;
+      const targetSlot = store.state.partyIds.length < 5 ? store.state.partyIds.length : 4;
       store.setPartySlot(targetSlot, charId);
       selectedCharId = charId;
       render();
